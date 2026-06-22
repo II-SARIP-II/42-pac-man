@@ -56,7 +56,7 @@ if __name__ == "__main__":
 
     lvl1 = gen.generate_level(lvl1_val)
 
-    node = lvl1.level_map.get(player.pos)
+    node = lvl1.level_map.get((0, 0))
     if node:
         neighbour = node.get_neighbour(2)
         print(neighbour)
