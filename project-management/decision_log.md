@@ -18,20 +18,11 @@ Use this format:
 - **Decision:** what we chose
 - **Reasoning:** why we chose it
 
-## Example
+## Decisions
 
-### Choice of vector database
-- **Date:** 2026-03-10
-- **Situation:** Needed to store and query dense embeddings for retrieval.
-- **Options considered:** ChromaDB vs. FAISS
-- **Decision:** ChromaDB
-- **Reasoning:** Faster to set up given our timeline, built-in persistence,
-  good enough performance for our dataset size. FAISS would have given more
-  control but added setup overhead we didn't have time for.
-
-## Notes
-- It's fine to log decisions that turned out to be wrong later — just add a follow-up
-  note explaining what changed and why. That's valuable too.
-- Disagreements between teammates belong here: write the options each person
-  proposed and how you settled on one (testing both, voting, deferring to whoever
-  owns that part, etc.).
+### Choice of artistic direction
+- **Date:** 2026-06-22
+- **Situation:** 3D vs 2D.
+- **Options considered:** 3D vs 2D
+- **Decision:** 3D
+- **Reasoning:** To get our hands on 3D and work on a cool looking project that can be shown in a portfolio.
