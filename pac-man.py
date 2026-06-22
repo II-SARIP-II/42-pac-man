@@ -1,21 +1,10 @@
-from src.mazegenerator import MazeGenerator
-from src.core.Node import Node
+from src.models.config import ConfigFileValidation
+from src.utils_io import load_json_file
 
 
 def main() -> None:
-    size = 15
-
-    maze = MazeGenerator()
-    maze.generate()
-
-    nodes = []
-    for y, row in enumerate(maze.maze):
-        for x, cell in enumerate(row):
-            nodes.append(Node(
-                id= y * 10 + x,
-                pos=(x, y),
-                neighbours=[]
-            ))
+    config = ConfigFileValidation(**load_json_file("./config/config.json"))
+    gameStat(config)
 
 if __name__ == "__main__":
     main()
