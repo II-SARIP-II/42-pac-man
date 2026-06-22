@@ -1,5 +1,6 @@
-from pydantic import BaseModel, Field, FilePath
+from pydantic import BaseModel, Field
 from typing import List
+from pathlib import Path
 
 
 class LevelValidation(BaseModel):
@@ -8,7 +9,7 @@ class LevelValidation(BaseModel):
 
 
 class ConfigFileValidation(BaseModel):
-    highscore_filename: str = Field(FilePath)
+    highscore_filename: Path = Field(Path)
     levels: List[LevelValidation] = Field(default=[])
     lives: int = Field(default=3, ge=1)
     points_per_pacgum: int = Field(default=10, ge=0)
