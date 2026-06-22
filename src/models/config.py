@@ -1,14 +1,16 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import List
 from pathlib import Path
 
 
 class LevelValidation(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     width: int = Field(gt=5, lt=100)
     height: int = Field(gt=5, lt=100)
 
 
 class ConfigFileValidation(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     highscore_filename: Path = Field(Path)
     levels: List[LevelValidation] = Field(default=[])
     lives: int = Field(default=3, ge=1)
