@@ -55,6 +55,8 @@ if __name__ == "__main__":
     gen = LevelGenerator()
 
     lvl1 = gen.generate_level(lvl1_val)
-    x = lvl1.level_map[(0, 0)].neighbours[1]
-    if x:
-        print(lvl1.level_map[x].neighbours)
+
+    node = lvl1.level_map.get((0, 0))
+    if node:
+        neighbour = node.get_neighbour(2)
+        print(neighbour)

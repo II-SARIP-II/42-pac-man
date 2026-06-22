@@ -5,5 +5,8 @@ class Node():
         self.pos: tuple[int, int] = pos
         self.neighbours = neighbours
 
+    def get_neighbour(self, direction: int) -> tuple[int, int] | None:
+        return self.neighbours[direction]
+
     def __repr__(self) -> str:
         return f"Node {self.pos}"
