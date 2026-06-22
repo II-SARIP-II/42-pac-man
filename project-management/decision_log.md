@@ -26,3 +26,10 @@ Use this format:
 - **Options considered:** 3D vs 2D
 - **Decision:** 3D
 - **Reasoning:** To get our hands on 3D and work on a cool looking project that can be shown in a portfolio.
+
+## Choice of 3D graphic lib
+- **Date:** 2026-06-22
+- **Situation:** Which 3D libraries to use.
+- **Options considered:** Ursina vs Panda3D vs Raylib
+- **Decision:** Ursina
+- **Reasoning:** Ursina is built on panda3d and seem easy to use compare to panda3d. However the documentation is a bit incomplete. We also look at raylib, but there is no to little docs and panda3d seem more tedious for beginners. Ursina also has built-in UI.
