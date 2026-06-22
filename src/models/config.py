@@ -5,7 +5,7 @@ from pathlib import Path
 
 class LevelValidation(BaseModel):
     width: int = Field(gt=5, lt=100)
-    heigh: int = Field(gt=5, lt=100)
+    height: int = Field(gt=5, lt=100)
 
 
 class ConfigFileValidation(BaseModel):
