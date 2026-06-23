@@ -49,14 +49,3 @@ class LevelGenerator():
             west = None
 
         return [north, est, south, west]
-
-if __name__ == "__main__":
-    lvl1_val = LevelValidation(width=6, height=6)
-    gen = LevelGenerator()
-
-    lvl1 = gen.generate_level(lvl1_val)
-
-    node = lvl1.level_map.get((0, 0))
-    if node:
-        neighbour = node.get_neighbour(2)
-        print(neighbour)

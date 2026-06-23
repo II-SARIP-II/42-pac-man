@@ -26,8 +26,6 @@ class GameState():
             self.scores = self._getScores(self.highscore_filename_config)
         except Exception as e:
             print(e)
-        print(self.levels[0].level_map)
-        print("\n\n", self.scores)
 
     @staticmethod
     def _getScores(filename: str):
