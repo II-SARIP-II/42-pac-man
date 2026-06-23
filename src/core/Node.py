@@ -18,7 +18,7 @@ class Node():
         binary = format(self.wall, '04b')[::-1]
 
         for i, b in enumerate(binary[:len(self.neighbours)]):
-            if b == '0':
+            if b == '1':
                 self.neighbours[i] = None
 
     def __repr__(self) -> str:
