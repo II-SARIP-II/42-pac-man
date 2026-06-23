@@ -1,8 +1,9 @@
 from Item import Item
 from Game import Game
+from Character import Character
 
 
-class Player():
+class Player(Character):
     def __init__(self) -> None:
         self.lives = 3
         self.scores = 0
@@ -13,9 +14,6 @@ class Player():
 
         if self.lives == 0:
             print("game over")
-
-    def respawn(self) -> None:
-        pass
 
     def eat_item(self, item: Item, game: Game) -> None:
         game.player_eat_item(item)

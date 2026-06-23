@@ -1,4 +1,7 @@
-class Ghost():
+from Character import Character
+
+
+class Ghost(Character):
     def __init__(self) -> None:
         self.is_edible = False
 
@@ -8,8 +11,4 @@ class Ghost():
 
     def get_eaten(self) -> None:
         # if the ghost is eaten
-        pass
-
-    def respawn(self) -> None:
-        # respawn the ghost
         pass
