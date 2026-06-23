@@ -3,6 +3,7 @@ from .Level import Level
 from ..models.config import LevelValidation
 from .Node import Node
 
+
 class LevelGenerator():
     def generate_level(self, level: LevelValidation) -> Level:
         width = level.width
@@ -17,14 +18,16 @@ class LevelGenerator():
                 pos = x, y
                 nodes[pos] = Node(
                     pos=pos,
-                    neighbours=self.get_neighbours(pos,
-                        height, width),
+                    neighbours=self.get_neighbours(pos, height, width),
                     wall=cell
                 )
         return Level(height=height, width=width, level_map=nodes)
 
-    def get_neighbours(self, pos: tuple[int, int],
-        height: int, width: int) -> list[tuple[int, int] | None]:
+    def get_neighbours(self,
+                       pos: tuple[int, int],
+                       height: int,
+                       width: int
+                       ) -> list[tuple[int, int] | None]:
 
         x, y = pos
 

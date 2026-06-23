@@ -1,5 +1,6 @@
 from ursina import Entity
 
+
 class Character(Entity):
     def __init__(self, model):
         super().__init__(model)

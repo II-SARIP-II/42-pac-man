@@ -4,7 +4,6 @@ from src.core.Level import Level
 from src.core.LevelGenerator import LevelGenerator
 from typing import List
 from ursina import Ursina, Entity, Vec3, color, camera
-from src.core.Node import Node
 
 
 class GameState():
@@ -46,37 +45,47 @@ class GameState():
 
     @staticmethod
     def createMap(mapData: Level):
-        ground = Entity(model='plane', scale=Vec3(mapData.width, 0, mapData.height), x=0, y=0, z=0, color=color.blue, collider='box')
-        center = Entity(model='plane', scale=Vec3(1, 0, 1), x=0, y=1, z=0, color=color.yellow, collider='box')
+        Entity(model='plane',
+               scale=Vec3(mapData.width, 0, mapData.height),
+               position=(0, 0, 0),
+               color=color.black,
+               collider='box'
+               )
+        Entity(model='plane',
+               scale=Vec3(1, 0, 1),
+               position=(0, 1, 0),
+               color=color.yellow,
+               collider='box'
+               )
         for node in mapData.level_map.values():
             cell_x = node.pos[0] - (mapData.width / 2) + 0.5
-            cell_z = -(node.pos[1] - (mapData.height / 2) + 0.5 )
+            cell_z = -(node.pos[1] - (mapData.height / 2) + 0.5)
             if not node.get_neighbour(0):
                 Entity(
                     model='cube', scale=Vec3(1, 2, 0.1),
-                    position=(cell_x, 1, cell_z + 0.5),
-                    color=color.red, collider='box'
+                    position=(cell_x, 0.5, cell_z + 0.5),
+                    color=color.blue, collider='box'
                 )
 
             if not node.get_neighbour(1):
                 Entity(
                     model='cube', scale=Vec3(0.1, 2, 1),
-                    position=(cell_x + 0.5, 1, cell_z),
-                    color=color.red, collider='box'
+                    position=(cell_x + 0.5, 0.5, cell_z),
+                    color=color.blue, collider='box'
                 )
 
             if not node.get_neighbour(2):
                 Entity(
                     model='cube', scale=Vec3(1, 2, 0.1),
-                    position=(cell_x, 1, cell_z - 0.5),
-                    color=color.red, collider='box'
+                    position=(cell_x, 0.5, cell_z - 0.5),
+                    color=color.blue, collider='box'
                 )
 
             if not node.get_neighbour(3):
                 Entity(
                     model='cube', scale=Vec3(0.1, 2, 1),
-                    position=(cell_x - 0.5, 1, cell_z),
-                    color=color.red, collider='box'
+                    position=(cell_x - 0.5, 0.5, cell_z),
+                    color=color.blue, collider='box'
                 )
 
     def game(self) -> None:
