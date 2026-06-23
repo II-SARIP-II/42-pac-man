@@ -9,7 +9,7 @@ class LevelValidation(BaseModel):
 
 
 class ConfigFileValidation(BaseModel):
-    highscore_filename: Path = Field(Path)
+    highscore_filename: Path
     levels: List[LevelValidation] = Field(default=[])
     lives: int = Field(default=3, ge=1)
     points_per_pacgum: int = Field(default=10, ge=0)

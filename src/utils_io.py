@@ -75,7 +75,8 @@ def read_text_file(path: str) -> str:
 
 
 def append_jsonl(records: Iterable[dict], path: str) -> None:
-    """Append records (dicts) to a JSONL file, creating parent dir if needed."""
+    """Append records (dicts) to a JSONL file,
+    creating parent dir if needed."""
     p = Path(path)
     ensure_directory(str(p.parent))
     try:
@@ -87,7 +88,8 @@ def append_jsonl(records: Iterable[dict], path: str) -> None:
 
 
 def write_json_file(obj: Any, path: str) -> None:
-    """Write an object as pretty JSON to a file, creating parent dir if needed."""
+    """Write an object as pretty JSON to a file,
+     creating parent dir if needed."""
     p = Path(path)
     ensure_directory(str(p.parent))
     try:
