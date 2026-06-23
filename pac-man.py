@@ -14,5 +14,6 @@ def main() -> None:
               config.level_max_time
               )
 
+
 if __name__ == "__main__":
     main()
