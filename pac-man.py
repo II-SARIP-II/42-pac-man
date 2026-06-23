@@ -5,7 +5,7 @@ from src.GameState import GameState
 
 def main() -> None:
     config = ConfigFileValidation(**load_json_file("./config/config.json"))
-    GameState(config.highscore_filename,
+    GameState(str(config.highscore_filename),
               config.levels,
               config.lives,
               config.points_per_pacgum,

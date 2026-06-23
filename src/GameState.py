@@ -4,17 +4,18 @@ from src.core.Level import Level
 from src.core.LevelGenerator import LevelGenerator
 from typing import List
 from ursina import Ursina, Entity, Vec3, color, camera
+from src.models.config import LevelValidation
 
 
 class GameState():
     def __init__(self,
-                 highscore_filename,
-                 levels,
-                 lives,
-                 points_per_pacgum,
-                 points_per_ghost,
-                 seed,
-                 level_max_time
+                 highscore_filename: str,
+                 levels: List[LevelValidation],
+                 lives: int,
+                 points_per_pacgum: int,
+                 points_per_ghost: int,
+                 seed: int,
+                 level_max_time: int
                  ) -> None:
         self.highscore_filename_config = highscore_filename
         self.levels_config = levels
@@ -37,14 +38,14 @@ class GameState():
         return ScoresList(**load_json_file(filename))
 
     @staticmethod
-    def _getLevels(levels_config) -> List[Level]:
+    def _getLevels(levels_config: List[LevelValidation]) -> List[Level]:
         levels: List[Level] = []
         for level in levels_config:
             levels.append(LevelGenerator().generate_level(level))
         return levels
 
     @staticmethod
-    def createMap(mapData: Level):
+    def createMap(mapData: Level) -> None:
         Entity(model='plane',
                scale=Vec3(mapData.width, 0, mapData.height),
                position=(0, 0, 0),

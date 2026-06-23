@@ -2,7 +2,7 @@ from ursina import Entity
 
 
 class Character(Entity):
-    def __init__(self, model):
+    def __init__(self, model: str):
         super().__init__(model)
 
     def move(self, direction: str) -> None:
