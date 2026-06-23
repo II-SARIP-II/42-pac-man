@@ -1,10 +1,16 @@
 from ursina import Entity, Button, Vec3, color
 from .EnumScene import EnumScene
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.GameEngine import GameEngine
+
 
 class MenuScene(Entity):
-    def __init__(self):
+    def __init__(self, game_state: "GameEngine"):
         super().__init__()
-        from src.GameState import GameState
+
+        self.game_state = game_state
 
         Entity(model='plane',
                scale=Vec3(20, 1, 20),
@@ -23,3 +29,6 @@ class MenuScene(Entity):
                 collider='box',
                 parent=self
                 )
+
+        self.button_game.on_click = (
+            lambda: self.game_state.display_scene(EnumScene.GAME))

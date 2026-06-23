@@ -1,10 +1,21 @@
 from ursina import Entity, Vec3, color
 from src.core.Level import Level
+from typing import TYPE_CHECKING
+from src.scene.EnumScene import EnumScene
+
+if TYPE_CHECKING:
+    from src.GameEngine import GameEngine
 
 
 class GameScene(Entity):
-    def __init__(self) -> None:
+    def __init__(self, game_state: "GameEngine") -> None:
         super().__init__()
+
+        self.game_state = game_state
+
+    def input(self, key: str) -> None:
+        if key == 'escape':
+            self.game_state.display_scene(EnumScene.MENU)
 
     def createMap(self, level: Level) -> None:
         Entity(model='plane',

@@ -10,7 +10,7 @@ from src.scene.EnumScene import EnumScene
 from src.scene.MenuScene import MenuScene
 
 
-class GameState():
+class GameEngine():
     def __init__(self,
                  highscore_filename: str,
                  levels: List[LevelValidation],
@@ -42,14 +42,12 @@ class GameState():
 
         self.state = EnumScene.MENU
 
-        self.game_scene = GameScene()
+        self.game_scene = GameScene(self)
         self.game_scene.createMap(self.levels[0])
         self.game_scene.disable()
 
-        self.menu_scene = MenuScene()
+        self.menu_scene = MenuScene(self)
         self.current_scene = self.menu_scene
-
-        self.menu_scene.button_game.on_click = lambda: self.display_scene(EnumScene.GAME)
 
         self.game()
 
@@ -69,7 +67,6 @@ class GameState():
             self.current_scene.disable()
 
         self.state = enum
-        print(self.state)
 
         if self.state == EnumScene.MENU:
             self.current_scene = self.menu_scene
@@ -77,8 +74,6 @@ class GameState():
         elif self.state == EnumScene.GAME:
             self.current_scene = self.game_scene
             self.game_scene.enable()
-
-        print(self.state)
 
     def game(self) -> None:
         self.app.run()
