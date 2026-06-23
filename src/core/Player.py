@@ -1,5 +1,5 @@
 from Item import Item
-from Game import Game
+from Game import GameScene
 from Character import Character
 
 
@@ -15,5 +15,5 @@ class Player(Character):
         if self.lives == 0:
             print("game over")
 
-    def eat_item(self, item: Item, game: Game) -> None:
+    def eat_item(self, item: Item, game: GameScene) -> None:
         game.player_eat_item(item)
