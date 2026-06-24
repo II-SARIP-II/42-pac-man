@@ -1,25 +1,31 @@
-from src.models.highscore import ScoresList
-from src.scene.GameScene import GameScene
-from src.utils_io import load_json_file
+from typing import List
+
+from ursina import camera
+
 from src.core.Level import Level
 from src.core.LevelGenerator import LevelGenerator
-from typing import List
-from ursina import camera
 from src.models.config import LevelValidation
+from src.models.highscore import ScoresList
 from src.scene.EnumScene import EnumScene
+from src.scene.GameScene import GameScene
+from src.scene.LoseScene import LoseScene
 from src.scene.MenuScene import MenuScene
+from src.scene.PauseScene import PauseScene
+from src.scene.WinScene import WinScene
+from src.utils_io import load_json_file
 
 
-class GameEngine():
-    def __init__(self,
-                 highscore_filename: str,
-                 levels: List[LevelValidation],
-                 lives: int,
-                 points_per_pacgum: int,
-                 points_per_ghost: int,
-                 seed: int,
-                 level_max_time: int
-                 ) -> None:
+class GameEngine:
+    def __init__(
+        self,
+        highscore_filename: str,
+        levels: List[LevelValidation],
+        lives: int,
+        points_per_pacgum: int,
+        points_per_ghost: int,
+        seed: int,
+        level_max_time: int,
+    ) -> None:
 
         self.highscore_filename_config = highscore_filename
         self.levels_config = levels
@@ -45,6 +51,15 @@ class GameEngine():
             self.game_scene = GameScene(self)
             self.game_scene.createMap(self.levels[0])
             self.game_scene.disable()
+
+            self.pause_scene = PauseScene(self)
+            self.pause_scene.disable()
+
+            self.win_scene = WinScene(self)
+            self.win_scene.disable()
+
+            self.lose_scene = LoseScene(self)
+            self.lose_scene.disable()
 
             self.menu_scene = MenuScene(self)
             self.current_scene = self.menu_scene
@@ -74,3 +89,12 @@ class GameEngine():
         elif self.state == EnumScene.GAME:
             self.current_scene = self.game_scene
             self.game_scene.enable()
+        elif self.state == EnumScene.PAUSE:
+            self.current_scene = self.pause_scene
+            self.pause_scene.enable()
+        elif self.state == EnumScene.LOSE:
+            self.current_scene = self.lose_scene
+            self.lose_scene.enable()
+        elif self.state == EnumScene.WIN:
+            self.current_scene = self.win_scene
+            self.win_scene.enable()

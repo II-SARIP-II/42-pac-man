@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from src.GameEngine import GameEngine
 
 
-class MenuScene(Entity):
+class WinScene(Entity):
     def __init__(self, game_state: "GameEngine"):
         super().__init__()
 
@@ -32,10 +32,10 @@ class MenuScene(Entity):
         self.buttonPlay()
 
     def buttonPlay(self) -> None:
-        self.button_game = ButtonUtils(
-            text="Play",
+        self.button_resume = ButtonUtils(
+            text="MENU",
             position=Vec3(0, 1, 1),
-            parent_scene=self,
+            action=lambda: self.game_state.display_scene(EnumScene.MENU),
             button_color=color.blue,
-            action=lambda: self.game_state.display_scene(EnumScene.GAME),
+            parent_scene=self,
         )
