@@ -30,12 +30,22 @@ class LoseScene(Entity):
 
     def createButtons(self) -> None:
         self.buttonPlay()
+        self.buttonQuit()
 
     def buttonPlay(self) -> None:
         self.button_resume = ButtonUtils(
             text="MENU",
             position=Vec3(0, 1, 1),
             action=lambda: self.game_state.display_scene(EnumScene.MENU),
+            button_color=color.blue,
+            parent_scene=self,
+        )
+
+    def buttonQuit(self) -> None:
+        self.button_quit = ButtonUtils(
+            text="Quit",
+            position=Vec3(0, 1, -2),
+            action=lambda: self.game_state.quit_game(),
             button_color=color.blue,
             parent_scene=self,
         )

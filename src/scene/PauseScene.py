@@ -59,13 +59,7 @@ class PauseScene(Entity):
         self.button_quit = ButtonUtils(
             text="QUIT",
             position=Vec3(0, 1, -5),
-            action=self.quit_game_action,
+            action=lambda: self.game_state.quit_game(),
             button_color=color.dark_gray,
             parent_scene=self,
         )
-
-    def quit_game_action(self) -> None:
-        """Exemple de fonction classique pour le bouton quitter"""
-        from ursina import application
-
-        application.quit()

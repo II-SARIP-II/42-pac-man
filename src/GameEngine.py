@@ -77,6 +77,9 @@ class GameEngine:
             levels.append(LevelGenerator().generate_level(level))
         return levels
 
+    def quit_game(self) -> None:
+        quit()
+
     def display_scene(self, enum: EnumScene) -> None:
         if self.current_scene:
             self.current_scene.disable()
