@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from pathlib import Path
 from typing import Any, Iterable, List
 
@@ -24,7 +25,8 @@ def load_json_file(path: str) -> Any:
         raise FileNotFoundError(f"File not found: {path}")
     try:
         with p.open("r", encoding="utf-8") as f:
-            return json.load(f)
+            content = re.sub(r"\s*#.*", "", f.read())
+            return json.loads(content)
     except json.JSONDecodeError as e:
         raise ValueError(f"Invalid JSON in {path}: {e}") from e
     except PermissionError as e:
@@ -89,7 +91,7 @@ def append_jsonl(records: Iterable[dict], path: str) -> None:
 
 def write_json_file(obj: Any, path: str) -> None:
     """Write an object as pretty JSON to a file,
-     creating parent dir if needed."""
+    creating parent dir if needed."""
     p = Path(path)
     ensure_directory(str(p.parent))
     try:
