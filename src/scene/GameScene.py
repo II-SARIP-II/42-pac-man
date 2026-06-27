@@ -17,13 +17,13 @@ class GameScene(Entity):
 
     def input(self, key: str) -> None:
         if key == "escape":
-            self.game_state.display_scene(EnumScene.MENU)
+            self.game_state.displayScene(EnumScene.MENU)
         if key == "p":
-            self.game_state.display_scene(EnumScene.PAUSE)
+            self.game_state.displayScene(EnumScene.PAUSE)
         if key == "l":
-            self.game_state.display_scene(EnumScene.LOSE)
+            self.game_state.displayScene(EnumScene.LOSE)
         if key == "v":
-            self.game_state.display_scene(EnumScene.WIN)
+            self.game_state.displayScene(EnumScene.WIN)
 
     def createMap(self, level: Level) -> None:
         Entity(
@@ -42,10 +42,10 @@ class GameScene(Entity):
             collider="box",
             parent=self,
         )
-        for node in level.level_map.values():
+        for node in level.levelMap.values():
             cell_x = node.pos[0] - (level.width / 2) + 0.5
             cell_z = -(node.pos[1] - (level.height / 2) + 0.5)
-            if not node.get_neighbour(0):
+            if not node.getNeighbour(0):
                 Entity(
                     model="cube",
                     scale=Vec3(1, 2, 0.1),
@@ -55,7 +55,7 @@ class GameScene(Entity):
                     parent=self,
                 )
 
-            if not node.get_neighbour(1):
+            if not node.getNeighbour(1):
                 Entity(
                     model="cube",
                     scale=Vec3(0.1, 2, 1),
@@ -65,7 +65,7 @@ class GameScene(Entity):
                     parent=self,
                 )
 
-            if not node.get_neighbour(2):
+            if not node.getNeighbour(2):
                 Entity(
                     model="cube",
                     scale=Vec3(1, 2, 0.1),
@@ -75,7 +75,7 @@ class GameScene(Entity):
                     parent=self,
                 )
 
-            if not node.get_neighbour(3):
+            if not node.getNeighbour(3):
                 Entity(
                     model="cube",
                     scale=Vec3(0.1, 2, 1),

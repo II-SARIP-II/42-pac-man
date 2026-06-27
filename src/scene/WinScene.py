@@ -36,7 +36,7 @@ class WinScene(Entity):
         self.button_menu = ButtonUtils(
             text="MENU",
             position=Vec3(0, 1, 1),
-            action=lambda: self.game_state.display_scene(EnumScene.MENU),
+            action=lambda: self.game_state.displayScene(EnumScene.MENU),
             button_color=color.blue,
             parent_scene=self,
         )
@@ -45,7 +45,7 @@ class WinScene(Entity):
         self.button_quit = ButtonUtils(
             text="Quit",
             position=Vec3(0, 1, 5),
-            action=lambda: self.game_state.quit_game(),
+            action=lambda: self.game_state.quitGame(),
             button_color=color.blue,
             parent_scene=self,
         )

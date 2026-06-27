@@ -43,7 +43,7 @@ class PauseScene(Entity):
         self.button_resume = ButtonUtils(
             text="RESUME",
             position=Vec3(0, 1, 1),
-            action=lambda: self.game_state.display_scene(EnumScene.GAME),
+            action=lambda: self.game_state.displayScene(EnumScene.GAME),
             button_color=color.blue,
             parent_scene=self,
         )
@@ -51,7 +51,7 @@ class PauseScene(Entity):
         self.button_menu = ButtonUtils(
             text="MAIN MENU",
             position=Vec3(0, 1, -2),
-            action=lambda: self.game_state.display_scene(EnumScene.MENU),
+            action=lambda: self.game_state.displayScene(EnumScene.MENU),
             button_color=color.red,
             parent_scene=self,
         )
@@ -59,7 +59,7 @@ class PauseScene(Entity):
         self.button_quit = ButtonUtils(
             text="QUIT",
             position=Vec3(0, 1, -5),
-            action=lambda: self.game_state.quit_game(),
+            action=lambda: self.game_state.quitGame(),
             button_color=color.dark_gray,
             parent_scene=self,
         )

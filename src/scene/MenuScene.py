@@ -38,14 +38,14 @@ class MenuScene(Entity):
             position=Vec3(0, 1, 1),
             parent_scene=self,
             button_color=color.blue,
-            action=lambda: self.game_state.display_scene(EnumScene.GAME),
+            action=lambda: self.game_state.displayScene(EnumScene.GAME),
         )
 
     def buttonQuit(self) -> None:
         self.button_quit = ButtonUtils(
             text="Quit",
             position=Vec3(0, 1, -2),
-            action=lambda: self.game_state.quit_game(),
+            action=lambda: self.game_state.quitGame(),
             button_color=color.blue,
             parent_scene=self,
         )

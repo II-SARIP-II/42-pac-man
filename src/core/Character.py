@@ -8,7 +8,7 @@ class Character(Entity):
     def move(self, direction: str) -> None:
         pass
 
-    def reset_pos(self) -> None:
+    def resetPos(self) -> None:
         pass
 
     def respawn(self) -> None:

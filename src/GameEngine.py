@@ -74,13 +74,13 @@ class GameEngine:
     def _getLevels(levels_config: List[LevelValidation]) -> List[Level]:
         levels: List[Level] = []
         for level in levels_config:
-            levels.append(LevelGenerator().generate_level(level))
+            levels.append(LevelGenerator().generateLevel(level))
         return levels
 
-    def quit_game(self) -> None:
+    def quitGame(self) -> None:
         quit()
 
-    def display_scene(self, enum: EnumScene) -> None:
+    def displayScene(self, enum: EnumScene) -> None:
         if self.current_scene:
             self.current_scene.disable()
 

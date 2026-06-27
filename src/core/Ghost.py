@@ -9,6 +9,6 @@ class Ghost(Character):
         # the ghost's ia
         pass
 
-    def get_eaten(self) -> None:
+    def getEaten(self) -> None:
         # if the ghost is eaten
         pass

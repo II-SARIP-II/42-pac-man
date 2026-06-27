@@ -1,11 +1,11 @@
 from ..mazegenerator import MazeGenerator
-from .Level import Level
 from ..models.config import LevelValidation
+from .Level import Level
 from .Node import Node
 
 
-class LevelGenerator():
-    def generate_level(self, level: LevelValidation) -> Level:
+class LevelGenerator:
+    def generateLevel(self, level: LevelValidation) -> Level:
         width = level.width
         height = level.height
 
@@ -18,16 +18,14 @@ class LevelGenerator():
                 pos = x, y
                 nodes[pos] = Node(
                     pos=pos,
-                    neighbours=self.get_neighbours(pos, height, width),
-                    wall=cell
+                    neighbours=self.getNeighbours(pos, height, width),
+                    wall=cell,
                 )
         return Level(height=height, width=width, level_map=nodes)
 
-    def get_neighbours(self,
-                       pos: tuple[int, int],
-                       height: int,
-                       width: int
-                       ) -> list[tuple[int, int] | None]:
+    def getNeighbours(
+        self, pos: tuple[int, int], height: int, width: int
+    ) -> list[tuple[int, int] | None]:
 
         x, y = pos
 

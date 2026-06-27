@@ -1,24 +1,22 @@
-class Node():
-    def __init__(self,
-                 pos: tuple[int, int],
-                 neighbours: list[tuple[int, int] | None],
-                 wall: int
-                 ) -> None:
+class Node:
+    def __init__(
+        self, pos: tuple[int, int], neighbours: list[tuple[int, int] | None], wall: int
+    ) -> None:
 
         self.pos: tuple[int, int] = pos
         self.neighbours = neighbours
         self.wall = wall
 
-        self.get_walls()
+        self.getWalls()
 
-    def get_neighbour(self, direction: int) -> tuple[int, int] | None:
+    def getNeighbour(self, direction: int) -> tuple[int, int] | None:
         return self.neighbours[direction]
 
-    def get_walls(self) -> None:
-        binary = format(self.wall, '04b')[::-1]
+    def getWalls(self) -> None:
+        binary = format(self.wall, "04b")[::-1]
 
-        for i, b in enumerate(binary[:len(self.neighbours)]):
-            if b == '1':
+        for i, b in enumerate(binary[: len(self.neighbours)]):
+            if b == "1":
                 self.neighbours[i] = None
 
     def __repr__(self) -> str:
