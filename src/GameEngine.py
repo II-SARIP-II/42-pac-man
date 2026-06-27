@@ -48,8 +48,7 @@ class GameEngine:
 
             self.state = EnumScene.MENU
 
-            self.game_scene = GameScene(self)
-            self.game_scene.createMap(self.levels[0])
+            self.game_scene = GameScene(self, self.levels[0])
             self.game_scene.disable()
 
             self.pause_scene = PauseScene(self)
