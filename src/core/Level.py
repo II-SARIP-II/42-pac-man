@@ -10,5 +10,5 @@ class Level:
         self._level_map = level_map
 
     @property
-    def levelMap(self) -> dict[tuple[int, int], Node]:
+    def level_map(self) -> dict[tuple[int, int], Node]:
         return self._level_map

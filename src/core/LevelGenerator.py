@@ -20,6 +20,7 @@ class LevelGenerator:
                     pos=pos,
                     neighbours=self.getNeighbours(pos, height, width),
                     wall=cell,
+                    size=(width, height)
                 )
         return Level(height=height, width=width, level_map=nodes)
 

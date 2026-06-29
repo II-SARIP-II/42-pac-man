@@ -1,11 +1,19 @@
+from ursina import Vec3
+
+
 class Node:
     def __init__(
-        self, pos: tuple[int, int], neighbours: list[tuple[int, int] | None], wall: int
+        self,
+        pos: tuple[int, int],
+        neighbours: list[tuple[int, int] | None],
+        wall: int,
+        size: tuple[int, int]
     ) -> None:
 
         self.pos: tuple[int, int] = pos
         self.neighbours = neighbours
         self.wall = wall
+        self.size = size
 
         self.getWalls()
 

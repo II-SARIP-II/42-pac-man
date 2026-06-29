@@ -5,52 +5,55 @@ from ursina import Entity, Vec3, color
 from src.core.Level import Level
 from src.core.Player import Player
 from src.scene.EnumScene import EnumScene
+from src.utils import convertPosToVec
 
 if TYPE_CHECKING:
     from src.GameEngine import GameEngine
 
 
 class GameScene(Entity):
-    def __init__(self, game_state: "GameEngine", level: Level) -> None:
+    def __init__(self, game_engine: "GameEngine", level: Level) -> None:
         super().__init__()
 
-        self.game_state = game_state
-        self.player = self.createPlayer()
+        self.game_engine = game_engine
         self.level = level
+        self.player = self.createPlayer(self.level.width, self.level.height)
         self.map = self.createMap()
 
     def input(self, key: str) -> None:
         match key:
             case "escape":
-                self.game_state.displayScene(EnumScene.MENU)
+                self.game_engine.displayScene(EnumScene.MENU)
             case "p":
-                self.game_state.displayScene(EnumScene.PAUSE)
+                self.game_engine.displayScene(EnumScene.PAUSE)
             case "l":
-                self.game_state.displayScene(EnumScene.LOSE)
+                self.game_engine.displayScene(EnumScene.LOSE)
             case "v":
-                self.game_state.displayScene(EnumScene.WIN)
+                self.game_engine.displayScene(EnumScene.WIN)
             case "w":
-                self.player.goUp()
+                self.player.wish_direction = 0
             case "d":
-                self.player.goRight()
+                self.player.wish_direction = 1
             case "s":
-                self.player.goDown()
+                self.player.wish_direction = 2
             case "a":
-                self.player.goLeft()
+                self.player.wish_direction = 3
 
     def createMap(self) -> None:
         Entity(
             model="plane",
             scale=Vec3(self.level.width, 0, self.level.height),
-            position=Vec3(0, 0, 0),
+            position=Vec3(-0.5, 0, 0.5),
             color=color.black,
             collider="box",
             parent=self,
         )
 
-        for node in self.level.levelMap.values():
-            cell_x = node.pos[0] - (self.level.width / 2) + 0.5
-            cell_z = -(node.pos[1] - (self.level.height / 2) + 0.5)
+        for node in self.level.level_map.values():
+            cell_vector = convertPosToVec((node.pos), (self.level.width, self.level.height))
+            cell_x = cell_vector.x
+            cell_z = cell_vector.z
+
             if not node.getNeighbour(0):
                 Entity(
                     model="cube",
@@ -104,5 +107,5 @@ class GameScene(Entity):
             case _:
                 return False
 
-    def createPlayer(self) -> Player:
-        return Player(parent=self)
+    def createPlayer(self, width: int, height: int) -> Player:
+        return Player(parent=self, width=width, height=height)
