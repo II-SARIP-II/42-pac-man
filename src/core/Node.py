@@ -1,6 +1,3 @@
-from ursina import Vec3
-
-
 class Node:
     def __init__(
         self,
