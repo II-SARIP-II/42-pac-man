@@ -1,7 +1,10 @@
 from typing import TYPE_CHECKING
 
+from typing_extensions import List
 from ursina import Entity, Vec3, color
 
+from src.core.Ghost import Ghost
+from src.core.ghosts.blinky import Blinky
 from src.core.Level import Level
 from src.core.Player import Player
 from src.scene.EnumScene import EnumScene
@@ -18,6 +21,9 @@ class GameScene(Entity):
         self.game_engine = game_engine
         self.level = level
         self.player = self.createPlayer(self.level.width, self.level.height)
+        self.ghosts: List[Ghost] = self.createGhosts(
+            self.level.width, self.level.height, self.player, self.level
+        )
         self.map = self.createMap()
 
     def input(self, key: str) -> None:
@@ -30,13 +36,13 @@ class GameScene(Entity):
                 self.game_engine.displayScene(EnumScene.LOSE)
             case "v":
                 self.game_engine.displayScene(EnumScene.WIN)
-            case "w" | 'up arrow':
+            case "w" | "up arrow":
                 self.player.wish_direction = 0
-            case "d" | 'right arrow':
+            case "d" | "right arrow":
                 self.player.wish_direction = 1
-            case "s" | 'down arrow':
+            case "s" | "down arrow":
                 self.player.wish_direction = 2
-            case "a" | 'left arrow':
+            case "a" | "left arrow":
                 self.player.wish_direction = 3
 
     def createMap(self) -> None:
@@ -50,7 +56,9 @@ class GameScene(Entity):
         )
 
         for node in self.level.level_map.values():
-            cell_vector = convertPosToVec((node.pos), (self.level.width, self.level.height))
+            cell_vector = convertPosToVec(
+                (node.pos), (self.level.width, self.level.height)
+            )
             cell_x = cell_vector.x
             cell_z = cell_vector.z
 
@@ -94,18 +102,12 @@ class GameScene(Entity):
                     parent=self,
                 )
 
-    def canMove(self, direction: int) -> bool:
-        match direction:
-            case 0:
-                return self.player.position.z < self.level.height - 1
-            case 1:
-                return self.player.position.x < self.level.width - 1
-            case 2:
-                return self.player.position.z > 0
-            case 3:
-                return self.player.position.x > 0
-            case _:
-                return False
-
     def createPlayer(self, width: int, height: int) -> Player:
         return Player(parent=self, width=width, height=height)
+
+    def createGhosts(
+        self, width: int, height: int, player: Player, level: Level
+    ) -> List[Ghost]:
+        return [
+            Blinky(parent=self, width=width, height=height, player=player, level=level)
+        ]

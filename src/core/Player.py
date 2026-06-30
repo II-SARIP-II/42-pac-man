@@ -1,8 +1,10 @@
+from typing import TYPE_CHECKING
+
 from ursina import Vec3, color
 
 from src.core.Character import Character
+from src.core.Node import Node
 from src.utils import convertPosToVec
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from src.scene.GameScene import GameScene
@@ -18,7 +20,7 @@ class Player(Character):
             color=color.yellow,
             parent=parent,
             width=width,
-            height=height
+            height=height,
         )
 
         self.lives = 3
@@ -33,6 +35,3 @@ class Player(Character):
 
     def getPlayerPos(self) -> Vec3:
         return self.get_position(relative_to=self.game_scene)
-
-    # def eatItem(self, item: Item, game: GameScene) -> None:
-    #     game.player_eat_item(item)

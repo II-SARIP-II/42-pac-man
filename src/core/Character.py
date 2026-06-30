@@ -22,7 +22,6 @@ class Character(Entity):
         position: Vec3 = Vec3(0, 0, 0),
         color=color.yellow,
     ):
-        print(color, position)
         super().__init__(
             model=model,
             scale=Vec3(0.5, 0.5, 0.5),

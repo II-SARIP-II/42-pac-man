@@ -1,0 +1,102 @@
+import random
+import time
+from typing import TYPE_CHECKING, List
+
+from ursina import Vec3, color
+
+from src.core.Ghost import Ghost
+from src.core.Level import Level
+from src.core.Node import Node
+from src.core.Player import Player
+from src.utils import convertPosToVec, convertVecToPos
+
+if TYPE_CHECKING:
+    from src.scene.GameScene import GameScene
+
+
+class Blinky(Ghost):
+    def __init__(
+        self, width: int, height: int, parent: "GameScene", player: Player, level: Level
+    ):
+        self.pos = (1, 1)
+        super().__init__(
+            width=width,
+            height=height,
+            parent=parent,
+            color=color.red,
+            player=player,
+            position=convertPosToVec(self.pos, (width, height)),
+        )
+        self.level = level
+        self.width = width
+        self.height = height
+        self.target_path = []
+        self.position = convertPosToVec(self.pos, (width, height))
+        self.frame_counter = 0
+        self.speed = 4.5
+
+    def update(self) -> None:
+        self.behaviour()
+
+    def behaviour(self) -> None:
+        if len(self.target_path) < 2:
+            self.recalculate_path()
+
+        arrive_au_node = self.move()
+        if arrive_au_node:
+            self.recalculate_path()
+
+    def recalculate_path(self) -> None:
+        player_pos = self.player.getPlayerPos()
+        player_grid_pos = convertVecToPos(player_pos, (self.width, self.height))
+
+        ghost_grid_pos = convertVecToPos(self.position, (self.width, self.height))
+
+        if (
+            ghost_grid_pos in self.level.level_map
+            and player_grid_pos in self.level.level_map
+        ):
+            self.bfs(
+                self.level.level_map[ghost_grid_pos],
+                self.level.level_map[player_grid_pos],
+            )
+
+    def move(self) -> bool:
+        """Déplace le fantôme et renvoie True s'il a atteint son nœud cible."""
+        if len(self.target_path) < 2:
+            return False
+        target_vec = convertPosToVec(self.target_path[1].pos, (self.width, self.height))
+        vector_to_target = target_vec - self.position
+        if vector_to_target:
+            distance_left = vector_to_target.length()
+            step = self.speed * time.dt
+            if distance_left <= step:
+                self.position = target_vec
+                return True
+            else:
+                direction = vector_to_target.normalized()
+                self.position += direction * step
+                return False
+        return False
+
+    def bfs(self, start: Node, goal: Node) -> None:
+        if start == goal:
+            self.target_path = [start]
+            return
+        queue = [(start, [start])]
+        visited = {start}
+        while queue:
+            current_node, path = queue.pop(0)
+            for neighbor_pos in current_node.neighbours:
+                if neighbor_pos is None:
+                    continue
+                neighbor_node = self.level.level_map[neighbor_pos]
+                if neighbor_node not in visited:
+                    new_path = path + [neighbor_node]
+                    if neighbor_node == goal:
+                        self.target_path = new_path
+                        return
+                    visited.add(neighbor_node)
+                    queue.append((neighbor_node, new_path))
+
+        self.target_path = []
