@@ -79,9 +79,11 @@ class Character(Entity):
             opposite_direction = (self.current_direction + 2) % 4
 
             if self.wish_direction == opposite_direction:
+                print("bug")
                 tmp = self.target_node
                 self.target_node = self.current_node
                 self.current_node = tmp
+                self.current_direction = self.wish_direction
 
             target_vector = convertPosToVec(self.target_node.pos, self.size)
             vector_to_target = target_vector - self.position
