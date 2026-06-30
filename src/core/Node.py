@@ -1,3 +1,5 @@
+from src.core.Item import Item
+
 class Node:
     def __init__(
         self,
@@ -12,6 +14,7 @@ class Node:
         self.wall = wall
         self.size = size
         self.nb_neighbours = 0
+        self.item: Item | None = None
 
         self.getWalls()
         self.getNbNeighbours()

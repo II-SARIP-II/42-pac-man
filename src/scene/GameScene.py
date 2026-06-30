@@ -108,9 +108,9 @@ class GameScene(Entity):
         for pos, node in self.level.level_map.items():
             pos = convertPosToVec(pos, self.size)
             if node.nb_neighbours == 1:
-                self.super_pacgums.append(SuperPacGum(
-                    score=10, position=pos, parent=self))
+                node.item = SuperPacGum(
+                    score=10, position=pos, parent=self)
 
             elif node.nb_neighbours > 1:
-                self.pacgums.append(PacGum(
-                    score=10, position=pos, parent=self))
+                node.item = PacGum(
+                    score=10, position=pos, parent=self)
