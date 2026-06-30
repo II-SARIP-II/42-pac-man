@@ -1,5 +1,5 @@
-from ursina import Vec3, color, time
-
+from ursina import Vec3, color, time, destroy
+from src.core.Node import Node
 from src.core.Character import Character
 from src.utils import convertPosToVec
 from typing import TYPE_CHECKING
@@ -12,7 +12,7 @@ class Player(Character):
     def __init__(self, parent: "GameScene", width: int, height: int) -> None:
         super().__init__(
             model="sphere",
-            scale=Vec3(0.5, 0.5, 0.5),
+            scale=Vec3(0.7, 0.7, 0.7),
             collider="box",
             position=convertPosToVec((0, 0), (width, height)),
             color=color.yellow,
@@ -35,6 +35,9 @@ class Player(Character):
         return self.get_position(relative_to=self.game_scene)
 
     def update(self) -> None:
+        if self.current_node.item:
+            self.eatItem(self.current_node)
+
         if self.current_node == self.target_node:
             if self.wish_direction >= 0:
                 wish_dir_neighbour = self.current_node.neighbours[
@@ -76,5 +79,8 @@ class Player(Character):
                 else:
                     self.position += direction * step
 
-    # def eatItem(self, item: Item, game: GameScene) -> None:
-    #     game.player_eat_item(item)
+    def eatItem(self, node: Node) -> None:
+        if node.item:
+            self.score += node.item.score
+            destroy(node.item)
+            node.item = None

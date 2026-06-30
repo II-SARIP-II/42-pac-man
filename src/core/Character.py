@@ -21,7 +21,7 @@ class Character(Entity):
     ):
         super().__init__(
             model=model,
-            scale=Vec3(0.5, 0.5, 0.5),
+            scale=scale,
             collider="box",
             position=Vec3(0, 0, 0),
             parent=parent,
