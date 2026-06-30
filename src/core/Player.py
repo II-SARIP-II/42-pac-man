@@ -81,6 +81,6 @@ class Player(Character):
 
     def eatItem(self, node: Node) -> None:
         if node.item:
-            self.score += node.item.score
+            self.scores += node.item.score
             destroy(node.item)
             node.item = None
