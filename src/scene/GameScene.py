@@ -30,13 +30,13 @@ class GameScene(Entity):
                 self.game_engine.displayScene(EnumScene.LOSE)
             case "v":
                 self.game_engine.displayScene(EnumScene.WIN)
-            case "w":
+            case "w" | 'up arrow':
                 self.player.wish_direction = 0
-            case "d":
+            case "d" | 'right arrow':
                 self.player.wish_direction = 1
-            case "s":
+            case "s" | 'down arrow':
                 self.player.wish_direction = 2
-            case "a":
+            case "a" | 'left arrow':
                 self.player.wish_direction = 3
 
     def createMap(self) -> None:

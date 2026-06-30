@@ -32,15 +32,32 @@ class Player(Character):
         self.target_node = self.current_node
         self.speed = 5.0
         self.wish_direction: int = -1
+        self.current_direction: int = self.wish_direction
 
     def update(self) -> None:
         if self.current_node == self.target_node and self.wish_direction >= 0:
-            neighbour_coo = self.current_node.neighbours[self.wish_direction]
-            if neighbour_coo is not None:
-                neighbour = self.getNode(neighbour_coo)
+
+            self.current_direction = self.wish_direction
+
+            wish_dir_neighbour = self.current_node.neighbours[self.wish_direction]
+
+            if wish_dir_neighbour is not None:
+                neighbour = self.getNode(wish_dir_neighbour)
                 self.target_node = neighbour
 
+            elif wish_dir_neighbour is None:
+                print("oui ici la !!!!!!!!!!!!!!!!!!!!!!1")
+                curr_dir_neighbour = self.current_node.neighbours[self.current_direction]
+                if curr_dir_neighbour is not None:
+                    self.target_node = curr_dir_neighbour
+
         if self.current_node != self.target_node:
+            opposite_direction = (self.current_direction + 2) % 4
+
+            if self.wish_direction == opposite_direction:
+                self.target_node, self.current_node = self.current_node, self.target_node
+                self.current_direction = self.wish_direction
+
             target_vector = convertPosToVec(self.target_node.pos, self.size)
             vector_to_target = target_vector - self.position
 
@@ -64,22 +81,6 @@ class Player(Character):
 
         if self.lives == 0:
             print("game over")
-
-    # def goUp(self) -> None:
-    #     self.position += Vec3(0, 0, 1)
-    #     print(self.getPlayerPos())
-
-    # def goDown(self) -> None:
-    #     self.position += Vec3(0, 0, -1)
-    #     print(self.getPlayerPos())
-
-    # def goLeft(self) -> None:
-    #     self.position += Vec3(-1, 0, 0)
-    #     print(self.getPlayerPos())
-
-    # def goRight(self) -> None:
-    #     self.position += Vec3(1, 0, 0)
-    #     print(self.getPlayerPos())
 
     def getPlayerPos(self) -> Vec3:
         return self.get_position(relative_to=self.game)
