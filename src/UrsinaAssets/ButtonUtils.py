@@ -2,6 +2,11 @@ from typing import Callable
 
 from ursina import Button, Vec3, color
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.scene.GameScene import GameScene
+
 
 class ButtonUtils(Button):
     def __init__(
@@ -9,8 +14,8 @@ class ButtonUtils(Button):
         text: str,
         position: Vec3,
         action: Callable,
-        button_color=color.blue,
-        parent_scene=None,
+        parent_scene: "GameScene",
+        button_color: color = color.blue,
     ) -> None:
 
         super().__init__(
