@@ -40,30 +40,30 @@ class GameEngine:
         self._setupEngine()
 
     def _setupEngine(self) -> None:
-        try:
-            self.scores = self._getScores(self.highscore_filename_config)
+        # try:
+        self.scores = self._getScores(self.highscore_filename_config)
 
-            camera.position = (0, 50, 0)
-            camera.rotation = (90, 0, 0)
+        camera.position = (0, 50, 0)
+        camera.rotation = (90, 0, 0)
 
-            self.state = EnumScene.MENU
+        self.state = EnumScene.MENU
 
-            self.game_scene = GameScene(self, self.levels[0])
-            self.game_scene.disable()
+        self.game_scene = GameScene(self, self.levels[0])
+        self.game_scene.disable()
 
-            self.pause_scene = PauseScene(self)
-            self.pause_scene.disable()
+        self.pause_scene = PauseScene(self)
+        self.pause_scene.disable()
 
-            self.win_scene = WinScene(self)
-            self.win_scene.disable()
+        self.win_scene = WinScene(self)
+        self.win_scene.disable()
 
-            self.lose_scene = LoseScene(self)
-            self.lose_scene.disable()
+        self.lose_scene = LoseScene(self)
+        self.lose_scene.disable()
 
-            self.menu_scene = MenuScene(self)
-            self.current_scene = self.menu_scene
-        except Exception as e:
-            raise ValueError(e)
+        self.menu_scene = MenuScene(self)
+        self.current_scene = self.menu_scene
+        # except Exception as e:
+        #     raise ValueError(e)
 
     @staticmethod
     def _getScores(filename: str) -> ScoresList:

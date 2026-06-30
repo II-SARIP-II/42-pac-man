@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from ursina import Entity, Vec3, color
 
 from src.core.Level import Level
+from src.core.PacGum import PacGum, SuperPacGum
 from src.core.Player import Player
 from src.scene.EnumScene import EnumScene
 from src.utils import convertPosToVec
@@ -17,8 +18,13 @@ class GameScene(Entity):
 
         self.game_engine = game_engine
         self.level = level
+        self.size = self.level.width, self.level.height
         self.player = self.createPlayer(self.level.width, self.level.height)
+        self.pacgums: list[PacGum] = []
+        self.super_pacgums: list[SuperPacGum] = []
+
         self.createMap()
+        self.createPacGums()
 
     def input(self, key: str) -> None:
         match key:
@@ -97,3 +103,14 @@ class GameScene(Entity):
 
     def createPlayer(self, width: int, height: int) -> Player:
         return Player(parent=self, width=width, height=height)
+
+    def createPacGums(self) -> None:
+        for pos, node in self.level.level_map.items():
+            pos = convertPosToVec(pos, self.size)
+            if node.nb_neighbours == 1:
+                self.super_pacgums.append(SuperPacGum(
+                    score=10, position=pos, parent=self))
+
+            elif node.nb_neighbours > 1:
+                self.pacgums.append(PacGum(
+                    score=10, position=pos, parent=self))

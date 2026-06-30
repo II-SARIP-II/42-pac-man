@@ -12,7 +12,7 @@ class Player(Character):
     def __init__(self, parent: "GameScene", width: int, height: int) -> None:
         super().__init__(
             model="sphere",
-            scale=Vec3(0.5, 0.5, 0.5),
+            scale=Vec3(0.7, 0.7, 0.7),
             collider="box",
             position=convertPosToVec((0, 0), (width, height)),
             color=color.yellow,
