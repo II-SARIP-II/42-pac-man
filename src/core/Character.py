@@ -1,4 +1,4 @@
-from ursina import Entity, Vec3, color, time
+from ursina import Entity, Vec3, color
 from src.utils import convertPosToVec
 from src.core.Node import Node
 from typing import TYPE_CHECKING
@@ -52,50 +52,7 @@ class Character(Entity):
         pass
 
     def update(self) -> None:
-        self.movement()
+        pass
 
     def getNode(self, coo: tuple[int, int]) -> Node:
         return self.game_scene.level.level_map[coo]
-
-    def movement(self) -> None:
-        if self.current_node == self.target_node:
-            if self.wish_direction >= 0:
-                wish_dir_neighbour = self.current_node.neighbours[
-                    self.wish_direction]
-
-                if wish_dir_neighbour is not None:
-                    self.current_direction = self.wish_direction
-                    neighbour = self.getNode(wish_dir_neighbour)
-                    self.target_node = neighbour
-
-                elif wish_dir_neighbour is None:
-                    curr_dir_neighbour = self.current_node.neighbours[
-                        self.current_direction]
-                    if curr_dir_neighbour is not None:
-                        neighbour = self.getNode(curr_dir_neighbour)
-                        self.target_node = neighbour
-
-        if self.current_node != self.target_node:
-            opposite_direction = (self.current_direction + 2) % 4
-
-            if self.wish_direction == opposite_direction:
-                print("bug")
-                tmp = self.target_node
-                self.target_node = self.current_node
-                self.current_node = tmp
-                self.current_direction = self.wish_direction
-
-            target_vector = convertPosToVec(self.target_node.pos, self.size)
-            vector_to_target = target_vector - self.position
-
-            if vector_to_target and vector_to_target.length_squared() > 0:
-                direction = vector_to_target.normalized()
-                distance_left = vector_to_target.length()
-
-                step = self.speed * time.dt
-
-                if distance_left <= step:
-                    self.position = target_vector
-                    self.current_node = self.target_node
-                else:
-                    self.position += direction * step
