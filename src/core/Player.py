@@ -1,8 +1,10 @@
-from ursina import Vec3, color, time, destroy
-from src.core.Node import Node
-from src.core.Character import Character
-from src.utils import convertPosToVec
 from typing import TYPE_CHECKING
+
+from ursina import Vec3, color, destroy, time
+
+from src.core.Character import Character
+from src.core.Node import Node
+from src.utils import convertPosToVec
 
 if TYPE_CHECKING:
     from src.scene.GameScene import GameScene
@@ -18,7 +20,7 @@ class Player(Character):
             color=color.yellow,
             parent=parent,
             width=width,
-            height=height
+            height=height,
         )
 
         self.lives = 3
@@ -40,8 +42,7 @@ class Player(Character):
 
         if self.current_node == self.target_node:
             if self.wish_direction >= 0:
-                wish_dir_neighbour = self.current_node.neighbours[
-                    self.wish_direction]
+                wish_dir_neighbour = self.current_node.neighbours[self.wish_direction]
 
                 if wish_dir_neighbour is not None:
                     self.current_direction = self.wish_direction
@@ -50,7 +51,8 @@ class Player(Character):
 
                 elif wish_dir_neighbour is None:
                     curr_dir_neighbour = self.current_node.neighbours[
-                        self.current_direction]
+                        self.current_direction
+                    ]
                     if curr_dir_neighbour is not None:
                         neighbour = self.getNode(curr_dir_neighbour)
                         self.target_node = neighbour

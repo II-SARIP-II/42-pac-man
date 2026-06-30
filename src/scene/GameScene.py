@@ -1,7 +1,10 @@
 from typing import TYPE_CHECKING
 
+from typing_extensions import List
 from ursina import Entity, Vec3, color
 
+from src.core.Ghost import Ghost
+from src.core.ghosts.blinky import Blinky
 from src.core.Level import Level
 from src.core.PacGum import PacGum, SuperPacGum
 from src.core.Player import Player
@@ -20,9 +23,9 @@ class GameScene(Entity):
         self.level = level
         self.size = self.level.width, self.level.height
         self.player = self.createPlayer(self.level.width, self.level.height)
-        self.pacgums: list[PacGum] = []
-        self.super_pacgums: list[SuperPacGum] = []
-
+        self.ghosts: List[Ghost] = self.createGhosts(
+            self.level.width, self.level.height, self.player, self.level
+        )
         self.createMap()
         self.createPacGums()
 
@@ -36,13 +39,13 @@ class GameScene(Entity):
                 self.game_engine.displayScene(EnumScene.LOSE)
             case "v":
                 self.game_engine.displayScene(EnumScene.WIN)
-            case "w" | 'up arrow':
+            case "w" | "up arrow":
                 self.player.wish_direction = 0
-            case "d" | 'right arrow':
+            case "d" | "right arrow":
                 self.player.wish_direction = 1
-            case "s" | 'down arrow':
+            case "s" | "down arrow":
                 self.player.wish_direction = 2
-            case "a" | 'left arrow':
+            case "a" | "left arrow":
                 self.player.wish_direction = 3
 
     def createMap(self) -> None:
@@ -57,7 +60,8 @@ class GameScene(Entity):
 
         for node in self.level.level_map.values():
             cell_vector = convertPosToVec(
-                (node.pos), (self.level.width, self.level.height))
+                (node.pos), (self.level.width, self.level.height)
+            )
             cell_x = cell_vector.x
             cell_z = cell_vector.z
 
@@ -108,9 +112,14 @@ class GameScene(Entity):
         for pos, node in self.level.level_map.items():
             pos = convertPosToVec(pos, self.size)
             if node.nb_neighbours == 1:
-                node.item = SuperPacGum(
-                    score=10, position=pos, parent=self)
+                node.item = SuperPacGum(score=10, position=pos, parent=self)
 
             elif node.nb_neighbours > 1:
-                node.item = PacGum(
-                    score=10, position=pos, parent=self)
+                node.item = PacGum(score=10, position=pos, parent=self)
+
+    def createGhosts(
+        self, width: int, height: int, player: Player, level: Level
+    ) -> List[Ghost]:
+        return [
+            Blinky(parent=self, width=width, height=height, player=player, level=level)
+        ]

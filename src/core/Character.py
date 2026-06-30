@@ -1,7 +1,8 @@
-from ursina import Entity, Vec3, color
-from src.utils import convertPosToVec
-from src.core.Node import Node
 from typing import TYPE_CHECKING
+
+from ursina import Entity, Vec3, color
+
+from src.core.Node import Node
 
 if TYPE_CHECKING:
     from src.scene.GameScene import GameScene
@@ -17,13 +18,13 @@ class Character(Entity):
         scale: Vec3 = Vec3(0.5, 0.5, 0.5),
         collider: str = "box",
         position: Vec3 = Vec3(0, 0, 0),
-        color: color = color.yellow
+        color: color = color.yellow,
     ):
         super().__init__(
             model=model,
             scale=scale,
             collider="box",
-            position=Vec3(0, 0, 0),
+            position=position,
             parent=parent,
             color=color,
         )
@@ -31,7 +32,7 @@ class Character(Entity):
         self.size = width, height
         self.game_scene = parent
 
-        self.position = convertPosToVec((0, 0), self.size)
+        self.position = position
 
         self.current_node = self.getNode((0, 0))
         self.target_node = self.current_node
