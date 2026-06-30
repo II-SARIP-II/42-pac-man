@@ -1,5 +1,6 @@
 from src.core.Item import Item
 
+
 class Node:
     def __init__(
         self,
@@ -29,7 +30,7 @@ class Node:
             if b == "1":
                 self.neighbours[i] = None
 
-    def getNbNeighbours(self):
+    def getNbNeighbours(self) -> None:
         res = 0
         for n in self.neighbours:
             if n is not None:
