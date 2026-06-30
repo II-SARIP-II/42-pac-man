@@ -4,7 +4,8 @@ from typing_extensions import List
 from ursina import Entity, Vec3, color
 
 from src.core.Ghost import Ghost
-from src.core.ghosts.blinky import Blinky
+from src.core.ghosts.Blinky import Blinky
+from src.core.ghosts.Pinky import Pinky
 from src.core.Level import Level
 from src.core.PacGum import PacGum, SuperPacGum
 from src.core.Player import Player
@@ -121,5 +122,6 @@ class GameScene(Entity):
         self, width: int, height: int, player: Player, level: Level
     ) -> List[Ghost]:
         return [
-            Blinky(parent=self, width=width, height=height, player=player, level=level)
+            Blinky(parent=self, width=width, height=height, player=player, level=level),
+            Pinky(parent=self, width=width, height=height, player=player, level=level),
         ]

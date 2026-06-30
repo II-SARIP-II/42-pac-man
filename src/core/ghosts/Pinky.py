@@ -1,6 +1,5 @@
-import random
 import time
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
 from ursina import Vec3, color
 
@@ -14,16 +13,16 @@ if TYPE_CHECKING:
     from src.scene.GameScene import GameScene
 
 
-class Blinky(Ghost):
+class Pinky(Ghost):
     def __init__(
         self, width: int, height: int, parent: "GameScene", player: Player, level: Level
     ):
-        self.pos = (1, 1)
+        self.pos = (0, height - 1)
         super().__init__(
             width=width,
             height=height,
             parent=parent,
-            color=color.red,
+            color=color.pink,
             player=player,
             position=convertPosToVec(self.pos, (width, height)),
         )
@@ -48,14 +47,30 @@ class Blinky(Ghost):
 
     def recalculate_path(self) -> None:
         player_pos = self.player.getPlayerPos()
+        player_dir = self.player.current_direction
+        add_pos = (0, 0)
         player_grid_pos = convertVecToPos(player_pos, (self.width, self.height))
-
+        match player_dir:
+            case 0:
+                add_pos = (0, -2)
+            case 1:
+                add_pos = (2, 0)
+            case 2:
+                add_pos = (0, 2)
+            case 3:
+                add_pos = (-2, 0)
+        target_node = tuple(map(lambda x, y: x + y, player_grid_pos, add_pos))
         ghost_grid_pos = convertVecToPos(self.position, (self.width, self.height))
 
         if (
             ghost_grid_pos in self.level.level_map
-            and player_grid_pos in self.level.level_map
+            and target_node in self.level.level_map
         ):
+            self.bfs(
+                self.level.level_map[ghost_grid_pos],
+                self.level.level_map[target_node],
+            )
+        else:
             self.bfs(
                 self.level.level_map[ghost_grid_pos],
                 self.level.level_map[player_grid_pos],
