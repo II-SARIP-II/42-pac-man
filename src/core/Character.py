@@ -1,8 +1,10 @@
-from ursina import Entity, Vec3, color
-from src.utils import convertPosToVec
 import time
-from src.core.Node import Node
 from typing import TYPE_CHECKING
+
+from ursina import Entity, Vec3, color
+
+from src.core.Node import Node
+from src.utils import convertPosToVec
 
 if TYPE_CHECKING:
     from src.scene.GameScene import GameScene
@@ -18,13 +20,14 @@ class Character(Entity):
         scale: Vec3 = Vec3(0.5, 0.5, 0.5),
         collider: str = "box",
         position: Vec3 = Vec3(0, 0, 0),
-        color=color.yellow
+        color=color.yellow,
     ):
+        print(color, position)
         super().__init__(
             model=model,
             scale=Vec3(0.5, 0.5, 0.5),
             collider="box",
-            position=Vec3(0, 0, 0),
+            position=position,
             parent=parent,
             color=color,
         )
@@ -32,7 +35,7 @@ class Character(Entity):
         self.size = width, height
         self.game_scene = parent
 
-        self.position = convertPosToVec((0, 0), self.size)
+        self.position = position
 
         self.current_node = self.getNode((0, 0))
         self.target_node = self.current_node
@@ -54,7 +57,6 @@ class Character(Entity):
 
     def update(self) -> None:
         if self.current_node == self.target_node and self.wish_direction >= 0:
-
             self.current_direction = self.wish_direction
 
             wish_dir_neighbour = self.current_node.neighbours[self.wish_direction]
@@ -64,7 +66,9 @@ class Character(Entity):
                 self.target_node = neighbour
 
             elif wish_dir_neighbour is None:
-                curr_dir_neighbour = self.current_node.neighbours[self.current_direction]
+                curr_dir_neighbour = self.current_node.neighbours[
+                    self.current_direction
+                ]
                 if curr_dir_neighbour is not None:
                     self.target_node = curr_dir_neighbour
 
@@ -72,7 +76,10 @@ class Character(Entity):
             opposite_direction = (self.current_direction + 2) % 4
 
             if self.wish_direction == opposite_direction:
-                self.target_node, self.current_node = self.current_node, self.target_node
+                self.target_node, self.current_node = (
+                    self.current_node,
+                    self.target_node,
+                )
                 self.current_direction = self.wish_direction
 
             target_vector = convertPosToVec(self.target_node.pos, self.size)
