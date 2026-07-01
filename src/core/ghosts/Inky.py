@@ -1,5 +1,5 @@
 import time
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from ursina import Vec3, color
 
@@ -13,16 +13,16 @@ if TYPE_CHECKING:
     from src.scene.GameScene import GameScene
 
 
-class Pinky(Ghost):
+class Inky(Ghost):
     def __init__(
         self, width: int, height: int, parent: "GameScene", player: Player, level: Level
     ):
-        self.pos = (0, height - 1)
+        self.pos = (width - 1, 0)
         super().__init__(
             width=width,
             height=height,
             parent=parent,
-            color=color.pink,
+            color=color.cyan,
             player=player,
             position=convertPosToVec(self.pos, (width, height)),
         )
@@ -33,6 +33,7 @@ class Pinky(Ghost):
         self.position = convertPosToVec(self.pos, (width, height))
         self.frame_counter = 0
         self.speed = 4.5
+        self.last_node: Optional[Node] = None
 
     def update(self) -> None:
         self.behaviour()
@@ -43,6 +44,8 @@ class Pinky(Ghost):
 
         arrive_au_node = self.move()
         if arrive_au_node:
+            if len(self.target_path) >= 2:
+                self.last_node = self.target_path[0]
             self.recalculate_path()
 
     def recalculate_path(self) -> None:
@@ -52,11 +55,11 @@ class Pinky(Ghost):
         player_grid_pos = convertVecToPos(player_pos, (self.width, self.height))
         match player_dir:
             case 0:
-                add_pos = (0, 2)
+                add_pos = (0, -2)
             case 1:
                 add_pos = (2, 0)
             case 2:
-                add_pos = (0, -2)
+                add_pos = (0, 2)
             case 3:
                 add_pos = (-2, 0)
         target_node = tuple(map(lambda x, y: x + y, player_grid_pos, add_pos))
@@ -69,6 +72,7 @@ class Pinky(Ghost):
             self.bfs(
                 self.level.level_map[ghost_grid_pos],
                 self.level.level_map[target_node],
+                self.last_node,
             )
         else:
             self.bfs(
@@ -94,12 +98,19 @@ class Pinky(Ghost):
                 return False
         return False
 
-    def bfs(self, start: Node, goal: Node) -> None:
+    def bfs(
+        self, start: Node, goal: Node, disallowed_node: Optional[Node] = None
+    ) -> None:
         if start == goal:
             self.target_path = [start]
             return
+
         queue = [(start, [start])]
         visited = {start}
+
+        if disallowed_node and disallowed_node != goal:
+            visited.add(disallowed_node)
+
         while queue:
             current_node, path = queue.pop(0)
             for neighbor_pos in current_node.neighbours:

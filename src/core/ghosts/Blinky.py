@@ -1,5 +1,5 @@
 import time
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Optional
 
 from ursina import Vec3, color
 
@@ -33,6 +33,7 @@ class Blinky(Ghost):
         self.position = convertPosToVec(self.pos, (width, height))
         self.frame_counter = 0
         self.speed = 4.5
+        self.last_node: Optional[Node] = None
 
     def update(self) -> None:
         self.behaviour()
@@ -43,12 +44,13 @@ class Blinky(Ghost):
 
         arrive_au_node = self.move()
         if arrive_au_node:
+            if len(self.target_path) >= 2:
+                self.last_node = self.target_path[0]
             self.recalculate_path()
 
     def recalculate_path(self) -> None:
         player_pos = self.player.getPlayerPos()
         player_grid_pos = convertVecToPos(player_pos, (self.width, self.height))
-
         ghost_grid_pos = convertVecToPos(self.position, (self.width, self.height))
 
         if (
@@ -58,6 +60,7 @@ class Blinky(Ghost):
             self.bfs(
                 self.level.level_map[ghost_grid_pos],
                 self.level.level_map[player_grid_pos],
+                self.last_node,
             )
 
     def move(self) -> bool:
@@ -78,12 +81,19 @@ class Blinky(Ghost):
                 return False
         return False
 
-    def bfs(self, start: Node, goal: Node) -> None:
+    def bfs(
+        self, start: Node, goal: Node, disallowed_node: Optional[Node] = None
+    ) -> None:
         if start == goal:
             self.target_path = [start]
             return
+
         queue = [(start, [start])]
         visited = {start}
+
+        if disallowed_node and disallowed_node != goal:
+            visited.add(disallowed_node)
+
         while queue:
             current_node, path = queue.pop(0)
             for neighbor_pos in current_node.neighbours:
