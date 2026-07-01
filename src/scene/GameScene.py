@@ -5,6 +5,7 @@ from ursina import Entity, Vec3, color
 
 from src.core.Ghost import Ghost
 from src.core.ghosts.Blinky import Blinky
+from src.core.ghosts.Clyde import Clyde
 from src.core.ghosts.Inky import Inky
 from src.core.ghosts.Pinky import Pinky
 from src.core.Level import Level
@@ -126,4 +127,5 @@ class GameScene(Entity):
             Blinky(parent=self, width=width, height=height, player=player, level=level),
             Pinky(parent=self, width=width, height=height, player=player, level=level),
             Inky(parent=self, width=width, height=height, player=player, level=level),
+            Clyde(parent=self, width=width, height=height, player=player, level=level),
         ]

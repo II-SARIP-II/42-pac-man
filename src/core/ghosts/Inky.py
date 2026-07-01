@@ -55,13 +55,13 @@ class Inky(Ghost):
         player_grid_pos = convertVecToPos(player_pos, (self.width, self.height))
         match player_dir:
             case 0:
-                add_pos = (0, -2)
-            case 1:
-                add_pos = (2, 0)
-            case 2:
-                add_pos = (0, 2)
-            case 3:
                 add_pos = (-2, 0)
+            case 1:
+                add_pos = (0, 2)
+            case 2:
+                add_pos = (2, 0)
+            case 3:
+                add_pos = (0, -2)
         target_node = tuple(map(lambda x, y: x + y, player_grid_pos, add_pos))
         ghost_grid_pos = convertVecToPos(self.position, (self.width, self.height))
 
