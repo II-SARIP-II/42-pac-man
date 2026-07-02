@@ -1,3 +1,4 @@
+import random
 import time
 from typing import TYPE_CHECKING, List, Optional
 
@@ -32,8 +33,10 @@ class Blinky(Ghost):
         self.target_path = []
         self.position = convertPosToVec(self.pos, (width, height))
         self.frame_counter = 0
-        self.speed = 4.5
+        self.speed = 4
         self.last_node: Optional[Node] = None
+        self.chase = True
+        self.chase_count = 0
 
     def update(self) -> None:
         self.behaviour()
@@ -49,17 +52,33 @@ class Blinky(Ghost):
             self.recalculate_path()
 
     def recalculate_path(self) -> None:
-        player_pos = self.player.getPlayerPos()
-        player_grid_pos = convertVecToPos(player_pos, (self.width, self.height))
+        if self.chase:
+            self.chase_count += 1
+            if self.chase_count > 30:
+                self.chase = False
+                self.speed = 2.5
+                self.chase_count = 0
+            player_pos = self.player.getPlayerPos()
+            target_pos = convertVecToPos(player_pos, (self.width, self.height))
+        else:
+            self.chase_count += 1
+            target_pos = (
+                random.randint(0, self.width - 1),
+                random.randint(0, self.height - 1),
+            )
+            if self.chase_count > 25:
+                self.chase = True
+                self.speed = 4
+                self.chase_count = 0
         ghost_grid_pos = convertVecToPos(self.position, (self.width, self.height))
 
         if (
             ghost_grid_pos in self.level.level_map
-            and player_grid_pos in self.level.level_map
+            and target_pos in self.level.level_map
         ):
             self.bfs(
                 self.level.level_map[ghost_grid_pos],
-                self.level.level_map[player_grid_pos],
+                self.level.level_map[target_pos],
                 self.last_node,
             )
 

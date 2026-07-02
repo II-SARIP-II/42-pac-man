@@ -1,3 +1,4 @@
+import random
 import time
 from typing import TYPE_CHECKING, Optional
 
@@ -17,7 +18,10 @@ class Clyde(Ghost):
     def __init__(
         self, width: int, height: int, parent: "GameScene", player: Player, level: Level
     ):
-        self.pos = (width - 1, 0)
+        if width % 2 != 0:
+            self.pos = (width // 2, height // 2)
+        else:
+            self.pos = (width // 2 - 1, height // 2)
         super().__init__(
             width=width,
             height=height,
@@ -32,8 +36,10 @@ class Clyde(Ghost):
         self.target_path = []
         self.position = convertPosToVec(self.pos, (width, height))
         self.frame_counter = 0
-        self.speed = 4.5
+        self.speed = 4
         self.last_node: Optional[Node] = None
+        self.chase = True
+        self.chase_count = 0
 
     def update(self) -> None:
         self.behaviour()
@@ -49,29 +55,45 @@ class Clyde(Ghost):
             self.recalculate_path()
 
     def recalculate_path(self) -> None:
-        player_pos = self.player.getPlayerPos()
-        player_dir = self.player.current_direction
-        add_pos = (0, 0)
-        player_grid_pos = convertVecToPos(player_pos, (self.width, self.height))
-        match player_dir:
-            case 0:
-                add_pos = (2, 0)
-            case 1:
-                add_pos = (0, -2)
-            case 2:
-                add_pos = (-2, 0)
-            case 3:
-                add_pos = (0, 2)
-        target_node = tuple(map(lambda x, y: x + y, player_grid_pos, add_pos))
+        if self.chase:
+            self.chase_count += 1
+            if self.chase_count > 25:
+                self.chase = False
+                self.speed = 2.5
+                self.chase_count = 0
+            player_pos = self.player.getPlayerPos()
+            player_dir = self.player.current_direction
+            add_pos = (0, 0)
+            player_grid_pos = convertVecToPos(player_pos, (self.width, self.height))
+            match player_dir:
+                case 0:
+                    add_pos = (2, 0)
+                case 1:
+                    add_pos = (0, -2)
+                case 2:
+                    add_pos = (-2, 0)
+                case 3:
+                    add_pos = (0, 2)
+            target_pos = tuple(map(lambda x, y: x + y, player_grid_pos, add_pos))
+        else:
+            self.chase_count += 1
+            target_pos = (
+                random.randint(0, self.width - 1),
+                random.randint(0, self.height - 1),
+            )
+            if self.chase_count > 25:
+                self.chase = True
+                self.speed = 4
+                self.chase_count = 0
         ghost_grid_pos = convertVecToPos(self.position, (self.width, self.height))
 
         if (
             ghost_grid_pos in self.level.level_map
-            and target_node in self.level.level_map
+            and target_pos in self.level.level_map
         ):
             self.bfs(
                 self.level.level_map[ghost_grid_pos],
-                self.level.level_map[target_node],
+                self.level.level_map[target_pos],
                 self.last_node,
             )
         else:
