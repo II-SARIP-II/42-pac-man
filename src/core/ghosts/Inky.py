@@ -1,10 +1,9 @@
-import random
 import time
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, Tuple
 
 from ursina import Vec3, color
 
-from src.core.Ghost import Ghost
+from src.core.Ghost import EnumMode, Ghost
 from src.core.Level import Level
 from src.core.Node import Node
 from src.core.Player import Player
@@ -19,29 +18,20 @@ class Inky(Ghost):
         self, width: int, height: int, parent: "GameScene", player: Player, level: Level
     ):
         self.pos = (width - 1, 0)
+        self.basic_color = color.cyan
         super().__init__(
             width=width,
             height=height,
             parent=parent,
-            color=color.cyan,
+            color=self.basic_color,
             player=player,
             position=convertPosToVec(self.pos, (width, height)),
         )
         self.level = level
-        self.width = width
-        self.height = height
         self.target_path = []
         self.position = convertPosToVec(self.pos, (width, height))
-        self.frame_counter = 0
-        self.speed = 4
-        self.last_node: Optional[Node] = None
-        self.chase = True
-        self.chase_count = 0
 
     def update(self) -> None:
-        self.behaviour()
-
-    def behaviour(self) -> None:
         if len(self.target_path) < 2:
             self.recalculate_path()
 
@@ -51,37 +41,34 @@ class Inky(Ghost):
                 self.last_node = self.target_path[0]
             self.recalculate_path()
 
+    def chaseMovement(self, player_grid_pos) -> Tuple[int, int]:
+        self.chase_count += 1
+        if self.chase_count > 30:
+            self.mode = EnumMode.RANDOM
+            self.speed = 2.5
+            self.chase_count = 0
+        player_dir = self.player.current_direction
+        add_pos = (0, 0)
+        match player_dir:
+            case 0:
+                add_pos = (-2, 0)
+            case 1:
+                add_pos = (0, 2)
+            case 2:
+                add_pos = (2, 0)
+            case 3:
+                add_pos = (0, -2)
+        return tuple(map(lambda x, y: x + y, player_grid_pos, add_pos))
+
     def recalculate_path(self) -> None:
-        if self.chase:
-            self.chase_count += 1
-            if self.chase_count > 30:
-                self.chase = False
-                self.speed = 2.5
-                self.chase_count = 0
+        if self.mode == EnumMode.CHASE:
             player_pos = self.player.getPlayerPos()
-            player_dir = self.player.current_direction
-            add_pos = (0, 0)
             player_grid_pos = convertVecToPos(player_pos, (self.width, self.height))
-            match player_dir:
-                case 0:
-                    add_pos = (-2, 0)
-                case 1:
-                    add_pos = (0, 2)
-                case 2:
-                    add_pos = (2, 0)
-                case 3:
-                    add_pos = (0, -2)
-            target_pos = tuple(map(lambda x, y: x + y, player_grid_pos, add_pos))
+            target_pos = self.chaseMovement(player_grid_pos)
+        elif self.mode == EnumMode.RANDOM:
+            target_pos = self.randomMovement()
         else:
-            self.chase_count += 1
-            target_pos = (
-                random.randint(0, self.width - 1),
-                random.randint(0, self.height - 1),
-            )
-            if self.chase_count > 25:
-                self.chase = True
-                self.speed = 4
-                self.chase_count = 0
+            target_pos = self.scaredMovement()
         ghost_grid_pos = convertVecToPos(self.position, (self.width, self.height))
 
         if (
@@ -122,13 +109,18 @@ class Inky(Ghost):
     ) -> None:
         if start == goal:
             self.target_path = [start]
+            if self.mode == EnumMode.RANDOM:
+                self.mode == EnumMode.CHASE
+            else:
+                self.mode == EnumMode.RANDOM
             return
 
         queue = [(start, [start])]
         visited = {start}
 
         if disallowed_node and disallowed_node != goal:
-            visited.add(disallowed_node)
+            if len(start.neighbours) > 1:
+                visited.add(disallowed_node)
 
         while queue:
             current_node, path = queue.pop(0)

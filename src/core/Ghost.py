@@ -1,7 +1,18 @@
+import random
+from enum import Enum
+from typing import Optional, Tuple
+
 from ursina import Vec3, color
 
 from src.core.Character import Character
+from src.core.Node import Node
 from src.core.Player import Player
+
+
+class EnumMode(Enum):
+    CHASE = 1
+    RANDOM = 2
+    SCARED = 3
 
 
 class Ghost(Character):
@@ -22,19 +33,42 @@ class Ghost(Character):
             color=color,
             position=position,
         )
+        self.width = width
+        self.height = height
         self.is_edible = False
         self.player = player
-
-    def behaviour(self) -> None:
-        # the ghost's ia
-        pass
+        self.frame_counter = 0
+        self.speed = 4
+        self.last_node: Optional[Node] = None
+        self.mode = EnumMode.CHASE
+        self.chase_count = 0
 
     def update(self) -> None:
         pass
 
     def getEaten(self) -> None:
-        # if the ghost is eaten
         pass
 
     def getTargetPos(self) -> Vec3:
         return self.player.getPlayerPos()
+
+    def chaseMovement(self, player_grid_pos) -> Tuple[int, int]:
+        pass
+
+    def randomMovement(self) -> Tuple[int, int]:
+        self.chase_count += 1
+        if self.chase_count > 15:
+            self.mode = EnumMode.CHASE
+            self.speed = 4
+            self.chase_count = 0
+        return (
+            random.randint(0, self.width - 1),
+            random.randint(0, self.height - 1),
+        )
+
+    def scaredMovement(self) -> Tuple[int, int]:
+        if len(self.target_path) <= 1:
+            self.mode = EnumMode.CHASE
+            self.speed = 4
+            self.chase_count = 0
+        return self.pos
