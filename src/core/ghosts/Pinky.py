@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional, Tuple, Any, List
+from typing import TYPE_CHECKING, Optional, Tuple, Any
 
 from ursina import color, time
 
@@ -32,7 +32,6 @@ class Pinky(Ghost):
             position=convertPosToVec(self.pos, (width, height)),
         )
         self.level = level
-        self.target_path: List[Node] = []
         self.position = convertPosToVec(self.pos, (width, height))
 
     def update(self) -> None:
@@ -51,7 +50,7 @@ class Pinky(Ghost):
             ) -> Tuple[int, int]:
         self.chase_count += 1
         if self.chase_count > 30:
-            self.mode = EnumMode.RANDOM
+            self.mode = EnumMode.SCARED
             self.speed = 2.5
             self.chase_count = 0
         player_dir = self.player.current_direction

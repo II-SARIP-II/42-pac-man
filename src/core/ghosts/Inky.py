@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional, Tuple, List, Any
+from typing import TYPE_CHECKING, Optional, Tuple, Any
 
 from ursina import color, time
 
@@ -32,7 +32,6 @@ class Inky(Ghost):
             position=convertPosToVec(self.pos, (width, height)),
         )
         self.level = level
-        self.target_path: List[Node] = []
         self.position = convertPosToVec(self.pos, (width, height))
 
     def update(self) -> None:
