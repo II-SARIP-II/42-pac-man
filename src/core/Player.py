@@ -42,7 +42,9 @@ class Player(Character):
 
         if self.current_node == self.target_node:
             if self.wish_direction >= 0:
-                wish_dir_neighbour = self.current_node.neighbours[self.wish_direction]
+                wish_dir_neighbour = self.current_node.neighbours[
+                    self.wish_direction
+                    ]
 
                 if wish_dir_neighbour is not None:
                     self.current_direction = self.wish_direction

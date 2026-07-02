@@ -1,7 +1,6 @@
-import time
-from typing import TYPE_CHECKING, Optional, Tuple
+from typing import TYPE_CHECKING, Optional, Tuple, List, Any
 
-from ursina import Vec3, color
+from ursina import color, time
 
 from src.core.Ghost import EnumMode, Ghost
 from src.core.Level import Level
@@ -15,7 +14,12 @@ if TYPE_CHECKING:
 
 class Blinky(Ghost):
     def __init__(
-        self, width: int, height: int, parent: "GameScene", player: Player, level: Level
+        self,
+        width: int,
+        height: int,
+        parent: "GameScene",
+        player: Player,
+        level: Level
     ):
         self.pos = (width - 1, height - 1)
         self.basic_color = color.red
@@ -28,20 +32,23 @@ class Blinky(Ghost):
             position=convertPosToVec(self.pos, (width, height)),
         )
         self.level = level
-        self.target_path = []
+        self.target_path: List[Node] = []
         self.position = convertPosToVec(self.pos, (width, height))
 
     def update(self) -> None:
         if len(self.target_path) < 2:
             self.recalculate_path()
 
-        arrive_au_node = self.move()
+        arrive_au_node = self.moving()
         if arrive_au_node:
             if len(self.target_path) >= 2:
                 self.last_node = self.target_path[0]
             self.recalculate_path()
 
-    def chaseMovement(self, player_grid_pos) -> Tuple[int, int]:
+    def chaseMovement(
+            self,
+            player_grid_pos: Tuple[int, Any]
+            ) -> Tuple[int, int]:
         self.chase_count += 1
         if self.chase_count > 20:
             self.mode = EnumMode.RANDOM
@@ -53,14 +60,20 @@ class Blinky(Ghost):
     def recalculate_path(self) -> None:
         if self.mode == EnumMode.CHASE:
             player_pos = self.player.getPlayerPos()
-            player_grid_pos = convertVecToPos(player_pos, (self.width, self.height))
+            player_grid_pos = convertVecToPos(
+                player_pos,
+                (self.width, self.height)
+            )
             target_pos = self.chaseMovement(player_grid_pos)
         elif self.mode == EnumMode.RANDOM:
             target_pos = self.randomMovement()
         else:
             target_pos = self.scaredMevement()
 
-        ghost_grid_pos = convertVecToPos(self.position, (self.width, self.height))
+        ghost_grid_pos = convertVecToPos(
+            self.position,
+            (self.width, self.height)
+        )
         if (
             ghost_grid_pos in self.level.level_map
             and target_pos in self.level.level_map
@@ -71,11 +84,13 @@ class Blinky(Ghost):
                 self.last_node,
             )
 
-    def move(self) -> bool:
-        """Déplace le fantôme et renvoie True s'il a atteint son nœud cible."""
+    def moving(self) -> bool:
         if len(self.target_path) < 2:
             return False
-        target_vec = convertPosToVec(self.target_path[1].pos, (self.width, self.height))
+        target_vec = convertPosToVec(
+            self.target_path[1].pos,
+            (self.width, self.height)
+        )
         vector_to_target = target_vec - self.position
         if vector_to_target:
             distance_left = vector_to_target.length()
@@ -90,7 +105,10 @@ class Blinky(Ghost):
         return False
 
     def bfs(
-        self, start: Node, goal: Node, disallowed_node: Optional[Node] = None
+        self,
+        start: Node,
+        goal: Node,
+        disallowed_node: Optional[Node] = None
     ) -> None:
         if start == goal:
             self.target_path = [start]

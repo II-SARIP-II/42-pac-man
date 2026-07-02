@@ -124,8 +124,32 @@ class GameScene(Entity):
         self, width: int, height: int, player: Player, level: Level
     ) -> List[Ghost]:
         return [
-            Blinky(parent=self, width=width, height=height, player=player, level=level),
-            Pinky(parent=self, width=width, height=height, player=player, level=level),
-            Inky(parent=self, width=width, height=height, player=player, level=level),
-            Clyde(parent=self, width=width, height=height, player=player, level=level),
+            Blinky(
+                parent=self,
+                width=width,
+                height=height,
+                player=player,
+                level=level
+                ),
+            Pinky(
+                parent=self,
+                width=width,
+                height=height,
+                player=player,
+                level=level
+                ),
+            Inky(
+                parent=self,
+                width=width,
+                height=height,
+                player=player,
+                level=level
+                ),
+            Clyde(
+                parent=self,
+                width=width,
+                height=height,
+                player=player,
+                level=level
+                )
         ]

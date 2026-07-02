@@ -1,12 +1,14 @@
 import random
 from enum import Enum
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Any
 
 from ursina import Vec3, color
 
 from src.core.Character import Character
 from src.core.Node import Node
 from src.core.Player import Player
+from src.scene.GameScene import GameScene
+from abc import ABC, abstractmethod
 
 
 class EnumMode(Enum):
@@ -15,7 +17,7 @@ class EnumMode(Enum):
     SCARED = 3
 
 
-class Ghost(Character):
+class Ghost(Character, ABC):
     def __init__(
         self,
         width: int,
@@ -23,7 +25,7 @@ class Ghost(Character):
         parent: "GameScene",
         player: Player,
         position: Vec3,
-        color=color.white,
+        color: color = color.white,
     ) -> None:
         super().__init__(
             model="sphere",
@@ -52,7 +54,11 @@ class Ghost(Character):
     def getTargetPos(self) -> Vec3:
         return self.player.getPlayerPos()
 
-    def chaseMovement(self, player_grid_pos) -> Tuple[int, int]:
+    @abstractmethod
+    def chaseMovement(
+            self,
+            player_grid_pos: Tuple[int, int]
+            ) -> Tuple[int, int]:
         pass
 
     def randomMovement(self) -> Tuple[int, int]:
@@ -66,7 +72,7 @@ class Ghost(Character):
             random.randint(0, self.height - 1),
         )
 
-    def scaredMovement(self) -> Tuple[int, int]:
+    def scaredMovement(self) -> Any:
         if len(self.target_path) <= 1:
             self.mode = EnumMode.CHASE
             self.speed = 4
