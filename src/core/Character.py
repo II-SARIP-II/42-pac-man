@@ -15,6 +15,7 @@ class Character(Entity):
         width: int,
         height: int,
         parent: "GameScene",
+        texture,
         scale: Vec3 = Vec3(0.5, 0.5, 0.5),
         collider: str = "box",
         position: Vec3 = Vec3(0, 0, 0),
@@ -25,6 +26,7 @@ class Character(Entity):
             scale=scale,
             collider="box",
             position=position,
+            texture=texture,
             parent=parent,
             color=color,
         )

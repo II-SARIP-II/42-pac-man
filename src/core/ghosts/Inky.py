@@ -28,6 +28,7 @@ class Inky(Ghost):
             height=height,
             parent=parent,
             color=self.basic_color,
+            image_path="/assets/images/inky.png",
             player=player,
             position=convertPosToVec(self.pos, (width, height)),
         )

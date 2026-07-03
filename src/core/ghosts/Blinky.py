@@ -28,6 +28,7 @@ class Blinky(Ghost):
             height=height,
             parent=parent,
             color=self.basic_color,
+            image_path="/assets/images/blinky.png",
             player=player,
             position=convertPosToVec(self.pos, (width, height)),
         )

@@ -31,6 +31,7 @@ class Clyde(Ghost):
             height=height,
             parent=parent,
             color=self.basic_color,
+            image_path="/assets/images/clyde.png",
             player=player,
             position=convertPosToVec(self.pos, (width, height)),
         )

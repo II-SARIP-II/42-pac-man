@@ -22,19 +22,23 @@ class Ghost(Character):
         self,
         width: int,
         height: int,
+        image_path: str,
         parent: "GameScene",
         player: Player,
         position: Vec3,
         color: color = color.white,
     ) -> None:
         super().__init__(
-            model="sphere",
+            model="quad",
+            texture=image_path,
             width=width,
             height=height,
             parent=parent,
+            scale=Vec3(0.6, 0.6, 0.6),
             color=color,
             position=position,
         )
+        self.rotation = Vec3(90, 0, 0)
         self.width = width
         self.height = height
         self.is_edible = False
