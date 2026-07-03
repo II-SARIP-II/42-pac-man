@@ -66,6 +66,9 @@ class Inky(Ghost):
                 add_pos = (0, -2)
         return tuple(map(lambda x, y: x + y, player_grid_pos, add_pos))
 
+    def deadMovement(self) -> Any:
+        return self.pos
+
     def recalculate_path(self) -> None:
         if self.mode == EnumMode.CHASE:
             player_pos = self.player.getPlayerPos()
@@ -76,8 +79,10 @@ class Inky(Ghost):
             target_pos = self.chaseMovement(player_grid_pos)
         elif self.mode == EnumMode.RANDOM:
             target_pos = self.randomMovement()
-        else:
+        elif self.mode == EnumMode.SCARED:
             target_pos = self.scaredMovement()
+        else:
+            target_pos = self.deadMovement()
         ghost_grid_pos = convertVecToPos(
             self.position,
             (self.width, self.height)

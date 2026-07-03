@@ -14,6 +14,7 @@ class EnumMode(Enum):
     CHASE = 1
     RANDOM = 2
     SCARED = 3
+    DEAD = 4
 
 
 class Ghost(Character):
@@ -85,3 +86,4 @@ class Ghost(Character):
             self.speed = 4
             self.chase_count = 0
         return escape_pos
+
