@@ -138,17 +138,17 @@ class GameEngine:
         else:
             self.displayScene(EnumScene.FINISH)
 
-    def eat_pacgum(self):
+    def eat_pacgum(self) -> None:
         self.current_score += self.points_per_pacgum_config
 
-    def eat_super_pacgum(self):
+    def eat_super_pacgum(self) -> None:
         self.current_score += self.points_per_super_pacgum_config
 
-    def eat_ghost(self):
+    def eat_ghost(self) -> None:
         self.current_score += self.points_per_ghost_config
         self.kill += 1
 
-    def lose_life(self):
+    def lose_life(self) -> None:
         self.lives_config -= 1
         self.lives_layout.lose_life()
         self.text_layout.add_death()

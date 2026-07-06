@@ -15,12 +15,12 @@ class Character(Entity):
         width: int,
         height: int,
         parent: "GameScene",
-        texture,
+        texture: str | None,
         scale: Vec3 = Vec3(0.5, 0.5, 0.5),
         collider: str = "box",
         position: Vec3 = Vec3(0, 0, 0),
         color: color = color.yellow,
-    ):
+    ) -> None:
         super().__init__(
             model=model,
             scale=scale,

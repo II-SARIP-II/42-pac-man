@@ -165,4 +165,3 @@ class GameScene(Entity):
             else:
                 self.game_engine.no_level += 1
                 self.game_engine.displayScene(EnumScene.WIN)
-                print("yes")

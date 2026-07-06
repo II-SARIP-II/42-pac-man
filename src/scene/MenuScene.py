@@ -19,7 +19,7 @@ class MenuScene(Scene):
 
         self.container = Entity(
             parent=self,
-            positon=Vec3(0, 0 , 0))
+            positon=Vec3(0, 0, 0))
 
         self.createBackground()
         self.createTitle()

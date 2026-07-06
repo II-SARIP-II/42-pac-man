@@ -1,6 +1,6 @@
 from ursina import color, Vec2, Entity, camera, Text
 import ursina
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from src.GameEngine import GameEngine
@@ -11,8 +11,8 @@ class TextLayout(Entity):
                  game_engine: "GameEngine",
                  time: int = 90,
                  multiplier: float = 1,
-                 **kwargs
-                 ):
+                 **kwargs: Any
+                 ) -> None:
         if multiplier < 0:
             raise ValueError("Multiplier must be positive")
 
@@ -36,10 +36,10 @@ class TextLayout(Entity):
         )
         self.refresh_text()
 
-    def add_death(self):
+    def add_death(self) -> None:
         self.death += 1
 
-    def refresh_text(self):
+    def refresh_text(self) -> None:
         txt = (f"Score: {self.game_engine.current_score}\n"
                f"Death: {self.death}\n"
                f"Time: {max(0, int(self.time))}\n")
@@ -47,7 +47,7 @@ class TextLayout(Entity):
         if self.text_entity:
             self.text_entity.text = txt
 
-    def update(self):
+    def update(self) -> None:
         from src.scene.EnumScene import EnumScene
         if self.game_engine.state == EnumScene.GAME:
             self.time -= ursina.time.dt
