@@ -150,19 +150,19 @@ class GameEngine:
         else:
             self.displayScene(EnumScene.FINISH)
 
-    def eat_pacgum(self) -> None:
+    def eatPacgum(self):
         self.current_score += self.points_per_pacgum_config
 
-    def eat_super_pacgum(self) -> None:
+    def eatSuperPacgum(self):
         self.current_score += self.points_per_super_pacgum_config
 
-    def eat_ghost(self) -> None:
+    def eatGhost(self):
         self.current_score += self.points_per_ghost_config
         self.kill += 1
 
-    def lose_life(self) -> None:
+    def loseLife(self):
         self.lives_config -= 1
-        self.lives_layout.lose_life()
+        self.lives_layout.loseLife()
         self.text_layout.add_death()
         self.current_score -= self.death_malus
 
@@ -189,3 +189,6 @@ class GameEngine:
             )[:10]
         clean_dict = json.loads(self.highscores.model_dump_json())
         write_json_file(clean_dict, "config/highscores.json")
+
+    def infiniteLive(self):
+        self.lives_layout.infiniteLive()
