@@ -7,3 +7,4 @@ class EnumScene(Enum):
     PAUSE = 3
     LOSE = 4
     WIN = 5
+    FINISH = 6

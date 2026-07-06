@@ -29,8 +29,10 @@ class GameScene(Entity):
         self.ghosts: List[Ghost] = self.createGhosts(
             self.level.width, self.level.height, self.player, self.level
         )
+        self.nb_pacgum = 0
         self.createMap()
         self.createPacGums()
+        self.current_nb_pacgum = self.nb_pacgum
 
     def input(self, key: str) -> None:
         match key:
@@ -116,9 +118,11 @@ class GameScene(Entity):
             pos = convertPosToVec(pos, self.size)
             if node.nb_neighbours == 1:
                 node.item = SuperPacGum(score=10, position=pos, parent=self)
+                self.nb_pacgum += 1
 
             elif node.nb_neighbours > 1:
                 node.item = PacGum(score=1, position=pos, parent=self)
+                self.nb_pacgum += 1
 
     def createGhosts(
         self, width: int, height: int, player: Player, level: Level
@@ -153,3 +157,11 @@ class GameScene(Entity):
                 level=level
                 )
         ]
+
+    def isTheLevelFinished(self) -> None:
+        if self.current_nb_pacgum == 0:
+            if self.game_engine.no_level == self.game_engine.nb_level:
+                self.game_engine.displayScene(EnumScene.FINISH)
+            else:
+                self.game_engine.no_level += 1
+                self.game_engine.displayScene(EnumScene.WIN)

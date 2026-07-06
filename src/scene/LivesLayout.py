@@ -1,5 +1,5 @@
 from ursina import color, Vec2, Entity, camera, destroy
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from src.GameEngine import GameEngine
@@ -9,7 +9,7 @@ class LivesLayout(Entity):
     def __init__(self,
                  game_engine: "GameEngine",
                  lives: int = 3,
-                 **kwargs
+                 **kwargs: Any
                  ):
         super().__init__(
             parent=camera.ui,
@@ -20,10 +20,10 @@ class LivesLayout(Entity):
         self.lives = lives
         self.engine = game_engine
 
-        self.life_entities = []
+        self.life_entities: list[Entity] = []
         self.display_lives()
 
-    def display_lives(self):
+    def display_lives(self) -> None:
         for i in range(self.lives):
             life_icon = Entity(
                 model="quad",
@@ -35,7 +35,7 @@ class LivesLayout(Entity):
             )
             self.life_entities.append(life_icon)
 
-    def lose_life(self):
+    def lose_life(self) -> None:
         if self.lives > 0 and self.life_entities:
             self.lives -= 1
             last_icon = self.life_entities.pop()

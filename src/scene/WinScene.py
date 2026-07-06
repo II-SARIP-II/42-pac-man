@@ -52,7 +52,7 @@ class WinScene(Scene):
 
         self.score = TextUtils(
             parent=self.container_texts,
-            text="Score: 0"
+            text=f"Score: {self.game_engine.current_score}"
         )
 
     def createButtons(self) -> None:

@@ -25,7 +25,8 @@ class Player(Character):
         )
 
         self.lives = 3
-        self.scores = 0
+        self.score = 0
+        self.game_scene = parent
 
     def loseLife(self) -> None:
         if self.lives > 0 and self.lives <= 3:
@@ -86,6 +87,9 @@ class Player(Character):
 
     def eatItem(self, node: Node) -> None:
         if node.item:
-            self.scores += node.item.score
+            self.game_scene.game_engine.current_score += node.item.score
             destroy(node.item)
             node.item = None
+
+            self.game_scene.current_nb_pacgum -= 1
+            self.game_scene.isTheLevelFinished()

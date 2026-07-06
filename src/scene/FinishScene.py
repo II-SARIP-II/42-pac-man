@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from src.GameEngine import GameEngine
 
 
-class MenuScene(Scene):
+class FinishScene(Scene):
     def __init__(self, game_engine: "GameEngine"):
         super().__init__(game_engine)
 
@@ -57,5 +57,5 @@ class MenuScene(Scene):
     def createTitle(self) -> None:
         self.titel = TextUtils(
             parent=self.container,
-            text="Pacman"
+            text="You finished the game, congrats!"
         )
