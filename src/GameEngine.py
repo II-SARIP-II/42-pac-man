@@ -5,7 +5,7 @@ from ursina import camera
 from src.core.Level import Level
 from src.core.LevelGenerator import LevelGenerator
 from src.models.config import LevelValidation
-from src.models.highscore import ScoresList
+from src.models.highscore import ScoresList, Score
 from src.scene.EnumScene import EnumScene
 from src.scene.GameScene import GameScene
 from src.scene.LoseScene import LoseScene
@@ -14,7 +14,6 @@ from src.scene.PauseScene import PauseScene
 from src.scene.WinScene import WinScene
 from src.scene.TextLayout import TextLayout
 from src.scene.LivesLayout import LivesLayout
-from src.models.highscore import Score, ScoresList
 from src.utils_io import load_json_file, write_json_file
 import json
 from datetime import datetime
