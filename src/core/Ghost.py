@@ -9,6 +9,11 @@ from src.core.Node import Node
 from src.core.Player import Player
 from src.utils import convertVecToPos
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.scene.GameScene import GameScene
+
 
 class EnumMode(Enum):
     CHASE = 1
@@ -86,4 +91,3 @@ class Ghost(Character):
             self.speed = 4
             self.chase_count = 0
         return escape_pos
-
