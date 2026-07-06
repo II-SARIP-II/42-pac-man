@@ -1,10 +1,11 @@
 from typing import TYPE_CHECKING
 
-from ursina import Entity, Vec3, color
+from ursina import Entity, Vec3, color, camera
 
 from src.ursina_assets.ButtonUtils import ButtonUtils
 from src.ursina_assets.TextUtils import TextUtils
 from src.ursina_assets.utils_scene import gridLayout
+from ursina.prefabs.input_field import InputField
 
 from .EnumScene import EnumScene
 from .Scene import Scene
@@ -19,13 +20,34 @@ class FinishScene(Scene):
 
         self.container = Entity(
             parent=self,
-            positon=Vec3(0, 0, 0))
+            position=Vec3(0, 0, 0))
 
         self.createBackground()
         self.createTitle()
+        self.createInputField()
         self.createButtons()
 
         gridLayout(self.container, 1.8)
+
+    def createInputField(self) -> None:
+        self.player_name = InputField(
+            parent=camera.ui,
+            placeholder="",
+            max_lines=1,
+            y=-10
+        )
+        self.player_name.active = True
+
+        self.visual_name_text = TextUtils(
+            parent=self.container,
+            text="Enter your name..."
+        )
+
+        self.validate_button = ButtonUtils(
+            text="Validate",
+            parent = self.container,
+            action=lambda: self.game_engine.submitScore(),
+        )
 
     def createBackground(self) -> None:
         Entity(
@@ -39,11 +61,11 @@ class FinishScene(Scene):
 
     def createButtons(self) -> None:
         self.button_game = ButtonUtils(
-            text="Play",
+            text="Menu",
             position=Vec3(0, 1, 1),
             parent=self.container,
             button_color=color.blue,
-            action=lambda: self.game_engine.displayScene(EnumScene.GAME),
+            action=lambda: self.game_engine.displayScene(EnumScene.MENU),
         )
 
         self.button_quit = ButtonUtils(
@@ -59,3 +81,14 @@ class FinishScene(Scene):
             parent=self.container,
             text="You finished the game, congrats!"
         )
+
+    def update(self) -> None:
+        if self.player_name.text == "":
+            self.visual_name_text.text = "Enter your name..."
+        else:
+            self.visual_name_text.text = self.player_name.text
+
+    def input(self, key: str) -> None:
+        match key:
+            case 'enter':
+                self.game_engine.submitScore()
