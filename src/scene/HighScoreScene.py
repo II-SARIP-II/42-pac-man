@@ -40,7 +40,7 @@ class HighScoreScene(Scene):
 
     def createTitle(self) -> None:
         self.title = TextUtils(
-            text="--Leaderboard--",
+            text="-- Leaderboard --",
             parent=self.container
         )
 

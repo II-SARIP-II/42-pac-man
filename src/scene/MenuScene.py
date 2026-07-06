@@ -55,7 +55,7 @@ class MenuScene(Scene):
         )
 
         self.button_quit = ButtonUtils(
-            text="Highscores",
+            text="Leaderboard",
             position=Vec3(0, 1, -2),
             action=lambda: self.game_engine.displayScene(EnumScene.HIGHSCORE),
             button_color=color.blue,
