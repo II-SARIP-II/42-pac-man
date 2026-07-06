@@ -20,6 +20,7 @@ class EnumMode(Enum):
     RANDOM = 2
     SCARED = 3
     DEAD = 4
+    STOP = 5
 
 
 class Ghost(Character):
