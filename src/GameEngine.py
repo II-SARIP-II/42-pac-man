@@ -69,8 +69,7 @@ class GameEngine:
         self.win_scene.disable()
 
         self.lose_scene = LoseScene(self)
-        self.current_scene = self.lose_scene
-        # self.lose_scene.disable()
+        self.lose_scene.disable()
 
         self.text_layout = TextLayout(
             self,
@@ -78,6 +77,7 @@ class GameEngine:
             1
             )
         self.text_layout.disable()
+
         self.lives_layout = LivesLayout(
             self,
             self.lives_config
@@ -85,8 +85,7 @@ class GameEngine:
         self.lives_layout.disable()
 
         self.menu_scene = MenuScene(self)
-        # self.current_scene = self.menu_scene
-        self.menu_scene.disable()
+        self.current_scene = self.menu_scene
         # except Exception as e:
         #     raise ValueError(e)
 
@@ -138,7 +137,7 @@ class GameEngine:
         else:
             print("game finished")
             quit()
-            
+
     def eat_pacgum(self):
         self.current_score += self.points_per_pacgum_config
 
