@@ -65,12 +65,6 @@ class GameEngine:
         self.pause_scene = PauseScene(self)
         self.pause_scene.disable()
 
-        self.win_scene = WinScene(self)
-        self.win_scene.disable()
-
-        self.lose_scene = LoseScene(self)
-        self.lose_scene.disable()
-
         self.text_layout = TextLayout(
             self,
             self.level_max_time_config,
@@ -123,9 +117,11 @@ class GameEngine:
             self.current_scene = self.pause_scene
             self.pause_scene.enable()
         elif self.state == EnumScene.LOSE:
+            self.lose_scene = LoseScene(self)
             self.current_scene = self.lose_scene
             self.lose_scene.enable()
         elif self.state == EnumScene.WIN:
+            self.win_scene = WinScene(self)
             self.current_scene = self.win_scene
             self.win_scene.enable()
 
