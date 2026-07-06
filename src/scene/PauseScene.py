@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING
 
 from ursina import Entity, Vec2, Vec3, color
 
-from src.UrsinaAssets.ButtonUtils import ButtonUtils
-from src.UrsinaAssets.TextUtils import TextUtils
+from src.ursina_assets.ButtonUtils import ButtonUtils
+from src.ursina_assets.TextUtils import TextUtils
 
 from .EnumScene import EnumScene
 
@@ -45,7 +45,7 @@ class PauseScene(Entity):
             position=Vec3(0, 1, 1),
             action=lambda: self.game_state.displayScene(EnumScene.GAME),
             button_color=color.blue,
-            parent_scene=self,
+            parent=self,
         )
 
         self.button_menu = ButtonUtils(
@@ -53,7 +53,7 @@ class PauseScene(Entity):
             position=Vec3(0, 1, -2),
             action=lambda: self.game_state.displayScene(EnumScene.MENU),
             button_color=color.red,
-            parent_scene=self,
+            parent=self,
         )
 
         self.button_quit = ButtonUtils(
@@ -61,5 +61,5 @@ class PauseScene(Entity):
             position=Vec3(0, 1, -5),
             action=lambda: self.game_state.quitGame(),
             button_color=color.dark_gray,
-            parent_scene=self,
+            parent=self,
         )

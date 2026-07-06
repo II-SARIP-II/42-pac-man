@@ -118,7 +118,7 @@ class GameScene(Entity):
                 node.item = SuperPacGum(score=10, position=pos, parent=self)
 
             elif node.nb_neighbours > 1:
-                node.item = PacGum(score=10, position=pos, parent=self)
+                node.item = PacGum(score=1, position=pos, parent=self)
 
     def createGhosts(
         self, width: int, height: int, player: Player, level: Level

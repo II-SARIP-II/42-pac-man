@@ -133,9 +133,9 @@ class Pinky(Ghost):
         if start == goal:
             self.target_path = [start]
             if self.mode == EnumMode.RANDOM:
-                self.mode == EnumMode.CHASE
+                self.mode = EnumMode.CHASE
             else:
-                self.mode == EnumMode.RANDOM
+                self.mode = EnumMode.RANDOM
             return
 
         queue = [(start, [start])]

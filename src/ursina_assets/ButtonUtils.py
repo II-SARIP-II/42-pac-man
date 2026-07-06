@@ -12,19 +12,20 @@ class ButtonUtils(Button):
     def __init__(
         self,
         text: str,
-        position: Vec3,
         action: Callable,
-        parent_scene: "GameScene",
+        parent: "GameScene",
+        position: Vec3 = Vec3(0, 0, 0),
+        scale: Vec3 = Vec3(5, 1, 1.5),
         button_color: color = color.blue,
     ) -> None:
 
         super().__init__(
             model="plane",
             text=text,
-            scale=Vec3(5, 1, 2),
+            scale=scale,
             position=position,
             collider="box",
-            parent=parent_scene,
+            parent=parent,
             color=button_color,
         )
 
