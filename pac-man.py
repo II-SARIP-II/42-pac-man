@@ -18,6 +18,7 @@ def main() -> None:
         config.levels,
         config.lives,
         config.points_per_pacgum,
+        config.points_per_super_pacgum,
         config.points_per_ghost,
         config.seed,
         config.level_max_time,
