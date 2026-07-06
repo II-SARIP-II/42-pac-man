@@ -12,18 +12,23 @@ if TYPE_CHECKING:
 
 class Player(Character):
     def __init__(self, parent: "GameScene", width: int, height: int) -> None:
+        if width % 2 != 0:
+            self.start_pos = (width // 2, height // 2)
+        else:
+            self.start_pos = (width // 2 - 1, height // 2)
         super().__init__(
             model="sphere",
             scale=Vec3(0.7, 0.7, 0.7),
             collider="box",
             texture=None,
-            position=convertPosToVec((0, 0), (width, height)),
+            position=convertPosToVec(self.start_pos, (width, height)),
             color=color.yellow,
             parent=parent,
             width=width,
             height=height,
         )
-
+        self.current_node = self.getNode(self.start_pos)
+        self.target_node = self.current_node
         self.lives = 3
         self.score = 0
         self.game_scene = parent

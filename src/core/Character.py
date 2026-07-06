@@ -36,8 +36,6 @@ class Character(Entity):
 
         self.position = position
 
-        self.current_node = self.getNode((0, 0))
-        self.target_node = self.current_node
         self.speed = 5.0
         self.wish_direction: int = -1
         self.current_direction: int = self.wish_direction
