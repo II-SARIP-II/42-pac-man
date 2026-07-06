@@ -12,15 +12,16 @@ from src.core.Level import Level
 from src.core.PacGum import PacGum, SuperPacGum
 from src.core.Player import Player
 from src.scene.EnumScene import EnumScene
+from src.scene.Scene import Scene
 from src.utils import convertPosToVec
 
 if TYPE_CHECKING:
     from src.GameEngine import GameEngine
 
 
-class GameScene(Entity):
+class GameScene(Scene):
     def __init__(self, game_engine: "GameEngine", level: Level) -> None:
-        super().__init__()
+        super().__init__(game_engine)
 
         self.game_engine = game_engine
         self.level = level
@@ -43,7 +44,7 @@ class GameScene(Entity):
             case "l":
                 self.game_engine.displayScene(EnumScene.LOSE)
             case "v":
-                self.game_engine.displayScene(EnumScene.WIN)
+                self.current_nb_pacgum = 0
             case "w" | "up arrow":
                 self.player.wish_direction = 0
             case "d" | "right arrow":
@@ -159,7 +160,7 @@ class GameScene(Entity):
         ]
 
     def isTheLevelFinished(self) -> None:
-        if self.current_nb_pacgum == 0:
+        if self.current_nb_pacgum <= 0:
             if self.game_engine.no_level == self.game_engine.nb_level:
                 self.game_engine.displayScene(EnumScene.FINISH)
             else:

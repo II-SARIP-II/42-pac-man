@@ -56,6 +56,13 @@ class WinScene(Scene):
         )
 
     def createButtons(self) -> None:
+        self.button_next_level = ButtonUtils(
+            text="NEXT LEVEL",
+            action=lambda: self.game_engine.nextLevel(),
+            button_color=color.blue,
+            parent=self.container_buttons,
+        )
+
         self.button_menu = ButtonUtils(
             text="MENU",
             action=lambda: self.game_engine.displayScene(EnumScene.MENU),
@@ -66,13 +73,6 @@ class WinScene(Scene):
         self.button_quit = ButtonUtils(
             text="QUIT",
             action=lambda: self.game_engine.quitGame(),
-            button_color=color.blue,
-            parent=self.container_buttons,
-        )
-
-        self.button_next_level = ButtonUtils(
-            text="NEXT LEVEL",
-            action=lambda: self.game_engine.nextLevel(),
             button_color=color.blue,
             parent=self.container_buttons,
         )

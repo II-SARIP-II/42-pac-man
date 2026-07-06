@@ -1,6 +1,7 @@
 from typing import List
 
 from ursina import camera
+# from ursina.scripts.smooth_follow import player
 
 from src.core.Level import Level
 from src.core.LevelGenerator import LevelGenerator
@@ -135,8 +136,6 @@ class GameEngine:
             self.finish_scene = FinishScene(self)
             self.current_scene = self.finish_scene
             self.finish_scene.enable()
-            
-            self.write_highscore()
 
     def nextLevel(self) -> None:
         if self.no_level <= self.nb_level:
@@ -162,9 +161,18 @@ class GameEngine:
         self.text_layout.add_death()
         self.current_score -= self.death_malus
 
-    def write_highscore(self):
+    def submitScore(self) -> None:
+        name = self.finish_scene.player_name.text.strip()
+        if not name:
+            print("The name cannot be empty.")
+            return
+
+        self.write_highscore(name)
+        self.displayScene(EnumScene.MENU)
+
+    def write_highscore(self, name: str):
         game_score = Score(
-            name="Echo",
+            name=name,
             score=self.current_score,
             date=datetime.now()
             )
