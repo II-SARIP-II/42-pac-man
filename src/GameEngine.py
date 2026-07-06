@@ -163,15 +163,16 @@ class GameEngine:
         self.current_score -= self.death_malus
 
     def write_highscore(self):
-        game_score = Score(name="Echo", score=self.current_score, date=datetime.now())
+        game_score = Score(
+            name="Echo",
+            score=self.current_score,
+            date=datetime.now()
+            )
         self.highscores.scores.append(game_score)
-        self.highscores.scores = sorted(self.highscores.scores, key=lambda x: x.score, reverse=True)[:10]
+        self.highscores.scores = sorted(
+            self.highscores.scores,
+            key=lambda x: x.score,
+            reverse=True
+            )[:10]
         clean_dict = json.loads(self.highscores.model_dump_json())
         write_json_file(clean_dict, "config/highscores.json")
-
-'''
-class Score(BaseModel):
-    name: str = Field(min_length=1, max_length=10, pattern=r"^[a-zA-Z0-9 ]+$")
-    score: int = Field(ge=0)
-    date: datetime
-'''
