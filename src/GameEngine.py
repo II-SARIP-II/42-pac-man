@@ -12,6 +12,7 @@ from src.scene.LoseScene import LoseScene
 from src.scene.MenuScene import MenuScene
 from src.scene.PauseScene import PauseScene
 from src.scene.WinScene import WinScene
+from src.scene.Layout import Layout
 from src.utils_io import load_json_file
 
 
@@ -60,6 +61,16 @@ class GameEngine:
         self.lose_scene = LoseScene(self)
         self.lose_scene.disable()
 
+        self.layout = Layout(
+            self,
+            self.lives_config,
+            self.level_max_time_config,
+            self.points_per_pacgum_config,
+            self.points_per_pacgum_config*5,
+            self.points_per_ghost_config, 100, 1
+            )
+        self.layout.disable()
+
         self.menu_scene = MenuScene(self)
         self.current_scene = self.menu_scene
         # except Exception as e:
@@ -80,6 +91,7 @@ class GameEngine:
         quit()
 
     def displayScene(self, enum: EnumScene) -> None:
+        self.layout.disable()
         if self.current_scene:
             self.current_scene.disable()
 
@@ -91,6 +103,7 @@ class GameEngine:
         elif self.state == EnumScene.GAME:
             self.current_scene = self.game_scene
             self.game_scene.enable()
+            self.layout.enable()
         elif self.state == EnumScene.PAUSE:
             self.current_scene = self.pause_scene
             self.pause_scene.enable()
