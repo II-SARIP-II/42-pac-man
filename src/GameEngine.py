@@ -14,7 +14,10 @@ from src.scene.PauseScene import PauseScene
 from src.scene.WinScene import WinScene
 from src.scene.TextLayout import TextLayout
 from src.scene.LivesLayout import LivesLayout
-from src.utils_io import load_json_file
+from src.models.highscore import Score, ScoresList
+from src.utils_io import load_json_file, write_json_file
+import json
+from datetime import datetime
 
 
 class GameEngine:
@@ -52,7 +55,7 @@ class GameEngine:
 
     def _setupEngine(self) -> None:
         # try:
-        self.scores = self._getScores(self.highscore_filename_config)
+        self.highscores = self._getScores(self.highscore_filename_config)
 
         camera.position = (0, 50, 0)
         camera.rotation = (90, 0, 0)
@@ -91,7 +94,11 @@ class GameEngine:
 
     @staticmethod
     def _getScores(filename: str) -> ScoresList:
-        return ScoresList(**load_json_file(filename))
+        try:
+            return ScoresList(**load_json_file(filename))
+        except (ValueError, FileNotFoundError):
+            print(f"{filename} was empty or invalid.")
+            return ScoresList(scores=[])
 
     @staticmethod
     def _getLevels(levels_config: List[LevelValidation]) -> List[Level]:
@@ -128,6 +135,7 @@ class GameEngine:
         elif self.state == EnumScene.WIN:
             self.current_scene = self.win_scene
             self.win_scene.enable()
+            self.write_highscore()
 
     def nextLevel(self) -> None:
         if self.no_level < self.nb_level:
@@ -153,3 +161,17 @@ class GameEngine:
         self.lives_layout.lose_life()
         self.text_layout.add_death()
         self.current_score -= self.death_malus
+
+    def write_highscore(self):
+        game_score = Score(name="Echo", score=self.current_score, date=datetime.now())
+        self.highscores.scores.append(game_score)
+        self.highscores.scores = sorted(self.highscores.scores, key=lambda x: x.score, reverse=True)[:10]
+        clean_dict = json.loads(self.highscores.model_dump_json())
+        write_json_file(clean_dict, "config/highscores.json")
+
+'''
+class Score(BaseModel):
+    name: str = Field(min_length=1, max_length=10, pattern=r"^[a-zA-Z0-9 ]+$")
+    score: int = Field(ge=0)
+    date: datetime
+'''
