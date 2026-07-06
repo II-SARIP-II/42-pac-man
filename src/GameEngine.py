@@ -12,6 +12,7 @@ from src.scene.LoseScene import LoseScene
 from src.scene.MenuScene import MenuScene
 from src.scene.PauseScene import PauseScene
 from src.scene.WinScene import WinScene
+from src.scene.FinishScene import FinishScene
 from src.scene.TextLayout import TextLayout
 from src.scene.LivesLayout import LivesLayout
 from src.utils_io import load_json_file
@@ -41,7 +42,7 @@ class GameEngine:
 
         self.levels: List[Level] = self._getLevels(self.levels_config)
         self.no_level = 0
-        self.nb_level = len(self.levels)
+        self.nb_level = len(self.levels) - 1
 
         self.current_score = 0
 
@@ -124,15 +125,18 @@ class GameEngine:
             self.win_scene = WinScene(self)
             self.current_scene = self.win_scene
             self.win_scene.enable()
+        elif self.state == EnumScene.FINISH:
+            self.finish_scene = FinishScene(self)
+            self.current_scene = self.finish_scene
+            self.finish_scene.enable()
 
     def nextLevel(self) -> None:
-        if self.no_level < self.nb_level:
-            self.game_scene = GameScene(self, self.levels[self.no_level + 1])
+        if self.no_level <= self.nb_level:
+            self.game_scene = GameScene(self, self.levels[self.no_level])
             self.game_scene.disable()
             self.displayScene(EnumScene.GAME)
         else:
-            print("game finished")
-            quit()
+            self.displayScene(EnumScene.FINISH)
 
     def eat_pacgum(self):
         self.current_score += self.points_per_pacgum_config

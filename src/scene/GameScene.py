@@ -160,4 +160,9 @@ class GameScene(Entity):
 
     def isTheLevelFinished(self) -> None:
         if self.current_nb_pacgum == 0:
-            self.game_engine.displayScene(EnumScene.WIN)
+            if self.game_engine.no_level == self.game_engine.nb_level:
+                self.game_engine.displayScene(EnumScene.FINISH)
+            else:
+                self.game_engine.no_level += 1
+                self.game_engine.displayScene(EnumScene.WIN)
+                print("yes")

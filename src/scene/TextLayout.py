@@ -25,7 +25,7 @@ class TextLayout(Entity):
         self.score = 0
         self.death = 0
         self.time = time
-        self.engine = game_engine
+        self.game_engine = game_engine
 
         self.text_entity = Text(
             text="",
@@ -40,7 +40,7 @@ class TextLayout(Entity):
         self.death += 1
 
     def refresh_text(self):
-        txt = (f"Score: {self.score}\n"
+        txt = (f"Score: {self.game_engine.current_score}\n"
                f"Death: {self.death}\n"
                f"Time: {max(0, int(self.time))}\n")
 
@@ -49,6 +49,6 @@ class TextLayout(Entity):
 
     def update(self):
         from src.scene.EnumScene import EnumScene
-        if self.engine.state == EnumScene.GAME:
+        if self.game_engine.state == EnumScene.GAME:
             self.time -= ursina.time.dt
             self.refresh_text()
