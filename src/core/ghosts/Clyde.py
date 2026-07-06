@@ -21,10 +21,7 @@ class Clyde(Ghost):
         player: Player,
         level: Level
     ):
-        if width % 2 != 0:
-            self.pos = (width // 2, height // 2)
-        else:
-            self.pos = (width // 2 - 1, height // 2)
+        self.pos = (0, 0)
         self.basic_color = color.orange
         super().__init__(
             width=width,
