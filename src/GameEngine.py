@@ -14,6 +14,7 @@ from src.scene.MenuScene import MenuScene
 from src.scene.PauseScene import PauseScene
 from src.scene.WinScene import WinScene
 from src.scene.FinishScene import FinishScene
+from src.scene.HighScoreScene import HighScoreScene
 from src.scene.TextLayout import TextLayout
 from src.scene.LivesLayout import LivesLayout
 from src.utils_io import load_json_file, write_json_file
@@ -52,6 +53,7 @@ class GameEngine:
         # Additionnal Data
         self.death_malus = 100
         self.kill = 0
+
         self._setupEngine()
 
     def _setupEngine(self) -> None:
@@ -72,14 +74,12 @@ class GameEngine:
         self.text_layout = TextLayout(
             self,
             self.level_max_time_config,
-            1
-            )
+            1)
         self.text_layout.disable()
 
         self.lives_layout = LivesLayout(
             self,
-            self.lives_config
-            )
+            self.lives_config)
         self.lives_layout.disable()
 
         self.menu_scene = MenuScene(self)
@@ -136,6 +136,11 @@ class GameEngine:
             self.finish_scene = FinishScene(self)
             self.current_scene = self.finish_scene
             self.finish_scene.enable()
+        elif self.state == EnumScene.HIGHSCORE:
+            self.highscores = self._getScores(self.highscore_filename_config)
+            self.highscore_scene = HighScoreScene(self, self.highscores)
+            self.current_scene = self.highscore_scene
+            self.highscore_scene.enable()
 
     def nextLevel(self) -> None:
         if self.no_level <= self.nb_level:

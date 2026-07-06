@@ -54,6 +54,14 @@ class MenuScene(Scene):
             parent=self.container,
         )
 
+        self.button_quit = ButtonUtils(
+            text="Highscores",
+            position=Vec3(0, 1, -2),
+            action=lambda: self.game_engine.displayScene(EnumScene.HIGHSCORE),
+            button_color=color.blue,
+            parent=self.container,
+        )
+
     def createTitle(self) -> None:
         self.titel = TextUtils(
             parent=self.container,
