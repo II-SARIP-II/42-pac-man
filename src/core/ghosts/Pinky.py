@@ -27,6 +27,7 @@ class Pinky(Ghost):
             width=width,
             height=height,
             parent=parent,
+            image_path="/assets/images/pinky.png",
             color=self.basic_color,
             player=player,
             position=convertPosToVec(self.pos, (width, height)),

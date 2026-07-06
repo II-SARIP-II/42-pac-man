@@ -16,6 +16,7 @@ class Player(Character):
             model="sphere",
             scale=Vec3(0.7, 0.7, 0.7),
             collider="box",
+            texture=None,
             position=convertPosToVec((0, 0), (width, height)),
             color=color.yellow,
             parent=parent,
