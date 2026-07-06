@@ -52,10 +52,12 @@ class GameScene(Entity):
                 self.player.wish_direction = 2
             case "a" | "left arrow":
                 self.player.wish_direction = 3
-            case "c":
+            case "m":
                 self.toggleMovingGhosts()
             case "x":
                 self.toggleInfiniteLives()
+            case "c":
+                self.toggleAllCheat()
 
     def createMap(self) -> None:
         Entity(
@@ -159,6 +161,10 @@ class GameScene(Entity):
                 level=level
                 )
         ]
+
+    def toggleAllCheat(self):
+        self.toggleMovingGhosts()
+        self.toggleInfiniteLives()
 
     def toggleMovingGhosts(self):
         self.is_ghosts_moving = not self.is_ghosts_moving
