@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from ursina import Entity, Vec3, color
 
 from src.ursina_assets.ButtonUtils import ButtonUtils
+from src.ursina_assets.TextUtils import TextUtils
 from src.ursina_assets.utils_scene import gridLayout
 
 from .EnumScene import EnumScene
@@ -20,8 +21,9 @@ class MenuScene(Scene):
             parent=self,
             positon=Vec3(0, 0 , 0))
 
-        self.createButtons()
         self.createBackground()
+        self.createTitle()
+        self.createButtons()
 
         gridLayout(self.container, 1.8)
 
@@ -50,4 +52,10 @@ class MenuScene(Scene):
             action=lambda: self.game_engine.quitGame(),
             button_color=color.blue,
             parent=self.container,
+        )
+
+    def createTitle(self) -> None:
+        self.titel = TextUtils(
+            parent=self.container,
+            text="Pacman"
         )

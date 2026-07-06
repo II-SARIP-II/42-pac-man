@@ -3,49 +3,69 @@ from typing import TYPE_CHECKING
 from ursina import Entity, Vec3, color
 
 from src.ursina_assets.ButtonUtils import ButtonUtils
+from src.ursina_assets.TextUtils import TextUtils
+from src.ursina_assets.utils_scene import gridLayout
 
 from .EnumScene import EnumScene
+from .Scene import Scene
 
 if TYPE_CHECKING:
     from src.GameEngine import GameEngine
 
 
-class LoseScene(Entity):
-    def __init__(self, game_state: "GameEngine"):
-        super().__init__()
+class LoseScene(Scene):
+    def __init__(self, game_engine: "GameEngine"):
+        super().__init__(game_engine)
 
-        self.game_state = game_state
-        self.createButtons()
+        self.container = Entity(
+            parent=self, position=Vec3(0, 0, 0))
+
+        self.container_texts = Entity(
+            parent=self.container, position=Vec3(0, 0, 0))
+
+        self.container_buttons = Entity(
+            parent=self.container, position=Vec3(0, 0, 0))
+
         self.createBackground()
+        self.createTitle()
+        self.createButtons()
+
+        gridLayout(self.container_texts, 1)
+        gridLayout(self.container_buttons, 1.8)
+        gridLayout(self.container, 4)
 
     def createBackground(self) -> None:
         Entity(
             model="plane",
-            scale=Vec3(20, 1, 20),
+            scale=Vec3(20, 0, 20),
             position=Vec3(0, 0, 0),
             color=color.black,
             collider="box",
             parent=self,
         )
 
-    def createButtons(self) -> None:
-        self.buttonPlay()
-        self.buttonQuit()
-
-    def buttonPlay(self) -> None:
-        self.button_resume = ButtonUtils(
-            text="MENU",
-            position=Vec3(0, 1, 1),
-            action=lambda: self.game_state.displayScene(EnumScene.MENU),
-            button_color=color.blue,
-            parent=self,
+    def createTitle(self) -> None:
+        self.title = TextUtils(
+            parent=self.container_texts,
+            text="Game Over",
         )
 
-    def buttonQuit(self) -> None:
-        self.button_quit = ButtonUtils(
-            text="Quit",
-            position=Vec3(0, 1, -2),
-            action=lambda: self.game_state.quitGame(),
+        self.score = TextUtils(
+            parent=self.container_texts,
+            text="Score: 0"
+        )
+
+    def createButtons(self) -> None:
+        self.button_menu = ButtonUtils(
+            text="MENU",
+            action=lambda: self.game_engine.displayScene(EnumScene.MENU),
             button_color=color.blue,
-            parent=self,
+            parent=self.container_buttons,
+        )
+
+        self.button_quit = ButtonUtils(
+            text="QUIT",
+            action=lambda: self.game_engine.quitGame(),
+            button_color=color.blue,
+            parent=self.container_buttons,
         )

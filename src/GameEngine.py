@@ -60,10 +60,12 @@ class GameEngine:
         self.win_scene.disable()
 
         self.lose_scene = LoseScene(self)
-        self.lose_scene.disable()
+        self.current_scene = self.lose_scene
+        # self.lose_scene.disable()
 
         self.menu_scene = MenuScene(self)
-        self.current_scene = self.menu_scene
+        # self.current_scene = self.menu_scene
+        self.menu_scene.disable()
         # except Exception as e:
         #     raise ValueError(e)
 
