@@ -36,6 +36,8 @@ class GameEngine:
         self.level_max_time_config = level_max_time
 
         self.levels: List[Level] = self._getLevels(self.levels_config)
+        self.no_level = 0
+        self.nb_level = len(self.levels)
 
         self._setupEngine()
 
@@ -48,7 +50,7 @@ class GameEngine:
 
         self.state = EnumScene.MENU
 
-        self.game_scene = GameScene(self, self.levels[0])
+        self.game_scene = GameScene(self, self.levels[self.no_level])
         self.game_scene.disable()
 
         self.pause_scene = PauseScene(self)
@@ -100,3 +102,12 @@ class GameEngine:
         elif self.state == EnumScene.WIN:
             self.current_scene = self.win_scene
             self.win_scene.enable()
+
+    def nextLevel(self) -> None:
+        if self.no_level < self.nb_level:
+            self.game_scene = GameScene(self, self.levels[self.no_level + 1])
+            self.game_scene.disable()
+            self.displayScene(EnumScene.GAME)
+        else:
+            print("game finished")
+            quit()

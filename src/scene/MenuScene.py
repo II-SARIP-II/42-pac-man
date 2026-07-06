@@ -2,21 +2,28 @@ from typing import TYPE_CHECKING
 
 from ursina import Entity, Vec3, color
 
-from src.UrsinaAssets.ButtonUtils import ButtonUtils
+from src.ursina_assets.ButtonUtils import ButtonUtils
+from src.ursina_assets.utils_scene import gridLayout
 
 from .EnumScene import EnumScene
+from .Scene import Scene
 
 if TYPE_CHECKING:
     from src.GameEngine import GameEngine
 
 
-class MenuScene(Entity):
-    def __init__(self, game_state: "GameEngine"):
-        super().__init__()
+class MenuScene(Scene):
+    def __init__(self, game_engine: "GameEngine"):
+        super().__init__(game_engine)
 
-        self.game_state = game_state
+        self.container = Entity(
+            parent=self,
+            positon=Vec3(0, 0 , 0))
+
         self.createButtons()
         self.createBackground()
+
+        gridLayout(self.container, 1.8)
 
     def createBackground(self) -> None:
         Entity(
@@ -29,23 +36,18 @@ class MenuScene(Entity):
         )
 
     def createButtons(self) -> None:
-        self.buttonPlay()
-        self.buttonQuit()
-
-    def buttonPlay(self) -> None:
         self.button_game = ButtonUtils(
             text="Play",
             position=Vec3(0, 1, 1),
-            parent_scene=self,
+            parent=self.container,
             button_color=color.blue,
-            action=lambda: self.game_state.displayScene(EnumScene.GAME),
+            action=lambda: self.game_engine.displayScene(EnumScene.GAME),
         )
 
-    def buttonQuit(self) -> None:
         self.button_quit = ButtonUtils(
             text="Quit",
             position=Vec3(0, 1, -2),
-            action=lambda: self.game_state.quitGame(),
+            action=lambda: self.game_engine.quitGame(),
             button_color=color.blue,
-            parent_scene=self,
+            parent=self.container,
         )

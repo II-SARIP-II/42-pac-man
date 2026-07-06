@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from ursina import Entity, Vec3, color
 
-from src.UrsinaAssets.ButtonUtils import ButtonUtils
+from src.ursina_assets.ButtonUtils import ButtonUtils
 
 from .EnumScene import EnumScene
 
@@ -38,7 +38,7 @@ class LoseScene(Entity):
             position=Vec3(0, 1, 1),
             action=lambda: self.game_state.displayScene(EnumScene.MENU),
             button_color=color.blue,
-            parent_scene=self,
+            parent=self,
         )
 
     def buttonQuit(self) -> None:
@@ -47,5 +47,5 @@ class LoseScene(Entity):
             position=Vec3(0, 1, -2),
             action=lambda: self.game_state.quitGame(),
             button_color=color.blue,
-            parent_scene=self,
+            parent=self,
         )
