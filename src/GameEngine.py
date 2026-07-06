@@ -12,6 +12,8 @@ from src.scene.LoseScene import LoseScene
 from src.scene.MenuScene import MenuScene
 from src.scene.PauseScene import PauseScene
 from src.scene.WinScene import WinScene
+from src.scene.TextLayout import TextLayout
+from src.scene.LivesLayout import LivesLayout
 from src.utils_io import load_json_file
 
 
@@ -22,6 +24,7 @@ class GameEngine:
         levels: List[LevelValidation],
         lives: int,
         points_per_pacgum: int,
+        points_per_super_pacgum: int,
         points_per_ghost: int,
         seed: int,
         level_max_time: int,
@@ -31,12 +34,18 @@ class GameEngine:
         self.levels_config = levels
         self.lives_config = lives
         self.points_per_pacgum_config = points_per_pacgum
+        self.points_per_super_pacgum_config = points_per_super_pacgum
         self.points_per_ghost_config = points_per_ghost
         self.seed_config = seed
         self.level_max_time_config = level_max_time
 
         self.levels: List[Level] = self._getLevels(self.levels_config)
 
+        self.current_score = 0
+
+        # Additionnal Data
+        self.death_malus = 100
+        self.kill = 0
         self._setupEngine()
 
     def _setupEngine(self) -> None:
@@ -60,6 +69,18 @@ class GameEngine:
         self.lose_scene = LoseScene(self)
         self.lose_scene.disable()
 
+        self.text_layout = TextLayout(
+            self,
+            self.level_max_time_config,
+            1
+            )
+        self.text_layout.disable()
+        self.lives_layout = LivesLayout(
+            self,
+            self.lives_config
+            )
+        self.lives_layout.disable()
+
         self.menu_scene = MenuScene(self)
         self.current_scene = self.menu_scene
         # except Exception as e:
@@ -80,6 +101,8 @@ class GameEngine:
         quit()
 
     def displayScene(self, enum: EnumScene) -> None:
+        self.text_layout.disable()
+        self.lives_layout.disable()
         if self.current_scene:
             self.current_scene.disable()
 
@@ -91,6 +114,8 @@ class GameEngine:
         elif self.state == EnumScene.GAME:
             self.current_scene = self.game_scene
             self.game_scene.enable()
+            self.text_layout.enable()
+            self.lives_layout.enable()
         elif self.state == EnumScene.PAUSE:
             self.current_scene = self.pause_scene
             self.pause_scene.enable()
@@ -100,3 +125,19 @@ class GameEngine:
         elif self.state == EnumScene.WIN:
             self.current_scene = self.win_scene
             self.win_scene.enable()
+
+    def eat_pacgum(self):
+        self.current_score += self.points_per_pacgum_config
+
+    def eat_super_pacgum(self):
+        self.current_score += self.points_per_super_pacgum_config
+
+    def eat_ghost(self):
+        self.current_score += self.points_per_ghost_config
+        self.kill += 1
+
+    def lose_life(self):
+        self.lives_config -= 1
+        self.lives_layout.lose_life()
+        self.text_layout.add_death()
+        self.current_score -= self.death_malus
