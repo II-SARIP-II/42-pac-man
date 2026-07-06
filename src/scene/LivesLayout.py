@@ -20,10 +20,10 @@ class LivesLayout(Entity):
         self.lives = lives
         self.engine = game_engine
         self.infinite = False
-        self.life_entities = []
+        self.life_entities: list[Entity] = []
         self.displayLives()
 
-    def displayLives(self):
+    def displayLives(self) -> None:
         if not self.infinite:
             for i in range(self.lives):
                 life_icon = Entity(
@@ -46,14 +46,14 @@ class LivesLayout(Entity):
                 )
             self.life_entities.append(life_icon)
 
-    def infiniteLive(self):
+    def infiniteLive(self) -> None:
         for i in range(len(self.life_entities)):
             last_icon = self.life_entities.pop()
             destroy(last_icon)
         self.infinite = not self.infinite
         self.displayLives()
 
-    def loseLife(self):
+    def loseLife(self) -> None:
         if self.lives > 0 and self.life_entities:
             self.lives -= 1
             last_icon = self.life_entities.pop()

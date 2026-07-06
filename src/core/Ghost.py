@@ -65,12 +65,6 @@ class Ghost(Character):
     def getTargetPos(self) -> Vec3:
         return self.player.getPlayerPos()
 
-    def chaseMovement(
-            self,
-            player_grid_pos: Tuple[int, int]
-            ) -> Tuple[int, int]:
-        pass
-
     def randomMovement(self) -> Tuple[int, int]:
         self.chase_count += 1
         if self.chase_count > 15:

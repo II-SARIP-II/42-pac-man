@@ -93,5 +93,5 @@ class Player(Character):
             self.game_scene.current_nb_pacgum -= 1
             self.game_scene.isTheLevelFinished()
 
-    def set_lives(self, new_lives):
+    def set_lives(self, new_lives: int) -> None:
         self.lives = new_lives

@@ -40,8 +40,6 @@ class GameScene(Scene):
     def input(self, key: str) -> None:
         match key:
             case "escape":
-                self.game_engine.displayScene(EnumScene.MENU)
-            case "p":
                 self.game_engine.displayScene(EnumScene.PAUSE)
             case "l":
                 self.game_engine.displayScene(EnumScene.LOSE)
@@ -175,11 +173,11 @@ class GameScene(Scene):
                 self.game_engine.no_level += 1
                 self.game_engine.displayScene(EnumScene.WIN)
 
-    def toggleAllCheat(self):
+    def toggleAllCheat(self) -> None:
         self.toggleMovingGhosts()
         self.toggleInfiniteLives()
 
-    def toggleMovingGhosts(self):
+    def toggleMovingGhosts(self) -> None:
         self.is_ghosts_moving = not self.is_ghosts_moving
         if not self.is_ghosts_moving:
             for ghost in self.ghosts:
@@ -188,6 +186,6 @@ class GameScene(Scene):
             for ghost in self.ghosts:
                 ghost.mode = EnumMode.CHASE
 
-    def toggleInfiniteLives(self):
+    def toggleInfiniteLives(self) -> None:
         self.player.set_lives(999999)
         self.game_engine.infiniteLive()

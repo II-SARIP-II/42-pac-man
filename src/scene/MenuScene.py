@@ -19,7 +19,7 @@ class MenuScene(Scene):
 
         self.container = Entity(
             parent=self,
-            positon=Vec3(0, 0, 0))
+            position=Vec3(0, 0, 0))
 
         self.createBackground()
         self.createTitle()
@@ -39,7 +39,7 @@ class MenuScene(Scene):
 
     def createButtons(self) -> None:
         self.button_game = ButtonUtils(
-            text="Play",
+            text="PLAY",
             position=Vec3(0, 1, 1),
             parent=self.container,
             button_color=color.blue,
@@ -47,17 +47,17 @@ class MenuScene(Scene):
         )
 
         self.button_quit = ButtonUtils(
-            text="Quit",
+            text="LEADERBOARD",
             position=Vec3(0, 1, -2),
-            action=lambda: self.game_engine.quitGame(),
+            action=lambda: self.game_engine.displayScene(EnumScene.HIGHSCORE),
             button_color=color.blue,
             parent=self.container,
         )
 
         self.button_quit = ButtonUtils(
-            text="Leaderboard",
+            text="QUIT",
             position=Vec3(0, 1, -2),
-            action=lambda: self.game_engine.displayScene(EnumScene.HIGHSCORE),
+            action=lambda: self.game_engine.quitGame(),
             button_color=color.blue,
             parent=self.container,
         )
@@ -65,5 +65,5 @@ class MenuScene(Scene):
     def createTitle(self) -> None:
         self.titel = TextUtils(
             parent=self.container,
-            text="Pacman"
+            text="PACMAN"
         )
