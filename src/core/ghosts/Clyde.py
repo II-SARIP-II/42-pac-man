@@ -40,13 +40,13 @@ class Clyde(Ghost):
 
     def update(self) -> None:
         if len(self.target_path) < 2:
-            self.recalculate_path()
+            self.recalculatePath()
 
         arrive_au_node = self.moving()
         if arrive_au_node:
             if len(self.target_path) >= 2:
                 self.last_node = self.target_path[0]
-            self.recalculate_path()
+            self.recalculatePath()
 
     def chaseMovement(
             self,
@@ -74,7 +74,7 @@ class Clyde(Ghost):
     def deadMovement(self) -> Any:
         return self.pos
 
-    def recalculate_path(self) -> None:
+    def recalculatePath(self) -> None:
         if self.mode == EnumMode.CHASE:
             player_pos = self.player.getPlayerPos()
             player_grid_pos = convertVecToPos(
@@ -86,8 +86,10 @@ class Clyde(Ghost):
             target_pos = self.randomMovement()
         elif self.mode == EnumMode.SCARED:
             target_pos = self.scaredMovement()
-        else:
+        elif self.mode == EnumMode.DEAD:
             target_pos = self.deadMovement()
+        else:
+            return
         ghost_grid_pos = convertVecToPos(
             self.position,
             (self.width, self.height)

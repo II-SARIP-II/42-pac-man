@@ -134,7 +134,7 @@ class GameEngine:
         elif self.state == EnumScene.WIN:
             self.current_scene = self.win_scene
             self.win_scene.enable()
-            self.write_highscore()
+            self.writeHighscore()
 
     def nextLevel(self) -> None:
         if self.no_level < self.nb_level:
@@ -145,23 +145,23 @@ class GameEngine:
             print("game finished")
             quit()
 
-    def eat_pacgum(self):
+    def eatPacgum(self):
         self.current_score += self.points_per_pacgum_config
 
-    def eat_super_pacgum(self):
+    def eatSuperPacgum(self):
         self.current_score += self.points_per_super_pacgum_config
 
-    def eat_ghost(self):
+    def eatGhost(self):
         self.current_score += self.points_per_ghost_config
         self.kill += 1
 
-    def lose_life(self):
+    def loseLife(self):
         self.lives_config -= 1
-        self.lives_layout.lose_life()
+        self.lives_layout.loseLife()
         self.text_layout.add_death()
         self.current_score -= self.death_malus
 
-    def write_highscore(self):
+    def writeHighscore(self):
         game_score = Score(
             name="Echo",
             score=self.current_score,
@@ -175,3 +175,6 @@ class GameEngine:
             )[:10]
         clean_dict = json.loads(self.highscores.model_dump_json())
         write_json_file(clean_dict, "config/highscores.json")
+
+    def infiniteLive(self):
+        self.lives_layout.infiniteLive()

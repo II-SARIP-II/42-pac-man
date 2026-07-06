@@ -13,6 +13,7 @@ from src.core.PacGum import PacGum, SuperPacGum
 from src.core.Player import Player
 from src.scene.EnumScene import EnumScene
 from src.utils import convertPosToVec
+from src.core.Ghost import EnumMode
 
 if TYPE_CHECKING:
     from src.GameEngine import GameEngine
@@ -31,6 +32,7 @@ class GameScene(Entity):
         )
         self.createMap()
         self.createPacGums()
+        self.is_ghosts_moving = True
 
     def input(self, key: str) -> None:
         match key:
@@ -50,6 +52,10 @@ class GameScene(Entity):
                 self.player.wish_direction = 2
             case "a" | "left arrow":
                 self.player.wish_direction = 3
+            case "c":
+                self.toggleMovingGhosts()
+            case "x":
+                self.toggleInfiniteLives()
 
     def createMap(self) -> None:
         Entity(
@@ -153,3 +159,16 @@ class GameScene(Entity):
                 level=level
                 )
         ]
+
+    def toggleMovingGhosts(self):
+        self.is_ghosts_moving = not self.is_ghosts_moving
+        if not self.is_ghosts_moving:
+            for ghost in self.ghosts:
+                ghost.mode = EnumMode.STOP
+        else:
+            for ghost in self.ghosts:
+                ghost.mode = EnumMode.CHASE
+
+    def toggleInfiniteLives(self):
+        self.player.set_lives(999999)
+        self.game_engine.infiniteLive()

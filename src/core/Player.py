@@ -89,3 +89,6 @@ class Player(Character):
             self.scores += node.item.score
             destroy(node.item)
             node.item = None
+
+    def set_lives(self, new_lives):
+        self.lives = new_lives
