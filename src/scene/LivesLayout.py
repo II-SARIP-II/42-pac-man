@@ -34,7 +34,6 @@ class LivesLayout(Entity):
         self.displayLives()
 
     def clear_icons(self) -> None:
-        """Supprime proprement toutes les entités d'icônes actuelles."""
         for icon in self.life_entities:
             destroy(icon)
         self.life_entities.clear()

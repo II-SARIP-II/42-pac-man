@@ -8,15 +8,17 @@ from src.ursina_assets.utils_scene import gridLayout
 
 from .EnumScene import EnumScene
 from .Scene import Scene
+from src.GameData import GameData
 
 if TYPE_CHECKING:
     from src.GameEngine import GameEngine
 
 
 class WinScene(Scene):
-    def __init__(self, game_engine: "GameEngine"):
+    def __init__(self, game_engine: "GameEngine", game_data: GameData):
         super().__init__(game_engine)
 
+        self.game_data = game_data
         self.container = Entity(
             parent=self, position=Vec3(0, 0, 0))
 
@@ -52,7 +54,7 @@ class WinScene(Scene):
 
         self.score = TextUtils(
             parent=self.container_texts,
-            text=f"Score: {self.game_engine.current_score}"
+            text=f"Score: {self.game_data.score}"
         )
 
     def createButtons(self) -> None:

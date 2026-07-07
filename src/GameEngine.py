@@ -20,6 +20,7 @@ from src.scene.LivesLayout import LivesLayout
 from src.utils_io import load_json_file, write_json_file
 import json
 from datetime import datetime
+from src.GameData import GameData
 
 
 class GameEngine:
@@ -37,23 +38,19 @@ class GameEngine:
 
         self.highscore_filename_config = highscore_filename
         self.levels_config = levels
-        self.lives_config = lives
-        self.points_per_pacgum_config = points_per_pacgum
-        self.points_per_super_pacgum_config = points_per_super_pacgum
-        self.points_per_ghost_config = points_per_ghost
-        self.seed_config = seed
-        self.level_max_time_config = level_max_time
 
         self.levels: List[Level] = self._getLevels(self.levels_config)
         self.no_level = 0
         self.nb_level = len(self.levels) - 1
 
-        self.current_score = 0
-
-        # Additionnal Data
-        self.death_malus = 100
-        self.kill = 0
-        self.is_lose = False
+        self.game_data = GameData(
+            lives,
+            level_max_time,
+            points_per_pacgum=points_per_pacgum,
+            points_per_super_pacgum=points_per_super_pacgum,
+            points_per_ghost=points_per_ghost,
+            seed=seed
+        )
 
         self._setupEngine()
 
@@ -66,7 +63,11 @@ class GameEngine:
 
         self.state = EnumScene.MENU
 
-        self.game_scene = GameScene(self, self.levels[self.no_level])
+        self.game_scene = GameScene(
+            self,
+            game_data=self.game_data,
+            level=self.levels[self.no_level]
+            )
         self.game_scene.disable()
 
         self.pause_scene = PauseScene(self)
@@ -74,13 +75,13 @@ class GameEngine:
 
         self.text_layout = TextLayout(
             self,
-            self.level_max_time_config,
+            self.game_data,
             1)
         self.text_layout.disable()
 
         self.lives_layout = LivesLayout(
             self,
-            self.lives_config)
+            self.game_data.lives)
         self.lives_layout.disable()
 
         self.menu_scene = MenuScene(self)
@@ -126,11 +127,11 @@ class GameEngine:
             self.current_scene = self.pause_scene
             self.pause_scene.enable()
         elif self.state == EnumScene.LOSE:
-            self.lose_scene = LoseScene(self)
+            self.lose_scene = LoseScene(self, self.game_data)
             self.current_scene = self.lose_scene
             self.lose_scene.enable()
         elif self.state == EnumScene.WIN:
-            self.win_scene = WinScene(self)
+            self.win_scene = WinScene(self, self.game_data)
             self.current_scene = self.win_scene
             self.win_scene.enable()
         elif self.state == EnumScene.FINISH:
@@ -145,27 +146,29 @@ class GameEngine:
 
     def nextLevel(self) -> None:
         if self.no_level <= self.nb_level:
-            self.game_scene = GameScene(self, self.levels[self.no_level])
+            self.game_scene = GameScene(
+                game_engine=self,
+                level=self.levels[self.no_level],
+                game_data=self.game_data
+                )
             self.game_scene.disable()
             self.displayScene(EnumScene.GAME)
         else:
             self.displayScene(EnumScene.FINISH)
 
     def eatPacgum(self) -> None:
-        self.current_score += self.points_per_pacgum_config
+        self.game_data.addScore(self.game_data.points_per_pacgum_config)
 
     def eatSuperPacgum(self) -> None:
-        self.current_score += self.points_per_super_pacgum_config
+        self.game_data.addScore(self.game_data.points_per_super_pacgum_config)
 
     def eatGhost(self) -> None:
-        self.current_score += self.points_per_ghost_config
-        self.kill += 1
+        self.game_data.addScore(self.game_data.points_per_ghost_config)
+        self.game_data.addKill(1)
 
     def loseLife(self) -> None:
-        self.lives_config -= 1
         self.lives_layout.loseLife()
-        self.text_layout.add_death()
-        self.current_score -= self.death_malus
+        self.game_data.playerDead()
 
     def submitScore(self) -> None:
         name = self.finish_scene.player_name.text.strip()
@@ -179,7 +182,7 @@ class GameEngine:
     def write_highscore(self, name: str) -> None:
         game_score = Score(
             name=name,
-            score=self.current_score,
+            score=self.game_data.score,
             date=datetime.now()
             )
         self.highscores.scores.append(game_score)
