@@ -33,4 +33,4 @@ class ScoresList(BaseModel):
             return cls(**load_json_file(filename))
         except (ValueError, FileNotFoundError):
             print(f"{filename} was empty or invalid.")
-            return ScoresList(scores=[])
+            return cls(scores=[])
