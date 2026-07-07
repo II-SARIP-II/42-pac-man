@@ -7,6 +7,7 @@ from src.core.Level import Level
 from src.core.LevelGenerator import LevelGenerator
 from src.models.config import LevelValidation
 from src.models.highscore import ScoresList, Score
+from src.scene.Scene import Scene
 from src.scene.EnumScene import EnumScene
 from src.scene.GameScene import GameScene
 from src.scene.LoseScene import LoseScene
@@ -106,6 +107,9 @@ class GameEngine:
 
     def quitGame(self) -> None:
         quit()
+
+    def changeScene(self, new_scene: Scene) -> None:
+        pass
 
     def displayScene(self, enum: EnumScene) -> None:
         self.text_layout.disable()
