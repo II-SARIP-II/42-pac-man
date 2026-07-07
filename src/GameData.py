@@ -58,46 +58,6 @@ class GameData:
     def seed_config(self) -> int:
         return self._seed_config
 
-    @lives.setter
-    def lives(self, value: int) -> None:
-        self._lives = max(0, value)
-
-    @score.setter
-    def score(self, value: int) -> None:
-        self._score = max(0, value)
-
-    @game_time.setter
-    def game_time(self, value: int) -> None:
-        self._game_time = max(0, value)
-
-    @points_per_pacgum_config.setter
-    def points_per_pacgum_config(self, value: int) -> None:
-        self._points_per_pacgum_config = value
-
-    @points_per_super_pacgum_config.setter
-    def points_per_super_pacgum_config(self, value: int) -> None:
-        self._points_per_super_pacgum_config = value
-
-    @points_per_ghost_config.setter
-    def points_per_ghost_config(self, value: int) -> None:
-        self._points_per_ghost_config = value
-
-    @death_malus.setter
-    def death_malus(self, value: int) -> None:
-        self._death_malus = value
-
-    @kill.setter
-    def kill(self, value: int) -> None:
-        self._kill = max(0, value)
-
-    @nb_death.setter
-    def nb_death(self, value: int) -> None:
-        self._nb_death = max(0, value)
-
-    @seed_config.setter
-    def seed_config(self, value: int) -> None:
-        self._seed_config = value
-
     def addLives(self, amount: int = 1) -> None:
         if amount > 0:
             self._lives += amount
