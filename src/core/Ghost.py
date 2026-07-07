@@ -94,7 +94,7 @@ class Ghost(Character):
             self.chase_count = 0
         return escape_pos
 
-    def playerCollision(self):
+    def playerCollision(self) -> None:
         player_vec = self.getTargetPos()
         player_pos = convertVecToPos(
             player_vec,

@@ -53,6 +53,7 @@ class GameEngine:
         # Additionnal Data
         self.death_malus = 100
         self.kill = 0
+        self.is_lose = False
 
         self._setupEngine()
 

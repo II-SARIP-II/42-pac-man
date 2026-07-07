@@ -1,5 +1,6 @@
 from ursina import color, Vec2, Entity, camera, destroy
 from typing import TYPE_CHECKING, Any
+from src.GameEngine import EnumScene
 
 if TYPE_CHECKING:
     from src.GameEngine import GameEngine
@@ -18,7 +19,7 @@ class LivesLayout(Entity):
             **kwargs
         )
         self.lives = lives
-        self.engine = game_engine
+        self.game_engine = game_engine
         self.infinite = False
         self.life_entities: list[Entity] = []
         self.displayLives()
@@ -58,3 +59,5 @@ class LivesLayout(Entity):
             self.lives -= 1
             last_icon = self.life_entities.pop()
             destroy(last_icon)
+        if self.lives <= 0:
+            self.game_engine.displayScene(EnumScene.LOSE)

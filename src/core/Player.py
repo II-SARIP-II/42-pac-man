@@ -36,7 +36,10 @@ class Player(Character):
         self.get_eaten = False
 
     def loseLife(self) -> None:
-        self.position = convertPosToVec(self.start_pos, (self.width, self.height))
+        self.position = convertPosToVec(
+            self.start_pos,
+            (self.width, self.height)
+            )
         self.current_node = self.getNode(self.start_pos)
         self.target_node = self.current_node
         self.get_eaten = True
@@ -44,12 +47,16 @@ class Player(Character):
     def getPlayerPos(self) -> Vec3:
         return self.get_position(relative_to=self.game_scene)
 
-    def flashingPlayer(self, duration=3.0, interval=0.2):
+    def flashingPlayer(
+            self,
+            duration: float = 3.0,
+            interval: float = 0.2
+            ) -> None:
         self.get_eaten = False
         light_yellow = color.rgb32(246, 255, 205)
         original_color = color.yellow
 
-        def toggle_color(step):
+        def toggle_color(step: int) -> None:
             if step >= duration / interval:
                 self.color = original_color
                 return
