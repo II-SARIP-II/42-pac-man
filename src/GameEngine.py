@@ -182,14 +182,8 @@ class GameEngine:
             score=self.current_score,
             date=datetime.now()
             )
-        self.highscores.scores.append(game_score)
-        self.highscores.scores = sorted(
-            self.highscores.scores,
-            key=lambda x: x.score,
-            reverse=True
-            )[:10]
-        clean_dict = json.loads(self.highscores.model_dump_json())
-        write_json_file(clean_dict, "config/highscores.json")
+        self.highscores.addAndSave(
+            game_score, self.highscore_filename_config)
 
     def infiniteLive(self) -> None:
         self.lives_layout.infiniteLive()
