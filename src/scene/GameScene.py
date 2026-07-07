@@ -2,7 +2,8 @@ from typing import TYPE_CHECKING
 
 from typing_extensions import List
 from ursina import Entity, Vec3, color
-
+from src.scene.TextLayout import TextLayout
+from src.scene.LivesLayout import LivesLayout
 from src.core.Ghost import Ghost
 from src.core.ghosts.Blinky import Blinky
 from src.core.ghosts.Clyde import Clyde
@@ -46,6 +47,16 @@ class GameScene(Scene):
         self.createMap()
         self.createPacGums()
         self.current_nb_pacgum = self.nb_pacgum
+
+        self.text_layout = TextLayout(
+            self.game_engine,
+            self.game_data,
+        )
+
+        self.lives_layout = LivesLayout(
+            self.game_data
+        )
+
         self.is_ghosts_moving = True
 
     def input(self, key: str) -> None:
@@ -207,9 +218,12 @@ class GameScene(Scene):
                 ghost.mode = EnumMode.CHASE
 
     def toggleInfiniteLives(self) -> None:
-        self.game_data.addLives(999999)
-        self.game_engine.infiniteLive()
+        self.game_data.addLives(99999999)
+        self.lives_layout.infiniteLive()
 
     def killPlayer(self) -> None:
         self.player.loseLife()
-        self.game_engine.loseLife()
+        self.game_data.playerDead()
+        if self.game_data.lives <= 0:
+            self.game_engine.displayScene(EnumScene.LOSE)
+        self.lives_layout.displayLives()
