@@ -10,3 +10,9 @@ class Scene(Entity):
         super().__init__()
 
         self.game_engine = game_engine
+
+    def on_enter(self) -> None:
+        pass
+
+    def on_exit(self) -> None:
+        pass

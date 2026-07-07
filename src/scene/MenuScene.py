@@ -67,3 +67,6 @@ class MenuScene(Scene):
             parent=self.container,
             text="PACMAN"
         )
+
+    def on_enter(self) -> None:
+        self.game_engine.resetGame()

@@ -18,6 +18,8 @@ from src.scene.TextLayout import TextLayout
 from src.scene.LivesLayout import LivesLayout
 from datetime import datetime
 
+from src.utils_io import load_json_file
+
 
 class GameEngine:
     def __init__(
@@ -54,7 +56,7 @@ class GameEngine:
 
     def _setupEngine(self) -> None:
         # try:
-        self.highscores = self._getScores(self.highscore_filename_config)
+        self.highscores = ScoresList.from_json(self.highscore_filename_config)
 
         camera.position = (0, 50, 0)
         camera.rotation = (90, 0, 0)
@@ -94,14 +96,6 @@ class GameEngine:
         #     raise ValueError(e)
 
     @staticmethod
-    def _getScores(filename: str) -> ScoresList:
-        try:
-            return ScoresList(**load_json_file(filename))
-        except (ValueError, FileNotFoundError):
-            print(f"{filename} was empty or invalid.")
-            return ScoresList(scores=[])
-
-    @staticmethod
     def _getLevels(levels_config: List[LevelValidation]) -> List[Level]:
         levels: List[Level] = []
         for level in levels_config:
@@ -119,12 +113,8 @@ class GameEngine:
 
         self.state = enum
 
-        if self.state == EnumScene.MENU:
-            self.resetGame()
-        elif self.state == EnumScene.GAME:
+        if self.state == EnumScene.GAME:
             self.game_scene = GameScene(self, self.levels[self.no_level])
-        elif self.state == EnumScene.HIGHSCORE:
-            self.highscores = self._getScores(self.highscore_filename_config)
 
         scene_mapping = {
             EnumScene.MENU: (self.menu_scene, False),

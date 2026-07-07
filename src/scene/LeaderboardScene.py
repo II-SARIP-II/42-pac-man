@@ -63,3 +63,7 @@ class LeaderboardScene(Scene):
             parent=self,
             scale=Vec3(5, 1, 1),
         )
+
+    def on_enter(self) -> None:
+        self.game_engine.highscores = ScoresList.from_json(
+            self.game_engine.highscore_filename_config)
