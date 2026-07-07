@@ -45,7 +45,6 @@ class LivesLayout(Entity):
                 position=Vec2(0.06, 0),
                 texture="assets/images/infinity_yellow.png",
                 parent=self,
-                color=color.yellow
             )
             self.life_entities.append(life_icon)
             return
@@ -57,7 +56,6 @@ class LivesLayout(Entity):
                 position=Vec2(0.06, 0),
                 texture="assets/images/pacman.png",
                 parent=self,
-                color=color.yellow,
             )
             self.life_entities.append(life_icon)
             self.text_entity.text = f"x{self.game_data.lives}"
@@ -71,7 +69,6 @@ class LivesLayout(Entity):
                     position=Vec2(i * 0.06, 0),
                     texture="assets/images/pacman.png",
                     parent=self,
-                    color=color.yellow,
                 )
                 self.life_entities.append(life_icon)
 
