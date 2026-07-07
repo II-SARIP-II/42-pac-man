@@ -1,7 +1,6 @@
 from typing import List
 
 from ursina import camera
-# from ursina.scripts.smooth_follow import player
 
 from src.core.Level import Level
 from src.core.LevelGenerator import LevelGenerator
@@ -16,8 +15,6 @@ from src.scene.PauseScene import PauseScene
 from src.scene.WinScene import WinScene
 from src.scene.FinishScene import FinishScene
 from src.scene.LeaderboardScene import LeaderboardScene
-from src.scene.TextLayout import TextLayout
-from src.scene.LivesLayout import LivesLayout
 from src.utils_io import load_json_file, write_json_file
 import json
 from datetime import datetime
@@ -74,17 +71,6 @@ class GameEngine:
         self.pause_scene = PauseScene(self)
         self.pause_scene.disable()
 
-        self.text_layout = TextLayout(
-            self,
-            self.game_data,
-            1)
-        self.text_layout.disable()
-
-        self.lives_layout = LivesLayout(
-            self,
-            self.game_data.lives)
-        self.lives_layout.disable()
-
         self.menu_scene = MenuScene(self)
         self.current_scene = self.menu_scene
         # except Exception as e:
@@ -112,11 +98,9 @@ class GameEngine:
         pass
 
     def displayScene(self, enum: EnumScene) -> None:
-        self.text_layout.disable()
-        self.lives_layout.disable()
+
         if self.current_scene:
             self.current_scene.disable()
-
         self.state = enum
 
         if self.state == EnumScene.MENU:
@@ -125,8 +109,6 @@ class GameEngine:
         elif self.state == EnumScene.GAME:
             self.current_scene = self.game_scene
             self.game_scene.enable()
-            self.text_layout.enable()
-            self.lives_layout.enable()
         elif self.state == EnumScene.PAUSE:
             self.current_scene = self.pause_scene
             self.pause_scene.enable()
@@ -170,10 +152,6 @@ class GameEngine:
         self.game_data.addScore(self.game_data.points_per_ghost_config)
         self.game_data.addKill(1)
 
-    def loseLife(self) -> None:
-        self.lives_layout.loseLife()
-        self.game_data.playerDead()
-
     def submitScore(self) -> None:
         name = self.finish_scene.player_name.text.strip()
         if not name:
@@ -197,6 +175,3 @@ class GameEngine:
             )[:10]
         clean_dict = json.loads(self.highscores.model_dump_json())
         write_json_file(clean_dict, "config/highscores.json")
-
-    def infiniteLive(self) -> None:
-        self.lives_layout.infiniteLive()

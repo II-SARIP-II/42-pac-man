@@ -1,15 +1,12 @@
 from ursina import color, Vec2, Entity, camera, destroy, Text
-from typing import TYPE_CHECKING, Any
-from src.GameEngine import EnumScene
+from typing import Any
 
-if TYPE_CHECKING:
-    from src.GameEngine import GameEngine
+from src.GameData import GameData
 
 
 class LivesLayout(Entity):
     def __init__(self,
-                 game_engine: "GameEngine",
-                 lives: int = 3,
+                 game_data: GameData,
                  **kwargs: Any
                  ):
         super().__init__(
@@ -18,8 +15,7 @@ class LivesLayout(Entity):
             origin=Vec2(-0.5, -0.5),
             **kwargs
         )
-        self.lives = lives
-        self.game_engine = game_engine
+        self.game_data = game_data
         self.infinite = False
         self.life_entities: list[Entity] = []
 
@@ -49,44 +45,33 @@ class LivesLayout(Entity):
                 position=Vec2(0.06, 0),
                 texture="assets/images/infinity_yellow.png",
                 parent=self,
-                color=color.yellow
             )
             self.life_entities.append(life_icon)
             return
 
-        if self.lives > 9:
+        if self.game_data.lives > 9:
             life_icon = Entity(
                 model="quad",
                 scale=(0.05, 0.05),
                 position=Vec2(0.06, 0),
                 texture="assets/images/pacman.png",
                 parent=self,
-                color=color.yellow,
             )
             self.life_entities.append(life_icon)
-            self.text_entity.text = f"x{self.lives}"
+            self.text_entity.text = f"x{self.game_data.lives}"
 
         else:
             self.text_entity.text = ""
-            for i in range(self.lives):
+            for i in range(self.game_data.lives):
                 life_icon = Entity(
                     model="quad",
                     scale=(0.05, 0.05),
                     position=Vec2(i * 0.06, 0),
                     texture="assets/images/pacman.png",
                     parent=self,
-                    color=color.yellow,
                 )
                 self.life_entities.append(life_icon)
 
     def infiniteLive(self) -> None:
         self.infinite = not self.infinite
         self.displayLives()
-
-    def loseLife(self) -> None:
-        if self.lives > 0:
-            self.lives -= 1
-            self.displayLives()
-
-        if self.lives <= 0:
-            self.game_engine.displayScene(EnumScene.LOSE)
