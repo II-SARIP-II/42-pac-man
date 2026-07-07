@@ -6,7 +6,9 @@ class GameData:
                  points_per_ghost: int,
                  seed: int
                  ):
+        self._setup_lives = total_lives
         self._lives = total_lives
+        self._toggle_infinite_lives = False
         self._game_time = total_time
         self._points_per_pacgum_config = points_per_pacgum
         self._points_per_super_pacgum_config = points_per_super_pacgum
@@ -86,3 +88,10 @@ class GameData:
     def playerDead(self) -> None:
         self.removeLives(1)
         self.removeScore(self.death_malus)
+
+    def infiniteLives(self):
+        self._toggle_infinite_lives = not self._toggle_infinite_lives
+        if self._toggle_infinite_lives:
+            self._lives = 9999999999999999
+        else:
+            self._lives = self._setup_lives

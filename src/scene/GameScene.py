@@ -218,7 +218,7 @@ class GameScene(Scene):
                 ghost.mode = EnumMode.CHASE
 
     def toggleInfiniteLives(self) -> None:
-        self.game_data.addLives(99999999)
+        self.game_data.infiniteLives()
         self.lives_layout.infiniteLive()
 
     def killPlayer(self) -> None:
