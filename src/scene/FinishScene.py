@@ -7,7 +7,6 @@ from src.ursina_assets.TextUtils import TextUtils
 from src.ursina_assets.utils_scene import gridLayout
 from ursina.prefabs.input_field import InputField
 
-from .EnumScene import EnumScene
 from .Scene import Scene
 
 if TYPE_CHECKING:
@@ -22,10 +21,7 @@ class FinishScene(Scene):
             parent=self,
             position=Vec3(0, 0, 0))
 
-        self.createBackground()
-        self.createTitle()
-        self.createInputField()
-        self.createButtons()
+        self.createScene()
 
         gridLayout(self.container, 1.8)
 
@@ -49,15 +45,11 @@ class FinishScene(Scene):
             action=lambda: self.game_engine.submitScore(),
         )
 
-    def createBackground(self) -> None:
-        Entity(
-            model="plane",
-            scale=Vec3(20, 1, 20),
-            position=Vec3(0, 0, 0),
-            color=color.black,
-            collider="box",
-            parent=self,
-        )
+    def createScene(self) -> None:
+        self.createBackground()
+        self.createTitle()
+        self.createInputField()
+        self.createButtons()
 
     def createButtons(self) -> None:
         self.button_game = ButtonUtils(
@@ -65,13 +57,13 @@ class FinishScene(Scene):
             position=Vec3(0, 1, 1),
             parent=self.container,
             button_color=color.blue,
-            action=lambda: self.game_engine.displayScene(EnumScene.MENU),
+            action=lambda: self.onClickMenu(),
         )
 
         self.button_quit = ButtonUtils(
             text="Quit",
             position=Vec3(0, 1, -2),
-            action=lambda: self.game_engine.quitGame(),
+            action=lambda: self.onClickQuit(),
             button_color=color.blue,
             parent=self.container,
         )
@@ -92,3 +84,9 @@ class FinishScene(Scene):
         match key:
             case 'enter':
                 self.game_engine.submitScore()
+
+    def onClickQuit(self) -> None:
+        quit()
+
+    def onClickMenu(self) -> None:
+        self.game_engine.changeScene(self.game_engine.menu_scene)

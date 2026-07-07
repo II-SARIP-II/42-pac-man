@@ -7,7 +7,6 @@ from src.ursina_assets.TextUtils import TextUtils
 from src.ursina_assets.utils_scene import gridLayout
 from src.GameData import GameData
 
-from .EnumScene import EnumScene
 from .Scene import Scene
 
 if TYPE_CHECKING:
@@ -19,24 +18,21 @@ class LoseScene(Scene):
         super().__init__(game_engine)
 
         self.game_data = game_data
+
         self.container = Entity(
             parent=self, position=Vec3(0, 0, 0))
-
         self.container_texts = Entity(
             parent=self.container, position=Vec3(0, 0, 0))
-
         self.container_buttons = Entity(
             parent=self.container, position=Vec3(0, 0, 0))
 
-        self.createBackground()
-        self.createTitle()
-        self.createButtons()
+        self.createScene()
 
         gridLayout(self.container_texts, 1)
         gridLayout(self.container_buttons, 1.8)
         gridLayout(self.container, 4)
 
-    def createBackground(self) -> None:
+    def createScene(self) -> None:
         Entity(
             model="plane",
             scale=Vec3(20, 0, 20),
@@ -46,7 +42,6 @@ class LoseScene(Scene):
             parent=self,
         )
 
-    def createTitle(self) -> None:
         self.title = TextUtils(
             parent=self.container_texts,
             text="Game Over",
@@ -57,17 +52,22 @@ class LoseScene(Scene):
             text=f"Score: {self.game_data.score}"
         )
 
-    def createButtons(self) -> None:
         self.button_menu = ButtonUtils(
             text="MENU",
-            action=lambda: self.game_engine.displayScene(EnumScene.MENU),
+            action=lambda: self.onClickMenu(),
             button_color=color.blue,
             parent=self.container_buttons,
         )
 
         self.button_quit = ButtonUtils(
             text="QUIT",
-            action=lambda: self.game_engine.quitGame(),
+            action=lambda: self.onClickQuit(),
             button_color=color.blue,
             parent=self.container_buttons,
         )
+
+    def onClickMenu(self) -> None:
+        self.game_engine.changeScene(self.game_engine.menu_scene)
+
+    def onClickQuit(self) -> None:
+        quit()
