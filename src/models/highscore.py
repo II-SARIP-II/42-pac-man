@@ -3,6 +3,7 @@ from typing import List
 from datetime import datetime
 import json
 from src.utils_io import write_json_file, load_json_file
+from pathlib import Path
 
 class Score(BaseModel):
     name: str = Field(min_length=1, max_length=10, pattern=r"^[a-zA-Z0-9 ]+$")
@@ -26,9 +27,10 @@ class ScoresList(BaseModel):
         write_json_file(clean_highscores, filename)
 
     @classmethod
-    def from_json(cls, filename: str) -> "ScoresList":
+    def from_json(cls, filename: Path) -> "ScoresList":
+        """Load and return an instance of ScoresList from a JSON file."""
         try:
-            return ScoresList(**load_json_file(filename))
+            return cls(**load_json_file(str(filename)))
         except (ValueError, FileNotFoundError):
             print(f"{filename} was empty or invalid.")
             return ScoresList(scores=[])

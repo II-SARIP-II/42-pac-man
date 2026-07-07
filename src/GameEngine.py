@@ -18,30 +18,22 @@ from src.scene.TextLayout import TextLayout
 from src.scene.LivesLayout import LivesLayout
 from datetime import datetime
 
-from src.utils_io import load_json_file
+from src.models.config import ConfigFileValidation
 
 
 class GameEngine:
-    def __init__(
-        self,
-        highscore_filename: str,
-        levels: List[LevelValidation],
-        lives: int,
-        points_per_pacgum: int,
-        points_per_super_pacgum: int,
-        points_per_ghost: int,
-        seed: int,
-        level_max_time: int,
-    ) -> None:
+    def __init__(self, config: ConfigFileValidation) -> None:
 
-        self.highscore_filename_config = highscore_filename
-        self.levels_config = levels
-        self.lives_config = lives
-        self.points_per_pacgum_config = points_per_pacgum
-        self.points_per_super_pacgum_config = points_per_super_pacgum
-        self.points_per_ghost_config = points_per_ghost
-        self.seed_config = seed
-        self.level_max_time_config = level_max_time
+        self.highscore_filename_config = config.highscore_filename
+        self.levels_config = config.levels
+        self.lives_config = config.lives
+        self.points_per_pacgum_config = config.points_per_pacgum
+        self.points_per_super_pacgum_config = config.points_per_super_pacgum
+        self.points_per_ghost_config = config.points_per_ghost
+        self.seed_config = config.seed
+        self.level_max_time_config = config.level_max_time
+
+        self.config = config
 
         self.levels: list[Level] = []
         self.no_level: int = 0

@@ -12,17 +12,11 @@ def main() -> None:
     if len(argv) != 2:
         print("Usage: pac-man.py <config_file>")
         exit(1)
+
     config = ConfigFileValidation(**load_json_file(argv[1]))
-    GameEngine(
-        str(config.highscore_filename),
-        config.levels,
-        config.lives,
-        config.points_per_pacgum,
-        config.points_per_super_pacgum,
-        config.points_per_ghost,
-        config.seed,
-        config.level_max_time,
-    )
+
+    GameEngine(config)
+
     app.run()
 
 

@@ -46,7 +46,7 @@ class MenuScene(Scene):
             action=lambda: self.game_engine.displayScene(EnumScene.GAME),
         )
 
-        self.button_quit = ButtonUtils(
+        self.button_leaderboard = ButtonUtils(
             text="LEADERBOARD",
             position=Vec3(0, 1, -2),
             action=lambda: self.game_engine.displayScene(EnumScene.HIGHSCORE),
