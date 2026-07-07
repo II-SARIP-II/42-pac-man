@@ -1,8 +1,6 @@
-from typing import Callable
+from typing import TYPE_CHECKING, Callable
 
 from ursina import Button, Vec3, color
-
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from src.scene.GameScene import GameScene

@@ -10,7 +10,6 @@ class LevelGenerator:
         height = level.height
 
         maze = MazeGenerator(size=(width, height))
-        maze.generate()
 
         nodes = {}
         for y, row in enumerate(maze.maze):

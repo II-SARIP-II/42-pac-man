@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
 
-from ursina import Entity, Vec3, color, camera
+from ursina import Entity, Vec3, camera, color
+from ursina.prefabs.input_field import InputField
 
 from src.ursina_assets.ButtonUtils import ButtonUtils
 from src.ursina_assets.TextUtils import TextUtils
 from src.ursina_assets.utils_scene import gridLayout
-from ursina.prefabs.input_field import InputField
 
 from .Scene import Scene
 

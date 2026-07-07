@@ -2,9 +2,8 @@ from typing import TYPE_CHECKING
 
 from typing_extensions import List
 from ursina import Entity, Vec3, color, destroy
-from src.scene.TextLayout import TextLayout
-from src.scene.LivesLayout import LivesLayout
-from src.core.Ghost import Ghost
+
+from src.core.Ghost import EnumMode, Ghost
 from src.core.ghosts.Blinky import Blinky
 from src.core.ghosts.Clyde import Clyde
 from src.core.ghosts.Inky import Inky
@@ -12,10 +11,11 @@ from src.core.ghosts.Pinky import Pinky
 from src.core.Level import Level
 from src.core.PacGum import PacGum, SuperPacGum
 from src.core.Player import Player
-from src.scene.Scene import Scene
-from src.utils import convertPosToVec
-from src.core.Ghost import EnumMode
 from src.GameData import GameData
+from src.scene.LivesLayout import LivesLayout
+from src.scene.Scene import Scene
+from src.scene.TextLayout import TextLayout
+from src.utils import convertPosToVec
 
 if TYPE_CHECKING:
     from src.GameEngine import GameEngine

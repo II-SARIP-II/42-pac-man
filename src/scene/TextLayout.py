@@ -1,6 +1,8 @@
-from ursina import color, Vec2, Entity, camera, Text
-import ursina
 from typing import TYPE_CHECKING, Any
+
+import ursina
+from ursina import Entity, Text, Vec2, camera, color
+
 from src.GameData import GameData
 
 if TYPE_CHECKING:

@@ -1,5 +1,6 @@
-from ursina import Entity, Vec3, color
 from typing import TYPE_CHECKING
+
+from ursina import Entity, Vec3, color
 
 if TYPE_CHECKING:
     from src.GameEngine import GameEngine

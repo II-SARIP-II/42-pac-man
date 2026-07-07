@@ -2,12 +2,12 @@ from typing import TYPE_CHECKING
 
 from ursina import Entity, Vec3, color
 
+from src.GameData import GameData
 from src.ursina_assets.ButtonUtils import ButtonUtils
 from src.ursina_assets.TextUtils import TextUtils
 from src.ursina_assets.utils_scene import gridLayout
 
 from .Scene import Scene
-from src.GameData import GameData
 
 if TYPE_CHECKING:
     from src.GameEngine import GameEngine

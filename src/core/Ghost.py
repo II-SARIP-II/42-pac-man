@@ -1,6 +1,7 @@
 import random
+from datetime import datetime, timedelta
 from enum import Enum
-from typing import Optional, Tuple, Any, List
+from typing import TYPE_CHECKING, Any, List, Optional, Tuple
 
 from ursina import Vec3, color
 
@@ -8,10 +9,6 @@ from src.core.Character import Character
 from src.core.Node import Node
 from src.core.Player import Player
 from src.utils import convertVecToPos
-
-from datetime import datetime, timedelta
-
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from src.scene.GameScene import GameScene

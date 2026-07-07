@@ -1,5 +1,6 @@
-from ursina import Entity, Vec3, color
 from typing import TYPE_CHECKING
+
+from ursina import Entity, Vec3, color
 
 from src.ursina_assets.ButtonUtils import ButtonUtils
 from src.ursina_assets.TextUtils import TextUtils
@@ -60,7 +61,7 @@ class MenuScene(Scene):
         )
 
     def onClickPlay(self) -> None:
-        self.game_engine.resetGame()
+        self.game_engine.resetGameData()
         self.game_engine.newGameScene()
         self.game_engine.changeScene(self.game_engine.game_scene)
 

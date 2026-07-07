@@ -1,6 +1,8 @@
-from src.core.Item import Item
-from ursina import Vec3, color, time
 from typing import TYPE_CHECKING
+
+from ursina import Vec3, color, time
+
+from src.core.Item import Item
 
 if TYPE_CHECKING:
     from src.scene.GameScene import GameScene

@@ -4,8 +4,8 @@ from ursina import Vec3, color, destroy, time
 
 from src.core.Character import Character
 from src.core.Node import Node
-from src.utils import convertPosToVec
 from src.GameData import GameData
+from src.utils import convertPosToVec
 
 if TYPE_CHECKING:
     from src.scene.GameScene import GameScene

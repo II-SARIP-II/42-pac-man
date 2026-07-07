@@ -1,5 +1,6 @@
-from ursina import Text, Vec3, color
 from typing import TYPE_CHECKING, Any
+
+from ursina import Text, Vec3, color
 
 if TYPE_CHECKING:
     from src.scene.GameScene import GameScene

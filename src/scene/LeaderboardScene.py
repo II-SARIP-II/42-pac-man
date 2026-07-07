@@ -1,9 +1,11 @@
-from src.scene.Scene import Scene
-from ursina import Entity, color, Vec3
 from typing import TYPE_CHECKING
+
+from ursina import Entity, Vec3, color
+
 from src.models.highscore import ScoresList
-from src.ursina_assets.TextUtils import TextUtils
+from src.scene.Scene import Scene
 from src.ursina_assets.ButtonUtils import ButtonUtils
+from src.ursina_assets.TextUtils import TextUtils
 from src.ursina_assets.utils_scene import gridLayout
 
 if TYPE_CHECKING:

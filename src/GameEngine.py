@@ -1,23 +1,21 @@
+from datetime import datetime
 from typing import List
 
 from ursina import camera, destroy
 
 from src.core.Level import Level
 from src.core.LevelGenerator import LevelGenerator
+from src.GameData import GameData
 from src.models.config import LevelValidation
-from src.models.highscore import ScoresList, Score
-from src.scene.Scene import Scene
+from src.models.highscore import Score, ScoresList
+from src.scene.FinishScene import FinishScene
 from src.scene.GameScene import GameScene
+from src.scene.LeaderboardScene import LeaderboardScene
 from src.scene.LoseScene import LoseScene
 from src.scene.MenuScene import MenuScene
 from src.scene.PauseScene import PauseScene
+from src.scene.Scene import Scene
 from src.scene.WinScene import WinScene
-from src.scene.FinishScene import FinishScene
-from src.scene.LeaderboardScene import LeaderboardScene
-from src.utils_io import load_json_file, write_json_file
-import json
-from datetime import datetime
-from src.GameData import GameData
 
 
 class GameEngine:
@@ -36,10 +34,6 @@ class GameEngine:
         self.highscore_filename_config = highscore_filename
         self.levels_config = levels
 
-        self.levels: List[Level] = self._getLevels(self.levels_config)
-        self.no_level = 0
-        self.nb_level = len(self.levels) - 1
-
         self.lives = lives
         self.level_max_time = level_max_time
         self.points_per_pacgum = points_per_pacgum
@@ -47,15 +41,16 @@ class GameEngine:
         self.points_per_ghost = points_per_ghost
         self.seed = seed
 
-        self.highscores = self._getScores(self.highscore_filename_config)
+        self.highscores = ScoresList.loadFromJson(
+            self.highscore_filename_config)
 
         camera.position = (0, 50, 0)
         camera.rotation = (90, 0, 0)
 
-        self.resetGame()
+        self.resetGameData()
         self._setupScenes()
 
-    def resetGame(self) -> None:
+    def resetGameData(self) -> None:
         self.game_data = GameData(
             total_lives=self.lives,
             total_time=self.level_max_time,
@@ -105,14 +100,6 @@ class GameEngine:
         self.game_scene.disable()
 
     @staticmethod
-    def _getScores(filename: str) -> ScoresList:
-        try:
-            return ScoresList(**load_json_file(filename))
-        except (ValueError, FileNotFoundError):
-            print(f"{filename} was empty or invalid.")
-            return ScoresList(scores=[])
-
-    @staticmethod
     def _getLevels(levels_config: List[LevelValidation]) -> List[Level]:
         levels: List[Level] = []
         for level in levels_config:
@@ -151,20 +138,15 @@ class GameEngine:
             print("The name cannot be empty.")
             return
 
-        self.write_highscore(name)
+        self.writeHighscore(name)
         self.changeScene(self.menu_scene)
 
-    def write_highscore(self, name: str) -> None:
+    def writeHighscore(self, name: str) -> None:
         game_score = Score(
             name=name,
             score=self.game_data.score,
             date=datetime.now()
             )
-        self.highscores.scores.append(game_score)
-        self.highscores.scores = sorted(
-            self.highscores.scores,
-            key=lambda x: x.score,
-            reverse=True
-            )[:10]
-        clean_dict = json.loads(self.highscores.model_dump_json())
-        write_json_file(clean_dict, "config/highscores.json")
+
+        self.highscores.addAndSave(
+            game_score, self.highscore_filename_config)

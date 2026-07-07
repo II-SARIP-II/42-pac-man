@@ -1,5 +1,6 @@
-from ursina import color, Vec2, Entity, camera, destroy, Text
 from typing import Any
+
+from ursina import Entity, Text, Vec2, camera, color, destroy
 
 from src.GameData import GameData
 
