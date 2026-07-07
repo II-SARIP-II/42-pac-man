@@ -1,8 +1,6 @@
 from typing import List
 
-from pydantic_core.core_schema import EnumSchema
 from ursina import camera
-# from ursina.scripts.smooth_follow import player
 
 from src.core.Level import Level
 from src.core.LevelGenerator import LevelGenerator
@@ -18,8 +16,6 @@ from src.scene.FinishScene import FinishScene
 from src.scene.LeaderboardScene import LeaderboardScene
 from src.scene.TextLayout import TextLayout
 from src.scene.LivesLayout import LivesLayout
-from src.utils_io import load_json_file, write_json_file
-import json
 from datetime import datetime
 
 
@@ -45,6 +41,13 @@ class GameEngine:
         self.seed_config = seed
         self.level_max_time_config = level_max_time
 
+        self.levels: list[Level] = []
+        self.no_level: int = 0
+        self.nb_level: int = 0
+        self.current_score: int = 0
+        self.death_malus: int = 0
+        self.kill: int = 0
+        self.is_lose: bool = False
 
         self.resetGame()
         self._setupEngine()
@@ -189,7 +192,7 @@ class GameEngine:
         self.lives_layout.infiniteLive()
 
     def resetGame(self) -> None:
-        self.levels: List[Level] = self._getLevels(self.levels_config)
+        self.levels = self._getLevels(self.levels_config)
         self.no_level = 0
         self.nb_level = len(self.levels) - 1
 
