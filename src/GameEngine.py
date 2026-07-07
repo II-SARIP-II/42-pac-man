@@ -148,8 +148,6 @@ class GameEngine:
 
     def nextLevel(self) -> None:
         if self.no_level <= self.nb_level:
-            self.game_scene = GameScene(self, self.levels[self.no_level])
-            self.game_scene.disable()
             self.displayScene(EnumScene.GAME)
         else:
             self.displayScene(EnumScene.FINISH)
