@@ -57,7 +57,7 @@ class Ghost(Character):
         self.mode = EnumMode.CHASE
         self.chase_count = 0
         self.target_path: List[Node] = []
-        self.lastPlayerDeath = datetime.now()
+        self.last_player_death = datetime.now()
 
     def update(self) -> None:
         pass
@@ -104,10 +104,10 @@ class Ghost(Character):
             self.position,
             (self.width, self.height)
             )
-        grace_period = timedelta(seconds=2)
-        if datetime.now() < self.lastPlayerDeath + grace_period:
+        grace_period = timedelta(seconds=5)
+        if datetime.now() < self.last_player_death + grace_period:
             return
         if player_pos == ghost_pos:
             print("COLLISION")
-            self.lastPlayerDeath = datetime.now()
+            self.last_player_death = datetime.now()
             self.parent.killPlayer()
