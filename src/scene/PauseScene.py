@@ -50,7 +50,7 @@ class PauseScene(Entity):
         self.button_resume = ButtonUtils(
             text="RESUME",
             position=Vec3(0, 1, 1),
-            action=lambda: self.game_state.displayScene(EnumScene.GAME),
+            action=lambda: self.game_state.displayScene(EnumScene.RESUME),
             button_color=color.blue,
             parent=self.container,
         )

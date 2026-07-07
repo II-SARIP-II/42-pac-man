@@ -1,5 +1,6 @@
 from typing import List
 
+from pydantic_core.core_schema import EnumSchema
 from ursina import camera
 # from ursina.scripts.smooth_follow import player
 
@@ -44,17 +45,8 @@ class GameEngine:
         self.seed_config = seed
         self.level_max_time_config = level_max_time
 
-        self.levels: List[Level] = self._getLevels(self.levels_config)
-        self.no_level = 0
-        self.nb_level = len(self.levels) - 1
 
-        self.current_score = 0
-
-        # Additionnal Data
-        self.death_malus = 100
-        self.kill = 0
-        self.is_lose = False
-
+        self.resetGame()
         self._setupEngine()
 
     def _setupEngine(self) -> None:
@@ -65,9 +57,6 @@ class GameEngine:
         camera.rotation = (90, 0, 0)
 
         self.state = EnumScene.MENU
-
-        self.game_scene = GameScene(self, self.levels[self.no_level])
-        self.game_scene.disable()
 
         self.pause_scene = PauseScene(self)
         self.pause_scene.disable()
@@ -85,6 +74,19 @@ class GameEngine:
 
         self.menu_scene = MenuScene(self)
         self.current_scene = self.menu_scene
+
+        self.win_scene = WinScene(self)
+        self.win_scene.disable()
+
+        self.lose_scene = LoseScene(self)
+        self.lose_scene.disable()
+
+        self.finish_scene = FinishScene(self)
+        self.finish_scene.disable()
+
+        self.highscore_scene = LeaderboardScene(self, self.highscores)
+        self.highscore_scene.disable()
+
         # except Exception as e:
         #     raise ValueError(e)
 
@@ -115,33 +117,31 @@ class GameEngine:
         self.state = enum
 
         if self.state == EnumScene.MENU:
-            self.current_scene = self.menu_scene
-            self.menu_scene.enable()
+            self.resetGame()
         elif self.state == EnumScene.GAME:
-            self.current_scene = self.game_scene
-            self.game_scene.enable()
-            self.text_layout.enable()
-            self.lives_layout.enable()
-        elif self.state == EnumScene.PAUSE:
-            self.current_scene = self.pause_scene
-            self.pause_scene.enable()
-        elif self.state == EnumScene.LOSE:
-            self.lose_scene = LoseScene(self)
-            self.current_scene = self.lose_scene
-            self.lose_scene.enable()
-        elif self.state == EnumScene.WIN:
-            self.win_scene = WinScene(self)
-            self.current_scene = self.win_scene
-            self.win_scene.enable()
-        elif self.state == EnumScene.FINISH:
-            self.finish_scene = FinishScene(self)
-            self.current_scene = self.finish_scene
-            self.finish_scene.enable()
+            self.game_scene = GameScene(self, self.levels[self.no_level])
         elif self.state == EnumScene.HIGHSCORE:
             self.highscores = self._getScores(self.highscore_filename_config)
-            self.highscore_scene = LeaderboardScene(self, self.highscores)
-            self.current_scene = self.highscore_scene
-            self.highscore_scene.enable()
+
+        scene_mapping = {
+            EnumScene.MENU: (self.menu_scene, False),
+            EnumScene.GAME: (self.game_scene, True),
+            EnumScene.RESUME: (self.game_scene, True),
+            EnumScene.PAUSE: (self.pause_scene, False),
+            EnumScene.LOSE: (self.lose_scene, False),
+            EnumScene.WIN: (self.win_scene, False),
+            EnumScene.FINISH: (self.finish_scene, False),
+            EnumScene.HIGHSCORE: (self.highscore_scene, False),
+        }
+
+        if self.state in scene_mapping:
+            scene, hud = scene_mapping[self.state]
+            self.current_scene = scene
+            self.current_scene.enable()
+
+            if hud:
+                self.text_layout.enable()
+                self.lives_layout.enable()
 
     def nextLevel(self) -> None:
         if self.no_level <= self.nb_level:
@@ -193,3 +193,15 @@ class GameEngine:
 
     def infiniteLive(self) -> None:
         self.lives_layout.infiniteLive()
+
+    def resetGame(self) -> None:
+        self.levels: List[Level] = self._getLevels(self.levels_config)
+        self.no_level = 0
+        self.nb_level = len(self.levels) - 1
+
+        self.current_score = 0
+
+        # Additionnal Data
+        self.death_malus = 100
+        self.kill = 0
+        self.is_lose = False

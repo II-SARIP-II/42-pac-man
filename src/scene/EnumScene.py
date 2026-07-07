@@ -9,3 +9,4 @@ class EnumScene(Enum):
     WIN = 5
     FINISH = 6
     HIGHSCORE = 7
+    RESUME = 8

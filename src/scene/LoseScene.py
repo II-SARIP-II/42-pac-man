@@ -69,3 +69,6 @@ class LoseScene(Scene):
             button_color=color.blue,
             parent=self.container_buttons,
         )
+
+    def update(self) -> None:
+        self.score.text = f"Score: {self.game_engine.current_score}"

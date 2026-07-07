@@ -27,10 +27,12 @@ class GameScene(Scene):
         self.game_engine = game_engine
         self.level = level
         self.size = self.level.width, self.level.height
+
         self.player = self.createPlayer(self.level.width, self.level.height)
         self.ghosts: List[Ghost] = self.createGhosts(
             self.level.width, self.level.height, self.player, self.level
         )
+
         self.nb_pacgum = 0
         self.createMap()
         self.createPacGums()
@@ -187,7 +189,6 @@ class GameScene(Scene):
                 ghost.mode = EnumMode.CHASE
 
     def toggleInfiniteLives(self) -> None:
-        self.player.set_lives(999999)
         self.game_engine.infiniteLive()
 
     def killPlayer(self) -> None:
