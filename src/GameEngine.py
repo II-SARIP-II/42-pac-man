@@ -1,13 +1,12 @@
 from typing import List
 
-from ursina import camera
+from ursina import camera, destroy
 
 from src.core.Level import Level
 from src.core.LevelGenerator import LevelGenerator
 from src.models.config import LevelValidation
 from src.models.highscore import ScoresList, Score
 from src.scene.Scene import Scene
-from src.scene.EnumScene import EnumScene
 from src.scene.GameScene import GameScene
 from src.scene.LoseScene import LoseScene
 from src.scene.MenuScene import MenuScene
@@ -41,40 +40,69 @@ class GameEngine:
         self.no_level = 0
         self.nb_level = len(self.levels) - 1
 
-        self.game_data = GameData(
-            lives,
-            level_max_time,
-            points_per_pacgum=points_per_pacgum,
-            points_per_super_pacgum=points_per_super_pacgum,
-            points_per_ghost=points_per_ghost,
-            seed=seed
-        )
+        self.lives = lives
+        self.level_max_time = level_max_time
+        self.points_per_pacgum = points_per_pacgum
+        self.points_per_super_pacgum = points_per_super_pacgum
+        self.points_per_ghost = points_per_ghost
+        self.seed = seed
 
-        self._setupEngine()
-
-    def _setupEngine(self) -> None:
-        # try:
         self.highscores = self._getScores(self.highscore_filename_config)
 
         camera.position = (0, 50, 0)
         camera.rotation = (90, 0, 0)
 
-        self.state = EnumScene.MENU
+        self.resetGame()
+        self._setupScenes()
 
-        self.game_scene = GameScene(
-            self,
-            game_data=self.game_data,
-            level=self.levels[self.no_level]
-            )
-        self.game_scene.disable()
+    def resetGame(self) -> None:
+        self.game_data = GameData(
+            total_lives=self.lives,
+            total_time=self.level_max_time,
+            points_per_pacgum=self.points_per_pacgum,
+            points_per_super_pacgum=self.points_per_super_pacgum,
+            points_per_ghost=self.points_per_ghost,
+            seed=self.seed
+        )
+
+        self.levels = self._getLevels(self.levels_config)
+        self.no_level = 0
+        self.nb_level = len(self.levels) - 1
+
+    def _setupScenes(self) -> None:
+        self.game_scene = None
 
         self.pause_scene = PauseScene(self)
         self.pause_scene.disable()
 
+        self.finish_scene = FinishScene(self)
+        self.finish_scene.disable()
+
+        self.leaderboard_scene = LeaderboardScene(self, self.highscores)
+        self.leaderboard_scene.disable()
+
+        self.win_scene = WinScene(self, self.game_data)
+        self.win_scene.disable()
+
+        self.lose_scene = LoseScene(self, self.game_data)
+        self.lose_scene.disable()
+
         self.menu_scene = MenuScene(self)
+
         self.current_scene = self.menu_scene
-        # except Exception as e:
-        #     raise ValueError(e)
+
+    def newGameScene(self) -> None:
+        if self.game_scene:
+            self.game_scene.cleanUp()
+            destroy(self.game_scene)
+
+        self.game_scene = GameScene(
+            game_engine=self,
+            level=self.levels[self.no_level],
+            game_data=self.game_data
+        )
+
+        self.game_scene.disable()
 
     @staticmethod
     def _getScores(filename: str) -> ScoresList:
@@ -95,52 +123,17 @@ class GameEngine:
         quit()
 
     def changeScene(self, new_scene: Scene) -> None:
-        pass
-
-    def displayScene(self, enum: EnumScene) -> None:
-
-        if self.current_scene:
-            self.current_scene.disable()
-        self.state = enum
-
-        if self.state == EnumScene.MENU:
-            self.current_scene = self.menu_scene
-            self.menu_scene.enable()
-        elif self.state == EnumScene.GAME:
-            self.current_scene = self.game_scene
-            self.game_scene.enable()
-        elif self.state == EnumScene.PAUSE:
-            self.current_scene = self.pause_scene
-            self.pause_scene.enable()
-        elif self.state == EnumScene.LOSE:
-            self.lose_scene = LoseScene(self, self.game_data)
-            self.current_scene = self.lose_scene
-            self.lose_scene.enable()
-        elif self.state == EnumScene.WIN:
-            self.win_scene = WinScene(self, self.game_data)
-            self.current_scene = self.win_scene
-            self.win_scene.enable()
-        elif self.state == EnumScene.FINISH:
-            self.finish_scene = FinishScene(self)
-            self.current_scene = self.finish_scene
-            self.finish_scene.enable()
-        elif self.state == EnumScene.HIGHSCORE:
-            self.highscores = self._getScores(self.highscore_filename_config)
-            self.highscore_scene = LeaderboardScene(self, self.highscores)
-            self.current_scene = self.highscore_scene
-            self.highscore_scene.enable()
+        self.current_scene.onExit()
+        self.current_scene = new_scene
+        self.current_scene.onEntry()
 
     def nextLevel(self) -> None:
         if self.no_level <= self.nb_level:
-            self.game_scene = GameScene(
-                game_engine=self,
-                level=self.levels[self.no_level],
-                game_data=self.game_data
-                )
-            self.game_scene.disable()
-            self.displayScene(EnumScene.GAME)
+            self.newGameScene()
+            self.changeScene(self.game_scene)
+
         else:
-            self.displayScene(EnumScene.FINISH)
+            self.changeScene(self.finish_scene)
 
     def eatPacgum(self) -> None:
         self.game_data.addScore(self.game_data.points_per_pacgum_config)
@@ -159,7 +152,7 @@ class GameEngine:
             return
 
         self.write_highscore(name)
-        self.displayScene(EnumScene.MENU)
+        self.changeScene(self.menu_scene)
 
     def write_highscore(self, name: str) -> None:
         game_score = Score(

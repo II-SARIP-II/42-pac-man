@@ -44,7 +44,6 @@ class TextLayout(Entity):
             self.text_entity.text = txt
 
     def update(self) -> None:
-        from src.scene.EnumScene import EnumScene
-        if self.game_engine.state == EnumScene.GAME:
+        if self.game_engine.current_scene == self.game_engine.game_scene:
             self.game_data.removeTime(ursina.time.dt)
             self.refresh_text()
