@@ -57,24 +57,29 @@ class Player(Character):
 
     def flashingPlayer(
             self,
-            duration: float = 3.0,
-            interval: float = 0.2
+            duration: float = 2.0,
+            interval: float = 0.15
             ) -> None:
+
         self.get_eaten = False
-        light_yellow = color.rgb32(246, 255, 205)
+        light_yellow = color.black
         original_color = color.yellow
 
+        max_steps = int(duration/interval)
+
         def toggle_color(step: int) -> None:
-            if step >= duration / interval:
+            if step >= max_steps:
                 self.color = original_color
                 return
-            if self.color == light_yellow:
+
+            if step % 2 == 0:
                 self.color = original_color
             else:
                 self.color = light_yellow
 
             from ursina import invoke
             invoke(toggle_color, step + 1, delay=interval)
+
         toggle_color(0)
 
     def update(self) -> None:

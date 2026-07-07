@@ -49,7 +49,7 @@ class Ghost(Character):
         self.is_edible = False
         self.player = player
         self.frame_counter = 0
-        self.speed = 4
+        self.speed = 2
         self.last_node: Optional[Node] = None
         self.mode = EnumMode.CHASE
         self.chase_count = 0

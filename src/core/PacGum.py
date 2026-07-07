@@ -44,6 +44,9 @@ class SuperPacGum(Item):
         self.chrono = 0
 
     def update(self) -> None:
+        self.flashingEffect()
+
+    def flashingEffect(self) -> None:
         self.chrono += time.dt
 
         if self.chrono >= self.speed:
