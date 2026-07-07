@@ -1,6 +1,7 @@
 from ursina import color, Vec2, Entity, camera, Text
 import ursina
 from typing import TYPE_CHECKING, Any
+from src.GameData import GameData
 
 if TYPE_CHECKING:
     from src.GameEngine import GameEngine
@@ -9,7 +10,7 @@ if TYPE_CHECKING:
 class TextLayout(Entity):
     def __init__(self,
                  game_engine: "GameEngine",
-                 time: int = 90,
+                 game_data: GameData,
                  multiplier: float = 1,
                  **kwargs: Any
                  ) -> None:
@@ -22,9 +23,7 @@ class TextLayout(Entity):
             origin=Vec2(-0.5, 0.5),
             **kwargs
         )
-        self.score = 0
-        self.death = 0
-        self.time = time
+        self.game_data = game_data
         self.game_engine = game_engine
 
         self.text_entity = Text(
@@ -36,13 +35,10 @@ class TextLayout(Entity):
         )
         self.refresh_text()
 
-    def add_death(self) -> None:
-        self.death += 1
-
     def refresh_text(self) -> None:
-        txt = (f"Score: {self.game_engine.current_score}\n"
-               f"Death: {self.death}\n"
-               f"Time: {max(0, int(self.time))}\n")
+        txt = (f"Score: {self.game_data.score}\n"
+               f"Death: {self.game_data.nb_death}\n"
+               f"Time: {max(0, int(self.game_data.game_time))}\n")
 
         if self.text_entity:
             self.text_entity.text = txt
@@ -50,5 +46,5 @@ class TextLayout(Entity):
     def update(self) -> None:
         from src.scene.EnumScene import EnumScene
         if self.game_engine.state == EnumScene.GAME:
-            self.time -= ursina.time.dt
+            self.game_data.removeTime(ursina.time.dt)
             self.refresh_text()

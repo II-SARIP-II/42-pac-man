@@ -5,6 +5,7 @@ from ursina import Entity, Vec3, color
 from src.ursina_assets.ButtonUtils import ButtonUtils
 from src.ursina_assets.TextUtils import TextUtils
 from src.ursina_assets.utils_scene import gridLayout
+from src.GameData import GameData
 
 from .EnumScene import EnumScene
 from .Scene import Scene
@@ -14,9 +15,10 @@ if TYPE_CHECKING:
 
 
 class LoseScene(Scene):
-    def __init__(self, game_engine: "GameEngine"):
+    def __init__(self, game_engine: "GameEngine", game_data: GameData):
         super().__init__(game_engine)
 
+        self.game_data = game_data
         self.container = Entity(
             parent=self, position=Vec3(0, 0, 0))
 
@@ -52,7 +54,7 @@ class LoseScene(Scene):
 
         self.score = TextUtils(
             parent=self.container_texts,
-            text=f"Score: {self.game_engine.current_score}"
+            text=f"Score: {self.game_data.score}"
         )
 
     def createButtons(self) -> None:

@@ -5,13 +5,20 @@ from ursina import Vec3, color, destroy, time
 from src.core.Character import Character
 from src.core.Node import Node
 from src.utils import convertPosToVec
+from src.GameData import GameData
 
 if TYPE_CHECKING:
     from src.scene.GameScene import GameScene
 
 
 class Player(Character):
-    def __init__(self, parent: "GameScene", width: int, height: int) -> None:
+    def __init__(
+            self,
+            parent: "GameScene",
+            game_data: GameData,
+            width: int,
+            height: int
+            ) -> None:
         if width % 2 != 0:
             self.start_pos = (width // 2, height // 2)
         else:
@@ -33,6 +40,7 @@ class Player(Character):
         self.target_node = self.current_node
         self.score = 0
         self.game_scene = parent
+        self.game_data = game_data
         self.get_eaten = False
 
     def loseLife(self) -> None:
@@ -121,7 +129,7 @@ class Player(Character):
 
     def eatItem(self, node: Node) -> None:
         if node.item:
-            self.game_scene.game_engine.current_score += node.item.score
+            self.game_data.addScore(node.item.score)
             destroy(node.item)
             node.item = None
             self.game_scene.current_nb_pacgum -= 1

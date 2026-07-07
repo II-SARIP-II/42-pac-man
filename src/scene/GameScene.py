@@ -15,19 +15,30 @@ from src.scene.EnumScene import EnumScene
 from src.scene.Scene import Scene
 from src.utils import convertPosToVec
 from src.core.Ghost import EnumMode
+from src.GameData import GameData
 
 if TYPE_CHECKING:
     from src.GameEngine import GameEngine
 
 
 class GameScene(Scene):
-    def __init__(self, game_engine: "GameEngine", level: Level) -> None:
+    def __init__(
+            self,
+            game_engine: "GameEngine",
+            game_data: GameData,
+            level: Level
+            ) -> None:
         super().__init__(game_engine)
 
         self.game_engine = game_engine
+        self.game_data = game_data
         self.level = level
         self.size = self.level.width, self.level.height
-        self.player = self.createPlayer(self.level.width, self.level.height)
+        self.player = self.createPlayer(
+            self.level.width,
+            self.level.height,
+            game_data
+            )
         self.ghosts: List[Ghost] = self.createGhosts(
             self.level.width, self.level.height, self.player, self.level
         )
@@ -117,8 +128,17 @@ class GameScene(Scene):
                     parent=self,
                 )
 
-    def createPlayer(self, width: int, height: int) -> Player:
-        return Player(parent=self, width=width, height=height)
+    def createPlayer(
+            self,
+            width: int,
+            height: int,
+            game_data: GameData
+            ) -> Player:
+        return Player(
+            parent=self,
+            width=width,
+            height=height,
+            game_data=game_data)
 
     def createPacGums(self) -> None:
         for pos, node in self.level.level_map.items():
@@ -187,7 +207,7 @@ class GameScene(Scene):
                 ghost.mode = EnumMode.CHASE
 
     def toggleInfiniteLives(self) -> None:
-        self.player.set_lives(999999)
+        self.game_data.addLives(999999)
         self.game_engine.infiniteLive()
 
     def killPlayer(self) -> None:
