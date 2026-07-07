@@ -27,23 +27,45 @@ class Player(Character):
             width=width,
             height=height,
         )
+        self.width = width
+        self.height = height
         self.current_node = self.getNode(self.start_pos)
         self.target_node = self.current_node
-        self.lives = 3
         self.score = 0
         self.game_scene = parent
+        self.get_eaten = False
 
     def loseLife(self) -> None:
-        if self.lives > 0 and self.lives <= 3:
-            self.lives -= 1
-
-        if self.lives == 0:
-            print("game over")
+        self.position = convertPosToVec(self.start_pos, (self.width, self.height))
+        self.current_node = self.getNode(self.start_pos)
+        self.target_node = self.current_node
+        self.get_eaten = True
 
     def getPlayerPos(self) -> Vec3:
         return self.get_position(relative_to=self.game_scene)
 
+    def flashingPlayer(self, duration=3.0, interval=0.2):
+        self.get_eaten = False
+        light_yellow = color.rgb32(246, 255, 205)
+        original_color = color.yellow
+
+        def toggle_color(step):
+            if step >= duration / interval:
+                self.color = original_color
+                return
+            if self.color == light_yellow:
+                self.color = original_color
+            else:
+                self.color = light_yellow
+
+            from ursina import invoke
+            invoke(toggle_color, step + 1, delay=interval)
+        toggle_color(0)
+
     def update(self) -> None:
+        if self.get_eaten:
+            self.flashingPlayer()
+
         if self.current_node.item:
             self.eatItem(self.current_node)
 
@@ -97,6 +119,3 @@ class Player(Character):
             node.item = None
             self.game_scene.current_nb_pacgum -= 1
             self.game_scene.isTheLevelFinished()
-
-    def set_lives(self, new_lives):
-        self.lives = new_lives

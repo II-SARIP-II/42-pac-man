@@ -40,6 +40,7 @@ class Pinky(Ghost):
             self.recalculatePath()
 
         arrive_au_node = self.moving()
+        self.playerCollision()
         if arrive_au_node:
             if len(self.target_path) >= 2:
                 self.last_node = self.target_path[0]

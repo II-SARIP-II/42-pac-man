@@ -191,3 +191,7 @@ class GameScene(Scene):
     def toggleInfiniteLives(self):
         self.player.set_lives(999999)
         self.game_engine.infiniteLive()
+
+    def killPlayer(self):
+        self.player.loseLife()
+        self.game_engine.loseLife()

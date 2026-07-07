@@ -9,6 +9,8 @@ from src.core.Node import Node
 from src.core.Player import Player
 from src.utils import convertVecToPos
 
+from datetime import datetime, timedelta
+
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -55,6 +57,7 @@ class Ghost(Character):
         self.mode = EnumMode.CHASE
         self.chase_count = 0
         self.target_path: List[Node] = []
+        self.lastPlayerDeath = datetime.now()
 
     def update(self) -> None:
         pass
@@ -96,3 +99,21 @@ class Ghost(Character):
             self.speed = 4
             self.chase_count = 0
         return escape_pos
+
+    def playerCollision(self):
+        player_vec = self.getTargetPos()
+        player_pos = convertVecToPos(
+            player_vec,
+            (self.width, self.height)
+            )
+        ghost_pos = convertVecToPos(
+            self.position,
+            (self.width, self.height)
+            )
+        grace_period = timedelta(seconds=2)
+        if datetime.now() < self.lastPlayerDeath + grace_period:
+            return
+        if player_pos == ghost_pos:
+            print("COLLISION")
+            self.lastPlayerDeath = datetime.now()
+            self.parent.killPlayer()
