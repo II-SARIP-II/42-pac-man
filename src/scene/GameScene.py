@@ -184,18 +184,28 @@ class GameScene(Scene):
 
     def createPacGums(self) -> list[Entity]:
         items: list[Entity] = []
+        width = self.size[0]
+        height = self.size[1]
+
+        corner = [
+            (0, 0),
+            (0, height - 1),
+            (width - 1 , 0),
+            (width - 1, height - 1)
+        ]
 
         for pos, node in self.level.level_map.items():
             pos = convertPosToVec(pos, self.size)
-            if node.nb_neighbours == 1:
+            if node.pos in corner:
                 node.item = SuperPacGum(score=10, position=pos, parent=self)
                 items.append(node.item)
                 self.nb_pacgum += 1
 
-            elif node.nb_neighbours > 1:
+            elif node.nb_neighbours >= 1:
                 node.item = PacGum(score=1, position=pos, parent=self)
                 items.append(node.item)
                 self.nb_pacgum += 1
+
 
         return items
 
