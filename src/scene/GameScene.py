@@ -93,6 +93,8 @@ class GameScene(Scene):
                 self.game_engine.changeScene(self.game_engine.lose_scene)
             case "f":
                 self.game_engine.changeScene(self.game_engine.finish_scene)
+            case "n":
+                self.game_engine.changeScene(self.game_engine.win_scene)
             case "v":
                 self.current_nb_pacgum = 0
             case "w" | "up arrow":
@@ -248,7 +250,6 @@ class GameScene(Scene):
             if self.game_engine.no_level == self.game_engine.nb_level:
                 self.game_engine.changeScene(self.game_engine.finish_scene)
             else:
-                self.game_engine.no_level += 1
                 self.game_engine.changeScene(self.game_engine.win_scene)
 
     def toggleAllCheat(self) -> None:

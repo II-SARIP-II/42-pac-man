@@ -5,11 +5,19 @@ from .Node import Node
 
 
 class LevelGenerator:
+    def __init__(self, seed: int) -> None:
+        self.seed = seed
+        self.seeded = False
+
     def generateLevel(self, level: LevelValidation) -> Level:
         width = level.width
         height = level.height
 
-        maze = MazeGenerator(size=(width, height))
+        if self.seeded:
+            maze = MazeGenerator(size=(width, height))
+        else:
+            maze = MazeGenerator(size=(width, height), seed=self.seed)
+            self.seeded = True
 
         nodes = {}
         for y, row in enumerate(maze.maze):

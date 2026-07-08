@@ -61,7 +61,7 @@ class GameEngine:
             seed=self.seed
         )
 
-        self.levels = self._getLevels(self.levels_config)
+        self.levels = self.getLevels()
         self.no_level = 0
         self.nb_level = len(self.levels) - 1
 
@@ -103,11 +103,12 @@ class GameEngine:
 
         self.game_scene.disable()
 
-    @staticmethod
-    def _getLevels(levels_config: List[LevelValidation]) -> List[Level]:
+    def getLevels(self) -> List[Level]:
+        level_generator = LevelGenerator(self.seed)
         levels: List[Level] = []
-        for level in levels_config:
-            levels.append(LevelGenerator().generateLevel(level))
+
+        for level in self.levels_config:
+            levels.append(level_generator.generateLevel(level))
         return levels
 
     def quitGame(self) -> None:
@@ -119,6 +120,7 @@ class GameEngine:
         self.current_scene.onEntry()
 
     def nextLevel(self) -> None:
+        self.no_level += 1
         if self.no_level <= self.nb_level:
             self.newGameScene()
             self.changeScene(self.game_scene)
