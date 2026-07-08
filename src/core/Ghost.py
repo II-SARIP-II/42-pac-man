@@ -33,6 +33,8 @@ class Ghost(Character):
         position: Vec3,
         color: color = color.white,
     ) -> None:
+        spawn_position = Vec3(position.x, 0.1, position.z)
+
         super().__init__(
             model="quad",
             texture=image_path,
@@ -41,7 +43,7 @@ class Ghost(Character):
             parent=parent,
             scale=Vec3(0.6, 0.6, 0.6),
             color=color,
-            position=position,
+            position=spawn_position,
         )
         self.rotation = Vec3(90, 0, 0)
         self.width = width

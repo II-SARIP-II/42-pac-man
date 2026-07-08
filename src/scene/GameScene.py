@@ -35,6 +35,7 @@ class GameScene(Scene):
         self.level = level
         self.size = self.level.width, self.level.height
 
+        self.map = self.createMap()
         self.player = self.createPlayer(
             self.level.width,
             self.level.height,
@@ -43,7 +44,6 @@ class GameScene(Scene):
         self.ghosts: List[Ghost] = self.createGhosts(
             self.level.width, self.level.height, self.player, self.level
         )
-        self.map = self.createMap()
 
         # Pacgums
         self.nb_pacgum = 0

@@ -9,7 +9,7 @@ def convertPosToVec(coo: tuple[int, int], size: tuple[int, int]) -> Vec3:
     x -= width / 2
     y = (height / 2) - y
 
-    return Vec3(x, 0, y)
+    return Vec3(x, 0.1, y)
 
 
 def convertVecToPos(pos: Vec3, size: tuple[int, int]) -> tuple[int, int]:

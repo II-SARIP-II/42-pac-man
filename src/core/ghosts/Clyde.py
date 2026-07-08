@@ -33,7 +33,6 @@ class Clyde(Ghost):
             position=convertPosToVec(self.pos, (width, height)),
         )
         self.level = level
-        self.position = convertPosToVec(self.pos, (width, height))
 
     def update(self) -> None:
         if len(self.target_path) < 2:
