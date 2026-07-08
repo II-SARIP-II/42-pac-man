@@ -87,7 +87,6 @@ class GameData:
 
     def playerDead(self) -> None:
         self.removeLives(1)
-        self.removeScore(self.death_malus)
 
     def infiniteLives(self) -> None:
         self._toggle_infinite_lives = not self._toggle_infinite_lives
