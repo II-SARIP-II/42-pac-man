@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from ursina import Entity, Vec3
+from ursina import Entity, Vec3, color
 
 from src.models.highscore import ScoresList
 from src.scene.Scene import Scene
@@ -27,36 +27,44 @@ class LeaderboardScene(Scene):
             parent=self,
             position=Vec3(0, 0, 0))
 
+        self.text_container = Entity(
+            parent=self.container,
+            position=Vec3(0, 0, 3))
+
         self.createScene()
 
-        gridLayout(self.container, spacing=1)
+        gridLayout(self.text_container, spacing=1)
 
     def createScene(self) -> None:
         self.createBackground()
         self.createTitle()
         self.createHighscore()
-        self.createButton()
+        self.createButtons()
 
     def createTitle(self) -> None:
         self.title = TextUtils(
-            text="-- LEADERBOARD --",
-            parent=self.container
+            text="LEADERBOARD",
+            parent=self.container,
+            color=color.yellow,
+            position=Vec3(0, 1, 6)
         )
 
     def createHighscore(self) -> None:
         for score in self.scores_list.scores:
             TextUtils(
                 text=f"{score.name}: {score.score}",
-                parent=self.container
+                parent=self.text_container,
+                scale=25.0,
+                origin=(0, 0.5)
             )
 
-    def createButton(self) -> None:
+    def createButtons(self) -> None:
         self.button_menu = ButtonUtils(
             text="MENU",
-            position=Vec3(0, 1, -7),
             action=lambda: self.onClickMenu(),
-            parent=self,
-            scale=Vec3(5, 1, 1),
+            button_color=color.dark_gray,
+            parent=self.container,
+            position=Vec3(0, 0.1, -6.5)
         )
 
     def onClickMenu(self) -> None:

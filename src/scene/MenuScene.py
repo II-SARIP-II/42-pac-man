@@ -46,6 +46,14 @@ class MenuScene(Scene):
             parent=self.container,
         )
 
+        self.button_instruction = ButtonUtils(
+            text="INSTRUCTIONS",
+            position=Vec3(0, 1, -2),
+            action=lambda: self.onClickInstruction(),
+            button_color=color.blue,
+            parent=self.container,
+        )
+
         self.button_quit = ButtonUtils(
             text="QUIT",
             position=Vec3(0, 1, -2),
@@ -70,3 +78,6 @@ class MenuScene(Scene):
 
     def onClickQuit(self) -> None:
         quit()
+
+    def onClickInstruction(self) -> None:
+        self.game_engine.changeScene(self.game_engine.instruction_scene)

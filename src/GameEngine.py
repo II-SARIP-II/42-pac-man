@@ -14,6 +14,7 @@ from src.scene.LeaderboardScene import LeaderboardScene
 from src.scene.LoseScene import LoseScene
 from src.scene.MenuScene import MenuScene
 from src.scene.PauseScene import PauseScene
+from src.scene.InstructionScene import InstructionScene
 from src.scene.Scene import Scene
 from src.scene.WinScene import WinScene
 
@@ -81,6 +82,9 @@ class GameEngine:
 
         self.lose_scene = LoseScene(self)
         self.lose_scene.disable()
+
+        self.instruction_scene = InstructionScene(self)
+        self.instruction_scene.disable()
 
         self.menu_scene = MenuScene(self)
 

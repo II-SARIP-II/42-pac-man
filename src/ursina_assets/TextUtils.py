@@ -13,7 +13,8 @@ class TextUtils(Text):
         text: str = "",
         position: Vec3 = Vec3(0, 0, 0),
         color: color = color.white,
-        origin: tuple[int, int] = (0, 0),
+        origin: tuple[float, float] = (0, 0),
+        scale: float = 30,
         **kwargs: Any,
     ) -> None:
 
@@ -23,8 +24,9 @@ class TextUtils(Text):
             color=color,
             parent=parent,
             origin=origin,
+            scale=scale,
             **kwargs,
         )
 
         self.rotation_x = 90
-        self.scale = 30
+        self.scale = scale

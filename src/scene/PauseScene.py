@@ -34,7 +34,7 @@ class PauseScene(Scene):
         self.title = TextUtils(
             text=title,
             position=Vec3(0, 1, 0),
-            color=color.white,
+            color=color.yellow,
             parent=self.container,
         )
 
