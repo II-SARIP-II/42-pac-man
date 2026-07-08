@@ -1,8 +1,7 @@
 from typing import TYPE_CHECKING
 
-from ursina import Entity, Vec3, color
+from ursina import Entity, Vec3, color, destroy
 
-from src.models.highscore import ScoresList
 from src.scene.Scene import Scene
 from src.ursina_assets.ButtonUtils import ButtonUtils
 from src.ursina_assets.TextUtils import TextUtils
@@ -15,30 +14,24 @@ if TYPE_CHECKING:
 class LeaderboardScene(Scene):
     def __init__(
             self,
-            game_engine: "GameEngine",
-            scores: ScoresList
+            game_engine: "GameEngine"
             ) -> None:
 
         super().__init__(game_engine)
-
-        self.scores_list = scores
 
         self.container = Entity(
             parent=self,
             position=Vec3(0, 0, 0))
 
-        self.text_container = Entity(
+        self.score_container = Entity(
             parent=self.container,
-            position=Vec3(0, 0, 3))
+            position=Vec3(0, 0, 0))
 
         self.createScene()
-
-        gridLayout(self.text_container, spacing=1)
 
     def createScene(self) -> None:
         self.createBackground()
         self.createTitle()
-        self.createHighscore()
         self.createButtons()
 
     def createTitle(self) -> None:
@@ -46,16 +39,20 @@ class LeaderboardScene(Scene):
             text="LEADERBOARD",
             parent=self.container,
             color=color.yellow,
-            position=Vec3(0, 1, 6)
+            position=Vec3(0, 1, 5)
         )
 
     def createHighscore(self) -> None:
-        for score in self.scores_list.scores:
+        for child in self.score_container.children:
+            destroy(child)
+
+        self.score_container.children = []
+
+        for score in self.game_engine.highscores.scores:
             TextUtils(
                 text=f"{score.name}: {score.score}",
-                parent=self.text_container,
+                parent=self.score_container,
                 scale=25.0,
-                origin=(0, 0.5)
             )
 
     def createButtons(self) -> None:
@@ -66,6 +63,12 @@ class LeaderboardScene(Scene):
             parent=self.container,
             position=Vec3(0, 0.1, -6.5)
         )
+
+    def onEntry(self) -> None:
+        self.enable()
+        self.createHighscore()
+
+        gridLayout(self.score_container, spacing=0.8)
 
     def onClickMenu(self) -> None:
         self.game_engine.changeScene(self.game_engine.menu_scene)

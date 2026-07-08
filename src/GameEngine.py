@@ -74,7 +74,7 @@ class GameEngine:
         self.finish_scene = FinishScene(self)
         self.finish_scene.disable()
 
-        self.leaderboard_scene = LeaderboardScene(self, self.highscores)
+        self.leaderboard_scene = LeaderboardScene(self)
         self.leaderboard_scene.disable()
 
         self.win_scene = WinScene(self)
@@ -143,6 +143,10 @@ class GameEngine:
             return
 
         self.writeHighscore(name)
+
+        self.highscores = ScoresList.loadFromJson(
+            self.highscore_filename_config)
+
         self.changeScene(self.menu_scene)
 
     def writeHighscore(self, name: str) -> None:

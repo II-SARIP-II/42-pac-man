@@ -1,3 +1,4 @@
+from faulthandler import enable
 from typing import TYPE_CHECKING
 
 from ursina import Entity, Vec3, camera, color
@@ -33,12 +34,8 @@ class FinishScene(Scene):
 
     def createInputField(self) -> None:
         self.player_name = InputField(
-            parent=self,
-            placeholder="",
-            max_lines=1,
-            y=-10
+            enabled=False
         )
-        self.player_name.active = True
 
         self.visual_name_text = TextUtils(
             parent=self.container,
@@ -71,12 +68,14 @@ class FinishScene(Scene):
     def createTitle(self) -> None:
         self.title = TextUtils(
             parent=self.container,
-            text="You finished the game, congrats!"
+            text="You finished the game\ncongrats!",
+            color=color.yellow,
+            scale=40
         )
 
         self.score = TextUtils(
             parent=self.container,
-            text=f"Score: {self.game_engine.game_data.score}"
+            text=f"Score: {self.game_engine.game_data.score}",
         )
 
     def update(self) -> None:
@@ -88,9 +87,25 @@ class FinishScene(Scene):
             self.visual_name_text.text = self.player_name.text
 
     def input(self, key: str) -> None:
-        match key:
-            case 'enter':
-                self.game_engine.submitScore()
+        if key == 'enter':
+            self.game_engine.submitScore()
+            return
+
+        if key == 'backspace':
+            if len(self.player_name.text) > 0:
+                self.player_name.text = self.player_name.text[:-1]
+            return
+
+        if key == 'space':
+            self.player_name.text += ' '
+            return
+
+        if len(key) == 1 and len(self.player_name.text) < 12:
+            self.player_name.text += key
+
+    def onExit(self) -> None:
+        self.player_name.text = ""
+        self.disable()
 
     def onClickQuit(self) -> None:
         quit()
