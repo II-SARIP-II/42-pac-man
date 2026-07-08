@@ -22,13 +22,11 @@ class Pinky(Ghost):
         level: Level
     ):
         self.pos = (0, height - 1)
-        self.basic_color = color.pink
         super().__init__(
             width=width,
             height=height,
             parent=parent,
             image_path="/assets/images/pinky.png",
-            color=self.basic_color,
             player=player,
             position=convertPosToVec(self.pos, (width, height)),
         )
@@ -37,6 +35,8 @@ class Pinky(Ghost):
     def update(self) -> None:
         if len(self.target_path) < 2:
             self.recalculatePath()
+        if self.player.is_hunter:
+            self.mode = EnumMode.SCARED
 
         arrive_au_node = self.moving()
         self.playerCollision()

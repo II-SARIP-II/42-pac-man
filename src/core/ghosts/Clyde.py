@@ -22,12 +22,10 @@ class Clyde(Ghost):
         level: Level
     ):
         self.pos = (0, 0)
-        self.basic_color = color.orange
         super().__init__(
             width=width,
             height=height,
             parent=parent,
-            color=self.basic_color,
             image_path="/assets/images/clyde.png",
             player=player,
             position=convertPosToVec(self.pos, (width, height)),
@@ -37,6 +35,8 @@ class Clyde(Ghost):
     def update(self) -> None:
         if len(self.target_path) < 2:
             self.recalculatePath()
+        if self.player.is_hunter:
+            self.mode = EnumMode.SCARED
 
         arrive_au_node = self.moving()
         self.playerCollision()

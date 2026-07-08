@@ -22,12 +22,10 @@ class Blinky(Ghost):
         level: Level
     ):
         self.pos = (width - 1, height - 1)
-        self.basic_color = color.red
         super().__init__(
             width=width,
             height=height,
             parent=parent,
-            color=self.basic_color,
             image_path="/assets/images/blinky.png",
             player=player,
             position=convertPosToVec(self.pos, (width, height)),
@@ -37,7 +35,8 @@ class Blinky(Ghost):
     def update(self) -> None:
         if len(self.target_path) < 2:
             self.recalculatePath()
-
+        if self.player.is_hunter:
+            self.mode = EnumMode.SCARED
         arrive_au_node = self.moving()
         self.playerCollision()
         if arrive_au_node:
@@ -54,7 +53,6 @@ class Blinky(Ghost):
             self.mode = EnumMode.RANDOM
             self.speed = 2.5
             self.chase_count = 0
-            self.color = self.basic_color
         return player_grid_pos
 
     def deadMovement(self) -> Any:
