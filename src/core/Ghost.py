@@ -70,7 +70,6 @@ class Ghost(Character):
         self.chase_count += 1
         if self.chase_count > 15:
             self.mode = EnumMode.CHASE
-            self.speed = 4
             self.chase_count = 0
         return (
             random.randint(0, self.width - 1),
@@ -81,8 +80,14 @@ class Ghost(Character):
         self.texture = "assets/images/scared_ghost.png"
 
         player_vec = self.getTargetPos()
-        player_x, player_y = convertVecToPos(player_vec, (self.width, self.height))
-        ghost_grid_pos = convertVecToPos(self.position, (self.width, self.height))
+        player_x, player_y = convertVecToPos(
+            player_vec,
+            (self.width, self.height)
+        )
+        ghost_grid_pos = convertVecToPos(
+            self.position,
+            (self.width, self.height)
+        )
         current_node = self.level.level_map[ghost_grid_pos]
         best_pos = ghost_grid_pos
         max_distance = -1
@@ -111,9 +116,10 @@ class Ghost(Character):
             self.position,
             (self.width, self.height)
             )
-        grace_period = timedelta(seconds=5)
+        grace_period = timedelta(seconds=2)
         if datetime.now() < self.last_player_death + grace_period:
             return
         if player_pos == ghost_pos:
+            print(player_pos, ghost_pos)
             self.last_player_death = datetime.now()
             self.parent.killPlayer()
