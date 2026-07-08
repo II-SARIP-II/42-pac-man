@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from ursina import Entity, Vec3, color
+from ursina import Entity, Vec3
 
 from src.models.highscore import ScoresList
 from src.scene.Scene import Scene
