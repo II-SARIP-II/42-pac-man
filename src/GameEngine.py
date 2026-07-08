@@ -76,10 +76,10 @@ class GameEngine:
         self.leaderboard_scene = LeaderboardScene(self, self.highscores)
         self.leaderboard_scene.disable()
 
-        self.win_scene = WinScene(self, self.game_data)
+        self.win_scene = WinScene(self)
         self.win_scene.disable()
 
-        self.lose_scene = LoseScene(self, self.game_data)
+        self.lose_scene = LoseScene(self)
         self.lose_scene.disable()
 
         self.menu_scene = MenuScene(self)

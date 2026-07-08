@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 
 from ursina import Entity, Vec3, color
 
-from src.GameData import GameData
 from src.ursina_assets.ButtonUtils import ButtonUtils
 from src.ursina_assets.TextUtils import TextUtils
 from src.ursina_assets.utils_scene import gridLayout
@@ -14,10 +13,8 @@ if TYPE_CHECKING:
 
 
 class WinScene(Scene):
-    def __init__(self, game_engine: "GameEngine", game_data: GameData):
+    def __init__(self, game_engine: "GameEngine"):
         super().__init__(game_engine)
-
-        self.game_data = game_data
 
         self.container = Entity(
             parent=self, position=Vec3(0, 0, 0))
@@ -45,7 +42,7 @@ class WinScene(Scene):
 
         self.score = TextUtils(
             parent=self.container_texts,
-            text=f"Score: {self.game_data.score}"
+            text=f"Score: {self.game_engine.game_data.score}"
         )
 
     def createButtons(self) -> None:
@@ -69,6 +66,9 @@ class WinScene(Scene):
             button_color=color.blue,
             parent=self.container_buttons,
         )
+
+    def update(self) -> None:
+        self.score.text = f"Score: {self.game_engine.game_data.score}"
 
     def onClickMenu(self) -> None:
         self.game_engine.changeScene(self.game_engine.menu_scene)
