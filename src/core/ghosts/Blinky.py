@@ -21,7 +21,9 @@ class Blinky(Ghost):
         player: Player,
         level: Level
     ):
-        self.pos = (width - 1, height - 1)
+        self.spawn_position = (width - 1, height - 1)
+        self.pos = self.spawn_position
+
         self.basic_color = color.red
         super().__init__(
             width=width,
@@ -31,8 +33,12 @@ class Blinky(Ghost):
             image_path="/assets/images/blinky.png",
             player=player,
             position=convertPosToVec(self.pos, (width, height)),
+            spawn_pos=self.spawn_position
         )
         self.level = level
+
+    def respawn(self) -> None:
+        return super().respawn()
 
     def update(self) -> None:
         if len(self.target_path) < 2:

@@ -1,14 +1,16 @@
+from pty import spawn
 import random
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import TYPE_CHECKING, Any, List, Optional, Tuple
 
+from direct.showbase.PythonUtil import safeReprNotify
 from ursina import Vec3, color
 
 from src.core.Character import Character
 from src.core.Node import Node
 from src.core.Player import Player
-from src.utils import convertVecToPos
+from src.utils import convertVecToPos, convertPosToVec
 
 if TYPE_CHECKING:
     from src.scene.GameScene import GameScene
@@ -31,8 +33,12 @@ class Ghost(Character):
         parent: "GameScene",
         player: Player,
         position: Vec3,
+        spawn_pos: tuple[int, int],
         color: color = color.white,
     ) -> None:
+
+        self.spawn_position = spawn_pos
+
         spawn_position = Vec3(position.x, 0.1, position.z)
 
         super().__init__(
@@ -45,6 +51,7 @@ class Ghost(Character):
             color=color,
             position=spawn_position,
         )
+
         self.rotation = Vec3(90, 0, 0)
         self.width = width
         self.height = height
@@ -56,6 +63,18 @@ class Ghost(Character):
         self.mode = EnumMode.CHASE
         self.chase_count = 0
         self.target_path: List[Node] = []
+        self.last_player_death = datetime.now()
+
+    def respawn(self) -> None:
+        self.position = convertPosToVec(
+            self.spawn_position, (self.width, self.height))
+
+        self.mode = EnumMode.CHASE
+        self.speed = 2
+        self.chase_count = 0
+        self.target_path = []
+        self.last_node = None
+
         self.last_player_death = datetime.now()
 
     def update(self) -> None:
@@ -103,7 +122,7 @@ class Ghost(Character):
             self.position,
             (self.width, self.height)
             )
-        grace_period = timedelta(seconds=5)
+        grace_period = timedelta(seconds=3)
         if datetime.now() < self.last_player_death + grace_period:
             return
         if player_pos == ghost_pos:

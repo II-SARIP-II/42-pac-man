@@ -272,6 +272,10 @@ class GameScene(Scene):
     def killPlayer(self) -> None:
         self.player.loseLife()
         self.game_data.playerDead()
+
+        for ghost in self.ghosts:
+            ghost.respawn()
+
         if self.game_data.lives <= 0:
             self.game_engine.changeScene(self.game_engine.lose_scene)
         self.lives_layout.displayLives()
