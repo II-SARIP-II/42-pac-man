@@ -91,6 +91,8 @@ class GameScene(Scene):
                 self.game_engine.changeScene(self.game_engine.pause_scene)
             case "l":
                 self.game_engine.changeScene(self.game_engine.lose_scene)
+            case "f":
+                self.game_engine.changeScene(self.game_engine.finish_scene)
             case "v":
                 self.current_nb_pacgum = 0
             case "w" | "up arrow":

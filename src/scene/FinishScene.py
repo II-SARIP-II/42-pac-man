@@ -25,9 +25,15 @@ class FinishScene(Scene):
 
         gridLayout(self.container, 1.8)
 
+    def createScene(self) -> None:
+        self.createBackground()
+        self.createTitle()
+        self.createInputField()
+        self.createButtons()
+
     def createInputField(self) -> None:
         self.player_name = InputField(
-            parent=camera.ui,
+            parent=self,
             placeholder="",
             max_lines=1,
             y=-10
@@ -44,12 +50,6 @@ class FinishScene(Scene):
             parent=self.container,
             action=lambda: self.game_engine.submitScore(),
         )
-
-    def createScene(self) -> None:
-        self.createBackground()
-        self.createTitle()
-        self.createInputField()
-        self.createButtons()
 
     def createButtons(self) -> None:
         self.button_game = ButtonUtils(
@@ -69,12 +69,19 @@ class FinishScene(Scene):
         )
 
     def createTitle(self) -> None:
-        self.titel = TextUtils(
+        self.title = TextUtils(
             parent=self.container,
             text="You finished the game, congrats!"
         )
 
+        self.score = TextUtils(
+            parent=self.container,
+            text=f"Score: {self.game_engine.game_data.score}"
+        )
+
     def update(self) -> None:
+        self.score.text = f"Score: {self.game_engine.game_data.score}"
+
         if self.player_name.text == "":
             self.visual_name_text.text = "Enter your name..."
         else:

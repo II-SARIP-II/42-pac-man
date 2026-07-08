@@ -16,6 +16,7 @@ class TextLayout(Entity):
                  multiplier: float = 1,
                  **kwargs: Any
                  ) -> None:
+
         if multiplier < 0:
             raise ValueError("Multiplier must be positive")
 
