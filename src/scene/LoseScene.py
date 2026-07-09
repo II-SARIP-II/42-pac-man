@@ -74,7 +74,7 @@ class LoseScene(Scene):
         )
 
         self.validate_button = ButtonUtils(
-            text="Validate",
+            text="VALIDATE",
             parent=self.container_buttons,
             action=lambda: self.game_engine.submitScore(),
         )

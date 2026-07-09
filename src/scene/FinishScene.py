@@ -42,7 +42,7 @@ class FinishScene(Scene):
         )
 
         self.validate_button = ButtonUtils(
-            text="Validate",
+            text="VALIDATE",
             parent=self.container,
             action=lambda: self.game_engine.submitScore(),
         )
