@@ -5,7 +5,9 @@ from ursina import Vec3, color, destroy, time, invoke
 from src.core.Character import Character
 from src.core.Node import Node
 from src.GameData import GameData
+from src.core.PacGum import SuperPacGum
 from src.utils import convertPosToVec
+from datetime import datetime
 
 if TYPE_CHECKING:
     from src.scene.GameScene import GameScene
@@ -45,6 +47,8 @@ class Player(Character):
         self.game_data = game_data
 
         self.get_eaten = False
+        self.is_hunter = False
+        self.time_hunter = None
 
     def loseLife(self) -> None:
         self.position = convertPosToVec(
@@ -135,11 +139,13 @@ class Player(Character):
             self._handleMovement()
 
     def eatItem(self, node: Node) -> None:
-        if not node.item:
-            return
-
-        self.game_data.addScore(node.item.score)
-        destroy(node.item)
-        node.item = None
-        self.game_scene.current_nb_pacgum -= 1
-        self.game_scene.isTheLevelFinished()
+        if node.item:
+            self.game_data.addScore(node.item.score)
+            if isinstance(node.item, SuperPacGum):
+                self.is_hunter = True
+                self.time_hunter = datetime.now()
+                print(self.time_hunter)
+            destroy(node.item)
+            node.item = None
+            self.game_scene.current_nb_pacgum -= 1
+            self.game_scene.isTheLevelFinished()
