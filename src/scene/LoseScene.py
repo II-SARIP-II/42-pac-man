@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from ursina import Entity, Vec3, color
+from ursina.prefabs.input_field import InputField
 
 from src.ursina_assets.ButtonUtils import ButtonUtils
 from src.ursina_assets.TextUtils import TextUtils
@@ -25,19 +26,21 @@ class LoseScene(Scene):
 
         self.createScene()
 
-        gridLayout(self.container_texts, 1)
+        gridLayout(self.container_texts, 1.2)
         gridLayout(self.container_buttons, 1.8)
-        gridLayout(self.container, 4)
+        gridLayout(self.container, 5)
 
     def createScene(self) -> None:
         self.createBackground()
         self.createTitle()
+        self.createInputField()
         self.createButtons()
 
     def createTitle(self) -> None:
         self.title = TextUtils(
             parent=self.container_texts,
             text="Game Over",
+            color=color.yellow
         )
 
         self.score = TextUtils(
@@ -60,11 +63,53 @@ class LoseScene(Scene):
             parent=self.container_buttons,
         )
 
+    def createInputField(self) -> None:
+        self.player_name = InputField(
+            enabled=False
+        )
+
+        self.visual_name_text = TextUtils(
+            parent=self.container_texts,
+            text="Enter your name...",
+        )
+
+        self.validate_button = ButtonUtils(
+            text="Validate",
+            parent=self.container_buttons,
+            action=lambda: self.game_engine.submitScore(),
+        )
+
     def update(self) -> None:
         self.score.text = f"Score: {self.game_engine.game_data.score}"
+
+        if self.player_name.text == "":
+            self.visual_name_text.text = "Enter your name..."
+        else:
+            self.visual_name_text.text = self.player_name.text
+
+    def input(self, key: str) -> None:
+        if key == 'enter':
+            self.game_engine.submitScore()
+            return
+
+        if key == 'backspace':
+            if len(self.player_name.text) > 0:
+                self.player_name.text = self.player_name.text[:-1]
+            return
+
+        if key == 'space':
+            self.player_name.text += ' '
+            return
+
+        if len(key) == 1 and len(self.player_name.text) < 12:
+            self.player_name.text += key
 
     def onClickMenu(self) -> None:
         self.game_engine.changeScene(self.game_engine.menu_scene)
 
     def onClickQuit(self) -> None:
         quit()
+
+    def onExit(self) -> None:
+        self.player_name.text=""
+        self.disable()
