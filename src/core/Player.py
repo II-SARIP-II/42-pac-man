@@ -130,6 +130,11 @@ class Player(Character):
                 self.position += direction * step
 
     def update(self) -> None:
+        if self.is_hunter and self.time_hunter:
+            if (datetime.now() - self.time_hunter).total_seconds() > 5.0:
+                self.is_hunter = False
+                self.time_hunter = None
+
         if self.current_node.item:
             self.eatItem(self.current_node)
 
