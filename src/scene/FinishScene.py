@@ -1,7 +1,6 @@
-from faulthandler import enable
 from typing import TYPE_CHECKING
 
-from ursina import Entity, Vec3, camera, color
+from ursina import Entity, Vec3, color
 from ursina.prefabs.input_field import InputField
 
 from src.ursina_assets.ButtonUtils import ButtonUtils

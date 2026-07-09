@@ -192,7 +192,7 @@ class GameScene(Scene):
         corner = [
             (0, 0),
             (0, height - 1),
-            (width - 1 , 0),
+            (width - 1, 0),
             (width - 1, height - 1)
         ]
 
@@ -207,7 +207,6 @@ class GameScene(Scene):
                 node.item = PacGum(score=1, position=pos, parent=self)
                 items.append(node.item)
                 self.nb_pacgum += 1
-
 
         return items
 

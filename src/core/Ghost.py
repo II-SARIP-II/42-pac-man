@@ -1,10 +1,8 @@
-from pty import spawn
 import random
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import TYPE_CHECKING, Any, List, Optional, Tuple
 
-from direct.showbase.PythonUtil import safeReprNotify
 from ursina import Vec3, color
 
 from src.core.Character import Character

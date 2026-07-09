@@ -125,7 +125,6 @@ class Player(Character):
             else:
                 self.position += direction * step
 
-
     def update(self) -> None:
         if self.current_node.item:
             self.eatItem(self.current_node)

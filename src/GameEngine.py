@@ -66,7 +66,7 @@ class GameEngine:
         self.nb_level = len(self.levels) - 1
 
     def _setupScenes(self) -> None:
-        self.game_scene = None
+        self.game_scene: None | GameScene = None
 
         self.pause_scene = PauseScene(self)
         self.pause_scene.disable()
@@ -123,7 +123,8 @@ class GameEngine:
         self.no_level += 1
         if self.no_level <= self.nb_level:
             self.newGameScene()
-            self.changeScene(self.game_scene)
+            if self.game_scene:
+                self.changeScene(self.game_scene)
 
         else:
             self.changeScene(self.finish_scene)

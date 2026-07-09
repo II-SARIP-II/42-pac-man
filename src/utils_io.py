@@ -33,7 +33,7 @@ def load_json_file(path: str) -> Any:
         raise PermissionError(f"Permission denied reading {path}: {e}") from e
 
 
-def read_jsonl(path: str) -> List[dict]:
+def read_jsonl(path: str) -> List[dict[Any, Any]]:
     """Read a JSONL file and return a list of parsed objects.
 
     Malformed lines are skipped with a printed warning.
@@ -43,7 +43,7 @@ def read_jsonl(path: str) -> List[dict]:
     if not p.is_file():
         raise FileNotFoundError(f"File not found: {path}")
 
-    results: List[dict] = []
+    results: List[dict[Any, Any]] = []
     try:
         with p.open("r", encoding="utf-8") as f:
             for i, line in enumerate(f, start=1):
@@ -76,7 +76,7 @@ def read_text_file(path: str) -> str:
         raise PermissionError(f"Permission denied reading {path}: {e}") from e
 
 
-def append_jsonl(records: Iterable[dict], path: str) -> None:
+def append_jsonl(records: Iterable[dict[Any, Any]], path: str) -> None:
     """Append records (dicts) to a JSONL file,
     creating parent dir if needed."""
     p = Path(path)

@@ -71,7 +71,9 @@ class MenuScene(Scene):
     def onClickPlay(self) -> None:
         self.game_engine.resetGameData()
         self.game_engine.newGameScene()
-        self.game_engine.changeScene(self.game_engine.game_scene)
+
+        if self.game_engine.game_scene:
+            self.game_engine.changeScene(self.game_engine.game_scene)
 
     def onClickLeaderboard(self) -> None:
         self.game_engine.changeScene(self.game_engine.leaderboard_scene)

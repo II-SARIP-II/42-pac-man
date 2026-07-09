@@ -70,4 +70,5 @@ class PauseScene(Scene):
         quit()
 
     def onClickResume(self) -> None:
-        self.game_engine.changeScene(self.game_engine.game_scene)
+        if self.game_engine.game_scene:
+            self.game_engine.changeScene(self.game_engine.game_scene)
