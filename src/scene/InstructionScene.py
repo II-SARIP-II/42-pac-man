@@ -66,4 +66,4 @@ class InstructionScene(Scene):
         )
 
     def onClickReturn(self) -> None:
-        self.game_engine.changeScene(self.game_engine.prec_scene)
+        self.game_engine.changeScene(self.game_engine.prev_scene)
