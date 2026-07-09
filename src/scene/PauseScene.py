@@ -47,6 +47,14 @@ class PauseScene(Scene):
             parent=self.container,
         )
 
+        self.button_instructions = ButtonUtils(
+            text="INSTRUCTIONS",
+            position=Vec3(0, 1, -5),
+            action=lambda: self.onClickInstructions(),
+            button_color=color.blue,
+            parent=self.container,
+        )
+
         self.button_menu = ButtonUtils(
             text="MENU",
             position=Vec3(0, 1, -2),
@@ -65,6 +73,9 @@ class PauseScene(Scene):
 
     def onClickMenu(self) -> None:
         self.game_engine.changeScene(self.game_engine.menu_scene)
+
+    def onClickInstructions(self) -> None:
+        self.game_engine.changeScene(self.game_engine.instruction_scene)
 
     def onClickQuit(self) -> None:
         quit()

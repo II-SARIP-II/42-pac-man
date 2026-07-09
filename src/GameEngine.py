@@ -89,6 +89,7 @@ class GameEngine:
         self.menu_scene = MenuScene(self)
 
         self.current_scene = self.menu_scene
+        self.prec_scene = self.current_scene
 
     def newGameScene(self) -> None:
         if self.game_scene:
@@ -116,6 +117,7 @@ class GameEngine:
 
     def changeScene(self, new_scene: Scene) -> None:
         self.current_scene.onExit()
+        self.prec_scene = self.current_scene
         self.current_scene = new_scene
         self.current_scene.onEntry()
 

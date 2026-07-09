@@ -57,13 +57,13 @@ class InstructionScene(Scene):
         )
 
     def createButtons(self) -> None:
-        self.button_menu = ButtonUtils(
-            text="MENU",
+        self.button_return = ButtonUtils(
+            text="RETURN",
             position=Vec3(0, 1, -2),
-            action=lambda: self.onClickMenu(),
+            action=lambda: self.onClickReturn(),
             button_color=color.dark_gray,
             parent=self.container,
         )
 
-    def onClickMenu(self) -> None:
-        self.game_engine.changeScene(self.game_engine.menu_scene)
+    def onClickReturn(self) -> None:
+        self.game_engine.changeScene(self.game_engine.prec_scene)
