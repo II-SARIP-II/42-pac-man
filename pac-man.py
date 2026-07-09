@@ -1,6 +1,6 @@
 from sys import argv
 
-from ursina import Ursina, EditorCamera
+from ursina import Ursina
 
 from src.GameEngine import GameEngine
 from src.models.config import ConfigFileValidation
