@@ -38,6 +38,7 @@ class WinScene(Scene):
         self.title = TextUtils(
             parent=self.container_texts,
             text=title,
+            color=color.yellow
         )
 
         self.score = TextUtils(
