@@ -87,6 +87,11 @@ class Player(Character):
         toggle_color(0)
 
     def update(self) -> None:
+        if self.is_hunter and self.time_hunter:
+            if (datetime.now() - self.time_hunter).total_seconds() > 5.0:
+                self.is_hunter = False
+                self.time_hunter = None
+
         if self.get_eaten:
             self.flashingPlayer()
 
@@ -142,7 +147,6 @@ class Player(Character):
             if isinstance(node.item, SuperPacGum):
                 self.is_hunter = True
                 self.time_hunter = datetime.now()
-                print(self.time_hunter)
             destroy(node.item)
             node.item = None
             self.game_scene.current_nb_pacgum -= 1

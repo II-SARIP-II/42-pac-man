@@ -1,12 +1,12 @@
 from typing import TYPE_CHECKING, Any, Optional, Tuple
 
-from ursina import color, time
+from ursina import time
 
 from src.core.Ghost import EnumMode, Ghost
 from src.core.Level import Level
 from src.core.Node import Node
 from src.core.Player import Player
-from src.utils import convertPosToVec, convertVecToPos
+from src.utils import convertPosToVec
 
 if TYPE_CHECKING:
     from src.scene.GameScene import GameScene
@@ -29,25 +29,14 @@ class Blinky(Ghost):
             image_path="/assets/images/blinky.png",
             player=player,
             position=convertPosToVec(self.pos, (width, height)),
+            level=level
         )
-        self.level = level
-
-    def update(self) -> None:
-        if len(self.target_path) < 2:
-            self.recalculatePath()
-        if self.player.is_hunter:
-            self.mode = EnumMode.SCARED
-        arrive_au_node = self.moving()
-        self.playerCollision()
-        if arrive_au_node:
-            if len(self.target_path) >= 2:
-                self.last_node = self.target_path[0]
-            self.recalculatePath()
 
     def chaseMovement(
             self,
             player_grid_pos: Tuple[int, Any]
             ) -> Tuple[int, int]:
+        self.alpha = 1
         self.chase_count += 1
         if self.chase_count > 20:
             self.mode = EnumMode.RANDOM
@@ -57,37 +46,6 @@ class Blinky(Ghost):
 
     def deadMovement(self) -> Any:
         return self.pos
-
-    def recalculatePath(self) -> None:
-        if self.mode == EnumMode.CHASE:
-            player_pos = self.player.getPlayerPos()
-            player_grid_pos = convertVecToPos(
-                player_pos,
-                (self.width, self.height)
-            )
-            target_pos = self.chaseMovement(player_grid_pos)
-        elif self.mode == EnumMode.RANDOM:
-            target_pos = self.randomMovement()
-        elif self.mode == EnumMode.SCARED:
-            target_pos = self.scaredMovement()
-        elif self.mode == EnumMode.DEAD:
-            target_pos = self.deadMovement()
-        else:
-            return
-
-        ghost_grid_pos = convertVecToPos(
-            self.position,
-            (self.width, self.height)
-        )
-        if (
-            ghost_grid_pos in self.level.level_map
-            and target_pos in self.level.level_map
-        ):
-            self.bfs(
-                self.level.level_map[ghost_grid_pos],
-                self.level.level_map[target_pos],
-                self.last_node,
-            )
 
     def moving(self) -> bool:
         if len(self.target_path) < 2:
