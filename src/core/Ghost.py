@@ -200,6 +200,7 @@ class Ghost(Character):
 
     def getKilled(self) -> None:
         self.mode = EnumMode.DEAD
+        self.player.eatGhost()
         self.has_been_killed = True
         self.texture = self.image
         self.alpha = 0.5

@@ -88,6 +88,10 @@ class GameData:
     def playerDead(self) -> None:
         self.removeLives(1)
 
+    def eatGhost(self) -> None:
+        self.addKill()
+        self.addScore(self.points_per_ghost_config)
+
     def infiniteLives(self) -> None:
         self._toggle_infinite_lives = not self._toggle_infinite_lives
         if self._toggle_infinite_lives:

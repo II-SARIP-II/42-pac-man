@@ -153,3 +153,7 @@ class Player(Character):
             node.item = None
             self.game_scene.current_nb_pacgum -= 1
             self.game_scene.isTheLevelFinished()
+
+    def eatGhost(self) -> None:
+        self.game_data.eatGhost()
+
