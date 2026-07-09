@@ -24,12 +24,10 @@ class Inky(Ghost):
         self.spawn_position = (width - 1, 0)
         self.pos = self.spawn_position
 
-        self.basic_color = color.cyan
         super().__init__(
             width=width,
             height=height,
             parent=parent,
-            color=self.basic_color,
             image_path="/assets/images/inky.png",
             player=player,
             position=convertPosToVec(self.pos, (width, height)),
@@ -43,6 +41,8 @@ class Inky(Ghost):
     def update(self) -> None:
         if len(self.target_path) < 2:
             self.recalculatePath()
+        if self.player.is_hunter:
+            self.mode = EnumMode.SCARED
 
         arrive_au_node = self.moving()
         self.playerCollision()

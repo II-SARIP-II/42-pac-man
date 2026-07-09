@@ -34,7 +34,6 @@ class Ghost(Character):
         player: Player,
         position: Vec3,
         spawn_pos: tuple[int, int],
-        color: color = color.white,
     ) -> None:
 
         self.spawn_position = spawn_pos
@@ -48,7 +47,7 @@ class Ghost(Character):
             height=height,
             parent=parent,
             scale=Vec3(0.6, 0.6, 0.6),
-            color=color,
+            color=color.white,
             position=spawn_position,
         )
 
@@ -90,7 +89,6 @@ class Ghost(Character):
         self.chase_count += 1
         if self.chase_count > 15:
             self.mode = EnumMode.CHASE
-            self.speed = 4
             self.chase_count = 0
         return (
             random.randint(0, self.width - 1),
@@ -98,19 +96,34 @@ class Ghost(Character):
         )
 
     def scaredMovement(self) -> Any:
+        self.texture = "assets/images/scared_ghost.png"
+
         player_vec = self.getTargetPos()
-        player_pos_x, player_pos_y = convertVecToPos(
+        player_x, player_y = convertVecToPos(
             player_vec,
             (self.width, self.height)
-            )
-        target_pos_x = abs(self.width // 2 - player_pos_x)
-        target_pos_y = abs(self.height // 2 - player_pos_y)
-        escape_pos = (target_pos_x, target_pos_y)
-        if len(self.target_path) <= 1:
-            self.mode = EnumMode.CHASE
-            self.speed = 4
-            self.chase_count = 0
-        return escape_pos
+        )
+        ghost_grid_pos = convertVecToPos(
+            self.position,
+            (self.width, self.height)
+        )
+        current_node = self.level.level_map[ghost_grid_pos]
+        best_pos = ghost_grid_pos
+        max_distance = -1
+
+        for neighbour_pos in current_node.neighbours:
+            if neighbour_pos is None:
+                continue
+
+            nx, ny = neighbour_pos
+            distance = abs(player_x - nx) + abs(player_y - ny)
+
+            if distance > max_distance:
+                max_distance = distance
+                best_pos = neighbour_pos
+
+        print(best_pos)
+        return best_pos
 
     def playerCollision(self) -> None:
         player_vec = self.getTargetPos()
@@ -126,6 +139,6 @@ class Ghost(Character):
         if datetime.now() < self.last_player_death + grace_period:
             return
         if player_pos == ghost_pos:
-            print("COLLISION")
+            print(player_pos, ghost_pos)
             self.last_player_death = datetime.now()
             self.parent.killPlayer()
