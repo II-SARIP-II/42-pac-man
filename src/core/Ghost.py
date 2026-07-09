@@ -2,6 +2,7 @@ import random
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import TYPE_CHECKING, Any, List, Optional, Tuple
+from src.core.Level import Level
 
 from ursina import Vec3, color
 
@@ -32,12 +33,13 @@ class Ghost(Character):
         player: Player,
         position: Vec3,
         spawn_pos: tuple[int, int],
+        level: Level
     ) -> None:
 
         self.spawn_position = spawn_pos
 
         spawn_position = Vec3(position.x, 0.1, position.z)
-
+        self.image = image_path
         super().__init__(
             model="quad",
             texture=image_path,
@@ -48,7 +50,7 @@ class Ghost(Character):
             color=color.white,
             position=spawn_position,
         )
-
+        self.level = level
         self.rotation = Vec3(90, 0, 0)
         self.width = width
         self.height = height
@@ -61,6 +63,7 @@ class Ghost(Character):
         self.chase_count = 0
         self.target_path: List[Node] = []
         self.last_player_death = datetime.now()
+        self.has_been_killed = False
 
     def respawn(self) -> None:
         self.position = convertPosToVec(
@@ -75,7 +78,56 @@ class Ghost(Character):
         self.last_player_death = datetime.now()
 
     def update(self) -> None:
-        pass
+        if self.player.is_hunter:
+            if self.mode != EnumMode.DEAD:
+                self.mode = EnumMode.SCARED
+        else:
+            self.has_been_killed = False
+            if self.mode == EnumMode.SCARED:
+                self.mode = EnumMode.CHASE
+                self.texture = self.image
+
+        if len(self.target_path) < 2:
+            self.recalculatePath()
+
+        arrive_au_node = self.moving()
+        self.playerCollision()
+
+        if arrive_au_node:
+            if len(self.target_path) >= 2:
+                self.last_node = self.target_path[0]
+            self.recalculatePath()
+
+    def recalculatePath(self) -> None:
+        if self.mode == EnumMode.CHASE:
+            player_pos = self.player.getPlayerPos()
+            player_grid_pos = convertVecToPos(
+                player_pos,
+                (self.width, self.height)
+            )
+            target_pos = self.chaseMovement(player_grid_pos)
+        elif self.mode == EnumMode.RANDOM:
+            target_pos = self.randomMovement()
+        elif self.mode == EnumMode.SCARED:
+            target_pos = self.scaredMovement()
+        elif self.mode == EnumMode.DEAD:
+            target_pos = self.deadMovement()
+        else:
+            return
+
+        ghost_grid_pos = convertVecToPos(
+            self.position,
+            (self.width, self.height)
+        )
+        if (
+            ghost_grid_pos in self.level.level_map
+            and target_pos in self.level.level_map
+        ):
+            self.bfs(
+                self.level.level_map[ghost_grid_pos],
+                self.level.level_map[target_pos],
+                self.last_node,
+            )
 
     def getEaten(self) -> None:
         pass
@@ -84,6 +136,7 @@ class Ghost(Character):
         return self.player.getPlayerPos()
 
     def randomMovement(self) -> Tuple[int, int]:
+        self.alpha: float = 1
         self.chase_count += 1
         if self.chase_count > 15:
             self.mode = EnumMode.CHASE
@@ -94,6 +147,7 @@ class Ghost(Character):
         )
 
     def scaredMovement(self) -> Any:
+        self.alpha = 1
         self.texture = "assets/images/scared_ghost.png"
 
         player_vec = self.getTargetPos()
@@ -120,23 +174,32 @@ class Ghost(Character):
                 max_distance = distance
                 best_pos = neighbour_pos
 
-        print(best_pos)
         return best_pos
 
     def playerCollision(self) -> None:
         player_vec = self.getTargetPos()
-        player_pos = convertVecToPos(
-            player_vec,
-            (self.width, self.height)
-            )
-        ghost_pos = convertVecToPos(
-            self.position,
-            (self.width, self.height)
-            )
-        grace_period = timedelta(seconds=3)
-        if datetime.now() < self.last_player_death + grace_period:
+        player_pos = convertVecToPos(player_vec, (self.width, self.height))
+        ghost_pos = convertVecToPos(self.position, (self.width, self.height))
+
+        if player_pos != ghost_pos:
             return
-        if player_pos == ghost_pos:
-            print(player_pos, ghost_pos)
+
+        if self.player.is_hunter:
+            if self.mode != EnumMode.DEAD:
+                self.getKilled()
+        else:
+            if self.mode == EnumMode.DEAD:
+                return
+
+            grace_period = timedelta(seconds=2)
+            if datetime.now() < self.last_player_death + grace_period:
+                return
+
             self.last_player_death = datetime.now()
             self.parent.killPlayer()
+
+    def getKilled(self) -> None:
+        self.mode = EnumMode.DEAD
+        self.has_been_killed = True
+        self.texture = self.image
+        self.alpha = 0.5

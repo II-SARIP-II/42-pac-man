@@ -48,7 +48,7 @@ class Player(Character):
 
         self.get_eaten = False
         self.is_hunter = False
-        self.time_hunter = None
+        self.time_hunter: datetime | None = None
 
     def loseLife(self) -> None:
         self.position = convertPosToVec(
@@ -144,7 +144,6 @@ class Player(Character):
             if isinstance(node.item, SuperPacGum):
                 self.is_hunter = True
                 self.time_hunter = datetime.now()
-                print(self.time_hunter)
             destroy(node.item)
             node.item = None
             self.game_scene.current_nb_pacgum -= 1
