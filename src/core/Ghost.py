@@ -116,10 +116,14 @@ class Ghost(Character):
             self.position,
             (self.width, self.height)
             )
-        grace_period = timedelta(seconds=2)
-        if datetime.now() < self.last_player_death + grace_period:
-            return
-        if player_pos == ghost_pos:
-            print(player_pos, ghost_pos)
-            self.last_player_death = datetime.now()
-            self.parent.killPlayer()
+        if not self.player.is_hunter:
+            grace_period = timedelta(seconds=2)
+            if datetime.now() < self.last_player_death + grace_period:
+                return
+            if player_pos == ghost_pos:
+                print(player_pos, ghost_pos)
+                self.last_player_death = datetime.now()
+                self.parent.killPlayer()
+        else:
+            self.mode = EnumMode.DEAD
+            self.opacity = 0.5
