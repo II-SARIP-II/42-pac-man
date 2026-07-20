@@ -90,6 +90,8 @@ class GameData:
         if amount > 0:
             self._lives = max(0, self._lives - amount)
             self._nb_death += amount
+            if not self._toggle_infinite_lives:
+                self._setup_lives -= amount
 
     def removeScore(self, amount: int = 1) -> None:
         if amount > 0:
