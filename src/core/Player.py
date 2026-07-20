@@ -46,6 +46,7 @@ class Player(Character):
         self.game_scene = parent
         self.game_data = game_data
 
+        self.invincibility = False
         self.get_eaten = False
         self.is_hunter = False
         self.time_hunter: datetime | None = None

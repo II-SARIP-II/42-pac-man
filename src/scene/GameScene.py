@@ -109,6 +109,8 @@ class GameScene(Scene):
                 self.toggleInfiniteLives()
             case "v":
                 self.toggleIncreaseSpeed()
+            case "b":
+                self.toggleInvincibility()
             case "c":
                 self.toggleAllCheat()
 
@@ -267,6 +269,12 @@ class GameScene(Scene):
     def toggleInfiniteLives(self) -> None:
         self.game_data.infiniteLives()
         self.lives_layout.infiniteLive()
+
+    def toggleInvincibility(self) -> None:
+        if self.player.invincibility:
+            self.player.invincibility = False
+        else:
+            self.player.invincibility = True
 
     def toggleIncreaseSpeed(self) -> None:
         if self.player.speed == 5.0:
