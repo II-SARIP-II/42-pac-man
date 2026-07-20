@@ -70,7 +70,7 @@ class MenuScene(Scene):
 
     def onClickPlay(self) -> None:
         self.game_engine.resetGameData()
-        self.game_engine.createLevels()
+        self.game_engine.initLevel()
         self.game_engine.newGameScene()
 
         if self.game_engine.game_scene:

@@ -48,6 +48,8 @@ class GameEngine:
         camera.position = (0, 55, 0)
         camera.rotation = (90, 0, 0)
 
+        self.level_generator = LevelGenerator(self.seed)
+
         self.resetGameData()
         self._setupScenes()
 
@@ -61,10 +63,10 @@ class GameEngine:
             seed=self.seed
         )
 
-    def createLevels(self) -> None:
-        self.levels = self.getLevels()
+    def initLevel(self) -> None:
         self.no_level = 0
-        self.nb_level = len(self.levels) - 1
+        self.level = self.getLevel()
+        self.nb_level = len(self.levels_config) - 1
 
     def _setupScenes(self) -> None:
         self.game_scene: None | GameScene = None
@@ -97,21 +99,17 @@ class GameEngine:
             self.game_scene.cleanUp()
             destroy(self.game_scene)
 
+        self.level = self.getLevel()
         self.game_scene = GameScene(
             game_engine=self,
-            level=self.levels[self.no_level],
+            level=self.level,
             game_data=self.game_data
         )
 
         self.game_scene.disable()
 
-    def getLevels(self) -> List[Level]:
-        level_generator = LevelGenerator(self.seed)
-        levels: List[Level] = []
-
-        for level in self.levels_config:
-            levels.append(level_generator.generateLevel(level))
-        return levels
+    def getLevel(self) -> Level:
+        return self.level_generator.generateLevel(self.levels_config[self.no_level])
 
     def quitGame(self) -> None:
         quit()
@@ -125,9 +123,11 @@ class GameEngine:
     def nextLevel(self) -> None:
         self.no_level += 1
         if self.no_level <= self.nb_level:
+            self.newGameScene()
+
             if self.game_data.toggle_infinite_lives:
                 self.game_data.infiniteLives()
-            self.newGameScene()
+
             if self.game_scene:
                 self.game_data.addLevel()
                 self.game_data.resetTimer()
