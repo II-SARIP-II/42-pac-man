@@ -99,8 +99,9 @@ class FinishScene(Scene):
             self.player_name.text += ' '
             return
 
-        if len(key) == 1 and len(self.player_name.text) < 12:
-            self.player_name.text += key
+        if len(key) == 1 and len(self.player_name.text) < 10:
+            if key.isalnum():
+                self.player_name.text += key
 
     def onExit(self) -> None:
         self.player_name.text = ""
