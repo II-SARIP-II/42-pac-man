@@ -279,6 +279,11 @@ class GameScene(Scene):
             self.game_engine.changeScene(self.game_engine.lose_scene)
         self.lives_layout.displayLives()
 
+    def onEntry(self) -> None:
+        self.enable()
+        self.lives_layout.enable()
+        self.text_layout.enable()
+
     def onExit(self) -> None:
         self.lives_layout.disable()
         self.text_layout.disable()
