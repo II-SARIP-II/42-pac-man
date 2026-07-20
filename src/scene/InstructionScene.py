@@ -21,7 +21,7 @@ class InstructionScene(Scene):
         )
 
         self.createScene()
-        gridLayout(self.container, 2)
+        # gridLayout(self.container, 1.8)
 
     def createScene(self) -> None:
         self.createBackground()
@@ -29,37 +29,60 @@ class InstructionScene(Scene):
         self.createButtons()
 
     def createText(self) -> None:
+        # Titre fixe, en haut de l'écran => z positif (avant du plan vu du dessus)
         self.title = TextUtils(
             parent=self.container,
             text="INSTRUCTIONS",
-            color=color.yellow
+            color=color.yellow,
+            scale=35.0,
+            position=Vec3(0, 1, 4),
         )
 
-        TextUtils(
-            parent=self.container,
-            text="Movement:\nWASD or Arrows",
-            scale=25.0,
-            line_height=1.2
+        self.sections = Entity(parent=self.container, position=Vec3(0, 0, 0.5))
+
+        self.createSection(title="MOVEMENT", lines=["WASD or Arrows"])
+        self.createSection(title="PAUSE", lines=["Echap"])
+        self.createSection(
+            title="CHEAT MODE",
+            lines=[
+                "Toggle All  -  C",
+                "Invincibility  -  B",
+                "Increase Speed  -  V",
+                "Freeze Ghosts  -  Z",
+                "Infinite Lives - X"
+            ],
         )
 
-        TextUtils(
-            parent=self.container,
-            text="Pause:\nEchap",
-            scale=25.0,
-            line_height=1.2
-        )
+        # gridLayout espace les sections sur z -> cohérent avec la vue du dessus
+        gridLayout(self.sections, 1.8)
+
+    def createSection(self, title: str, lines: list[str]) -> Entity:
+        section = Entity(parent=self.sections)
 
         TextUtils(
-            parent=self.container,
-            text="Cheat mode:\nC",
+            parent=section,
+            text=title,
+            color=color.azure,
             scale=25.0,
-            line_height=1.2
+            line_height=2,
+            position=Vec3(0, 0, 0),
         )
+
+        for i, line in enumerate(lines):
+            TextUtils(
+                parent=section,
+                text=line,
+                scale=20.0,
+                line_height=2,
+                position=Vec3(0, 0, -(i + 1) * 0.60),
+            )
+
+        return section
 
     def createButtons(self) -> None:
         self.button_return = ButtonUtils(
             text="RETURN",
-            position=Vec3(0, 1, -2),
+            position=Vec3(0, 1, -6),
             action=lambda: self.onClickReturn(),
             button_color=color.dark_gray,
             parent=self.container,
