@@ -63,6 +63,10 @@ class GameData:
         return self._nb_death
 
     @property
+    def toggle_infinite_lives(self) -> bool:
+        return self._toggle_infinite_lives
+
+    @property
     def seed_config(self) -> int:
         return self._seed_config
 
@@ -107,6 +111,7 @@ class GameData:
         if self._toggle_infinite_lives:
             self._lives = 9999999999999999
         else:
+            print("LIVES TO self.game_data.infiniteLives()")
             self._lives = self._setup_lives
 
     def resetTimer(self) -> None:
