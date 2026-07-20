@@ -276,8 +276,11 @@ class GameScene(Scene):
             ghost.respawn()
 
         if self.game_data.lives <= 0:
-            self.game_engine.changeScene(self.game_engine.lose_scene)
+            self.gameLoose()
         self.lives_layout.displayLives()
+
+    def gameLoose(self) -> None:
+        self.game_engine.changeScene(self.game_engine.lose_scene)
 
     def onExit(self) -> None:
         self.lives_layout.disable()
