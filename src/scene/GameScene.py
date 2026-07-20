@@ -256,6 +256,8 @@ class GameScene(Scene):
     def toggleAllCheat(self) -> None:
         self.toggleMovingGhosts()
         self.toggleInfiniteLives()
+        self.toggleIncreaseSpeed()
+        self.toggleInvincibility()
 
     def toggleMovingGhosts(self) -> None:
         self.is_ghosts_moving = not self.is_ghosts_moving
