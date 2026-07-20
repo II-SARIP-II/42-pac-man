@@ -76,7 +76,8 @@ class LoseScene(Scene):
         self.validate_button = ButtonUtils(
             text="VALIDATE",
             parent=self.container_buttons,
-            action=lambda: self.game_engine.submitScore(),
+            action=lambda: self.game_engine.submitScore(
+                self.player_name.text),
         )
 
     def update(self) -> None:
@@ -89,7 +90,7 @@ class LoseScene(Scene):
 
     def input(self, key: str) -> None:
         if key == 'enter':
-            self.game_engine.submitScore()
+            self.game_engine.submitScore(self.player_name.text)
             return
 
         if key == 'backspace':
@@ -101,8 +102,9 @@ class LoseScene(Scene):
             self.player_name.text += ' '
             return
 
-        if len(key) == 1 and len(self.player_name.text) < 12:
-            self.player_name.text += key
+        if len(key) == 1 and len(self.player_name.text) < 10:
+            if key.isalnum():
+                self.player_name.text += key
 
     def onClickMenu(self) -> None:
         self.game_engine.changeScene(self.game_engine.menu_scene)
