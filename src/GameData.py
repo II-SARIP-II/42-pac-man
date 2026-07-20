@@ -19,10 +19,15 @@ class GameData:
         self._score = 0
         self._seed_config = seed
         self._is_lose = False
+        self._level_num = 1
 
     @property
     def lives(self) -> int:
         return self._lives
+
+    @property
+    def level_num(self) -> int:
+        return self._level_num
 
     @property
     def score(self) -> int:
@@ -63,6 +68,10 @@ class GameData:
     def addLives(self, amount: int = 1) -> None:
         if amount > 0:
             self._lives += amount
+
+    def addLevel(self, amount: int = 1) -> None:
+        if amount > 0:
+            self._level_num += amount
 
     def addScore(self, amount: int = 1) -> None:
         if amount > 0:
