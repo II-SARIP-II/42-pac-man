@@ -126,6 +126,7 @@ class GameEngine:
         if self.no_level <= self.nb_level:
             self.newGameScene()
             if self.game_scene:
+                self.game_data.addLevel()
                 self.changeScene(self.game_scene)
 
         else:

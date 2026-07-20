@@ -41,7 +41,8 @@ class TextLayout(Entity):
     def refresh_text(self) -> None:
         txt = (f"Score: {self.game_data.score}\n"
                f"Death: {self.game_data.nb_death}\n"
-               f"Time: {max(0, int(self.game_data.game_time))}\n")
+               f"Time: {max(0, int(self.game_data.game_time))}\n"
+               f"Level: {int(self.game_data.level_num)}\n")
 
         if self.text_entity:
             self.text_entity.text = txt
