@@ -109,7 +109,9 @@ class GameEngine:
         self.game_scene.disable()
 
     def getLevel(self) -> Level:
-        return self.level_generator.generateLevel(self.levels_config[self.no_level])
+        return self.level_generator.generateLevel(
+            self.levels_config[self.no_level]
+            )
 
     def quitGame(self) -> None:
         quit()

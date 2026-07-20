@@ -113,7 +113,6 @@ class GameData:
         if self._toggle_infinite_lives:
             self._lives = 9999999999999999
         else:
-            print("LIVES TO self.game_data.infiniteLives()")
             self._lives = self._setup_lives
 
     def resetTimer(self) -> None:
