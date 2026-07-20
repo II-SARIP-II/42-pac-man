@@ -267,6 +267,7 @@ class GameScene(Scene):
         else:
             for ghost in self.ghosts:
                 ghost.mode = EnumMode.CHASE
+                ghost.stop = False
 
     def toggleInfiniteLives(self) -> None:
         self.game_data.infiniteLives()
