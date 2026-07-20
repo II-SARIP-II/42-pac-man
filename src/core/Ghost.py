@@ -188,7 +188,7 @@ class Ghost(Character):
             if self.mode != EnumMode.DEAD:
                 self.getKilled()
         else:
-            if self.mode == EnumMode.DEAD:
+            if self.mode == EnumMode.DEAD or self.player.invincibility:
                 return
 
             grace_period = timedelta(seconds=2)

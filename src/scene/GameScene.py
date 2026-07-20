@@ -95,8 +95,6 @@ class GameScene(Scene):
                 self.game_engine.changeScene(self.game_engine.finish_scene)
             case "n":
                 self.game_engine.changeScene(self.game_engine.win_scene)
-            case "v":
-                self.current_nb_pacgum = 0
             case "w" | "up arrow":
                 self.player.wish_direction = 0
             case "d" | "right arrow":
@@ -105,10 +103,14 @@ class GameScene(Scene):
                 self.player.wish_direction = 2
             case "a" | "left arrow":
                 self.player.wish_direction = 3
-            case "m":
+            case "z":
                 self.toggleMovingGhosts()
             case "x":
                 self.toggleInfiniteLives()
+            case "v":
+                self.toggleIncreaseSpeed()
+            case "b":
+                self.toggleInvincibility()
             case "c":
                 self.toggleAllCheat()
 
@@ -268,6 +270,18 @@ class GameScene(Scene):
         self.game_data.infiniteLives()
         self.lives_layout.infiniteLive()
 
+    def toggleInvincibility(self) -> None:
+        if self.player.invincibility:
+            self.player.invincibility = False
+        else:
+            self.player.invincibility = True
+
+    def toggleIncreaseSpeed(self) -> None:
+        if self.player.speed == 5.0:
+            self.player.speed = 10.0
+        else:
+            self.player.speed = 5.0
+
     def killPlayer(self) -> None:
         self.player.loseLife()
         self.game_data.playerDead()
@@ -276,13 +290,16 @@ class GameScene(Scene):
             ghost.respawn()
 
         if self.game_data.lives <= 0:
-            self.game_engine.changeScene(self.game_engine.lose_scene)
+            self.gameLoose()
         self.lives_layout.displayLives()
 
     def onEntry(self) -> None:
         self.enable()
         self.lives_layout.enable()
         self.text_layout.enable()
+
+    def gameLoose(self) -> None:
+        self.game_engine.changeScene(self.game_engine.lose_scene)
 
     def onExit(self) -> None:
         self.lives_layout.disable()

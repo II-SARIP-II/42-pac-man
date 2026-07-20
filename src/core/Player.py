@@ -46,6 +46,7 @@ class Player(Character):
         self.game_scene = parent
         self.game_data = game_data
 
+        self.invincibility = False
         self.get_eaten = False
         self.is_hunter = False
         self.time_hunter: datetime | None = None
@@ -130,6 +131,8 @@ class Player(Character):
                 self.position += direction * step
 
     def update(self) -> None:
+        if self.game_data.game_time <= 1:
+            self.parent.gameLoose()
         if self.is_hunter and self.time_hunter:
             if (datetime.now() - self.time_hunter).total_seconds() > 5.0:
                 self.is_hunter = False
@@ -156,4 +159,3 @@ class Player(Character):
 
     def eatGhost(self) -> None:
         self.game_data.eatGhost()
-
