@@ -123,10 +123,11 @@ class GameEngine:
     def nextLevel(self) -> None:
         self.no_level += 1
         if self.no_level <= self.nb_level:
-            self.newGameScene()
 
             if self.game_data.toggle_infinite_lives:
                 self.game_data.infiniteLives()
+
+            self.newGameScene()
 
             if self.game_scene:
                 self.game_data.addLevel()
