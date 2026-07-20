@@ -44,8 +44,7 @@ class FinishScene(Scene):
         self.validate_button = ButtonUtils(
             text="VALIDATE",
             parent=self.container,
-            action=lambda: self.game_engine.submitScore(
-                self.player_name.text),
+            action=lambda: self.submitScore(),
         )
 
     def createButtons(self) -> None:
@@ -88,7 +87,7 @@ class FinishScene(Scene):
 
     def input(self, key: str) -> None:
         if key == 'enter':
-            self.game_engine.submitScore()
+            self.submitScore()
             return
 
         if key == 'backspace':
@@ -113,3 +112,6 @@ class FinishScene(Scene):
 
     def onClickMenu(self) -> None:
         self.game_engine.changeScene(self.game_engine.menu_scene)
+
+    def submitScore(self) -> None:
+        self.game_engine.submitScore(self.player_name.text)

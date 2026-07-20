@@ -76,8 +76,7 @@ class LoseScene(Scene):
         self.validate_button = ButtonUtils(
             text="VALIDATE",
             parent=self.container_buttons,
-            action=lambda: self.game_engine.submitScore(
-                self.player_name.text),
+            action = lambda: self.submitScore()
         )
 
     def update(self) -> None:
@@ -90,7 +89,7 @@ class LoseScene(Scene):
 
     def input(self, key: str) -> None:
         if key == 'enter':
-            self.game_engine.submitScore(self.player_name.text)
+            self.submitScore()
             return
 
         if key == 'backspace':
@@ -115,3 +114,6 @@ class LoseScene(Scene):
     def onExit(self) -> None:
         self.player_name.text=""
         self.disable()
+
+    def submitScore(self) -> None:
+        self.game_engine.submitScore(self.player_name.text)

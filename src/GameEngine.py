@@ -61,6 +61,7 @@ class GameEngine:
             seed=self.seed
         )
 
+    def createLevels(self) -> None:
         self.levels = self.getLevels()
         self.no_level = 0
         self.nb_level = len(self.levels) - 1
