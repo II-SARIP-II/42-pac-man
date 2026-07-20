@@ -10,6 +10,7 @@ class GameData:
         self._lives = total_lives
         self._toggle_infinite_lives = False
         self._game_time = total_time
+        self._saved_time = total_time
         self._points_per_pacgum_config = points_per_pacgum
         self._points_per_super_pacgum_config = points_per_super_pacgum
         self._points_per_ghost_config = points_per_ghost
@@ -107,3 +108,6 @@ class GameData:
             self._lives = 9999999999999999
         else:
             self._lives = self._setup_lives
+
+    def resetTimer(self) -> None:
+        self._game_time = self._saved_time
