@@ -81,7 +81,7 @@ class Ghost(Character):
     def update(self) -> None:
         if self.mode == EnumMode.STOP:
             self.stop = True
-        else:
+        elif self.mode == EnumMode.CHASE:
             self.stop = False
         if not self.stop:
             if self.player.is_hunter:
