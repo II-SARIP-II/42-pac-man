@@ -65,7 +65,6 @@ class GameEngine:
 
     def initLevel(self) -> None:
         self.no_level = 0
-        self.level = self.getLevel()
         self.nb_level = len(self.levels_config) - 1
 
     def _setupScenes(self) -> None:
