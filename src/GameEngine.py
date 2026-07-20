@@ -45,7 +45,7 @@ class GameEngine:
         self.highscores = ScoresList.loadFromJson(
             self.highscore_filename_config)
 
-        camera.position = (0, 50, 0)
+        camera.position = (0, 55, 0)
         camera.rotation = (90, 0, 0)
 
         self.resetGameData()
@@ -145,8 +145,8 @@ class GameEngine:
         self.game_data.addScore(self.game_data.points_per_ghost_config)
         self.game_data.addKill(1)
 
-    def submitScore(self) -> None:
-        name = self.finish_scene.player_name.text.strip()
+    def submitScore(self, name: str) -> None:
+        name = name.strip()
         if not name:
             print("The name cannot be empty.")
             return
