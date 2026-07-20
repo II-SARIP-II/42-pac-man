@@ -95,8 +95,6 @@ class GameScene(Scene):
                 self.game_engine.changeScene(self.game_engine.finish_scene)
             case "n":
                 self.game_engine.changeScene(self.game_engine.win_scene)
-            case "v":
-                self.current_nb_pacgum = 0
             case "w" | "up arrow":
                 self.player.wish_direction = 0
             case "d" | "right arrow":
@@ -105,10 +103,12 @@ class GameScene(Scene):
                 self.player.wish_direction = 2
             case "a" | "left arrow":
                 self.player.wish_direction = 3
-            case "m":
+            case "z":
                 self.toggleMovingGhosts()
             case "x":
                 self.toggleInfiniteLives()
+            case "v":
+                self.toggleIncreaseSpeed()
             case "c":
                 self.toggleAllCheat()
 
@@ -267,6 +267,12 @@ class GameScene(Scene):
     def toggleInfiniteLives(self) -> None:
         self.game_data.infiniteLives()
         self.lives_layout.infiniteLive()
+
+    def toggleIncreaseSpeed(self) -> None:
+        if self.player.speed == 5.0:
+            self.player.speed = 10.0
+        else:
+            self.player.speed = 5.0
 
     def killPlayer(self) -> None:
         self.player.loseLife()
