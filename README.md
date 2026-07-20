@@ -154,7 +154,7 @@ with 3 differents data in each score:
       "date": "2026-07-09T14:11:03.849052"
     },
     {
-      "name": "jean",
+      "name": "paris",
       "score": 266,
       "date": "2026-07-06T16:16:15.249185"
     },
