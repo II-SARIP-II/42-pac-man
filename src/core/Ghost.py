@@ -64,6 +64,7 @@ class Ghost(Character):
         self.target_path: List[Node] = []
         self.last_player_death = datetime.now()
         self.has_been_killed = False
+        self.stop = False
 
     def respawn(self) -> None:
         self.position = convertPosToVec(
@@ -78,25 +79,41 @@ class Ghost(Character):
         self.last_player_death = datetime.now()
 
     def update(self) -> None:
-        if self.player.is_hunter:
-            if self.mode != EnumMode.DEAD:
-                self.mode = EnumMode.SCARED
+        if self.mode == EnumMode.STOP:
+            self.stop = True
+        if not self.stop:
+            if self.player.is_hunter:
+                if self.mode != EnumMode.DEAD:
+                    self.mode = EnumMode.SCARED
+            else:
+                self.has_been_killed = False
+                if self.mode == EnumMode.SCARED:
+                    self.mode = EnumMode.CHASE
+                    self.texture = self.image
+
+            if len(self.target_path) < 2:
+                self.recalculatePath()
+
+            arrive_au_node = self.moving()
+            self.playerCollision()
+
+            if arrive_au_node:
+                if len(self.target_path) >= 2:
+                    self.last_node = self.target_path[0]
+                self.recalculatePath()
+
         else:
-            self.has_been_killed = False
-            if self.mode == EnumMode.SCARED:
-                self.mode = EnumMode.CHASE
-                self.texture = self.image
-
-        if len(self.target_path) < 2:
-            self.recalculatePath()
-
-        arrive_au_node = self.moving()
-        self.playerCollision()
-
-        if arrive_au_node:
-            if len(self.target_path) >= 2:
-                self.last_node = self.target_path[0]
-            self.recalculatePath()
+            if self.player.is_hunter:
+                if self.mode != EnumMode.DEAD:
+                    self.mode = EnumMode.SCARED
+                    self.alpha = 1
+                    self.texture = "assets/images/scared_ghost.png"
+            else:
+                self.has_been_killed = False
+                if self.mode == EnumMode.SCARED:
+                    self.mode = EnumMode.CHASE
+                    self.texture = self.image
+            self.playerCollision()
 
     def recalculatePath(self) -> None:
         if self.mode == EnumMode.CHASE:
