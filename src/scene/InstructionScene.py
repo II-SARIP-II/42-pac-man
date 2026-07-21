@@ -32,7 +32,6 @@ class InstructionScene(Scene):
         )
 
         self.createScene()
-        # gridLayout(self.container, 1.8)
 
     def createScene(self) -> None:
         """Build the scene's background, instruction text, and return button.
@@ -50,7 +49,6 @@ class InstructionScene(Scene):
         Returns:
             None.
         """
-        # Titre fixe, en haut de l'écran => z positif (avant du plan vu du dessus)
         self.title = TextUtils(
             parent=self.container,
             text="INSTRUCTIONS",
@@ -74,7 +72,6 @@ class InstructionScene(Scene):
             ],
         )
 
-        # gridLayout espace les sections sur z -> cohérent avec la vue du dessus
         gridLayout(self.sections, 1.8)
 
     def createSection(self, title: str, lines: list[str]) -> Entity:

@@ -2,7 +2,8 @@ from src.core.Item import Item
 
 
 class Node:
-    """A single cell of the maze graph, with neighbours and an optional item."""
+    """A single cell of the maze graph,
+    with neighbours and an optional item."""
 
     def __init__(
         self,

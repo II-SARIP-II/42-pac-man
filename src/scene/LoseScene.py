@@ -107,7 +107,7 @@ class LoseScene(Scene):
         self.validate_button = ButtonUtils(
             text="VALIDATE",
             parent=self.container_buttons,
-            action = lambda: self.submitScore()
+            action=lambda: self.submitScore()
         )
 
     def update(self) -> None:
@@ -171,7 +171,7 @@ class LoseScene(Scene):
         Returns:
             None.
         """
-        self.player_name.text=""
+        self.player_name.text = ""
         self.disable()
 
     def submitScore(self) -> None:
