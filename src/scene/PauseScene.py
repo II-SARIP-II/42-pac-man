@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from ursina import Entity, Vec3, color
+from sys import exit
 
 from src.scene.Scene import Scene
 from src.ursina_assets.ButtonUtils import ButtonUtils
@@ -131,4 +132,4 @@ class PauseScene(Scene):
         Returns:
             None.
         """
-        quit()
+        exit()

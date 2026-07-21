@@ -30,4 +30,17 @@ venv:
 init:
 	uv init
 
+build:
+	uv run python -m nuitka \
+	 --onefile \
+	 --standalone \
+	 --enable-plugin=no-qt \
+	 --include-package=direct \
+	 --include-package=panda3d \
+	 --include-package=ursina \
+	 --include-data-dir=assets=assets \
+	 --include-data-dir=config=config \
+	 --output-dir=builds/nuitka_linux \
+	 pac-man.py
+
 .PHONY: install run debug clean lint lint-strict venv init

@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import List
 
 from ursina import camera, destroy
+from sys import exit
 
 from src.core.Level import Level
 from src.core.LevelGenerator import LevelGenerator
@@ -159,7 +160,7 @@ class GameEngine:
         Returns:
             None.
         """
-        quit()
+        exit()
 
     def changeScene(self, new_scene: Scene) -> None:
         """Switch the active scene, calling exit/entry lifecycle hooks.

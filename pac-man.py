@@ -1,5 +1,6 @@
-from sys import argv
+from sys import argv, exit
 
+from pydantic import ValidationError
 from ursina import Ursina
 
 from src.GameEngine import GameEngine
@@ -13,26 +14,37 @@ def main() -> None:
     Returns:
         None.
     """
-    app = Ursina()
 
-    if len(argv) != 2:
-        print("Usage: pac-man.py <config_file>")
+    try:
+        app = Ursina()
+
+        if len(argv) != 2:
+            print("\nUsage: pac-man.py <config_file>")
+            exit(1)
+
+        config = ConfigFileValidation(**load_json_file(argv[1]))
+
+        GameEngine(
+            str(config.highscore_filename),
+            config.levels,
+            config.lives,
+            config.points_per_pacgum,
+            config.points_per_super_pacgum,
+            config.points_per_ghost,
+            config.seed,
+            config.level_max_time,
+        )
+
+        app.run()
+
+    except ValidationError as e:
+        print(
+            f"Validation error: {e.errors()[0]['loc']} {e.errors()[0]['msg']}")
         exit(1)
 
-    config = ConfigFileValidation(**load_json_file(argv[1]))
-
-    GameEngine(
-        str(config.highscore_filename),
-        config.levels,
-        config.lives,
-        config.points_per_pacgum,
-        config.points_per_super_pacgum,
-        config.points_per_ghost,
-        config.seed,
-        config.level_max_time,
-    )
-
-    app.run()
+    except Exception as e:
+        print(f"\nError: {e}")
+        exit(1)
 
 
 if __name__ == "__main__":

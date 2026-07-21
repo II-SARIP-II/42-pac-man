@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from ursina import Entity, Vec3, color
+from sys import exit
 
 from src.ursina_assets.ButtonUtils import ButtonUtils
 from src.ursina_assets.TextUtils import TextUtils
@@ -119,7 +120,7 @@ class WinScene(Scene):
         Returns:
             None.
         """
-        quit()
+        exit()
 
     def onClickNextLevel(self) -> None:
         """Advance to the next level.

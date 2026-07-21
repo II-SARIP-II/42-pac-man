@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 
 from ursina import Entity, Vec3, color
 from ursina.prefabs.input_field import InputField
+from sys import exit
 
 from src.ursina_assets.ButtonUtils import ButtonUtils
 from src.ursina_assets.TextUtils import TextUtils
@@ -163,7 +164,7 @@ class LoseScene(Scene):
         Returns:
             None.
         """
-        quit()
+        exit()
 
     def onExit(self) -> None:
         """Clear the entered name and disable the scene on exit.

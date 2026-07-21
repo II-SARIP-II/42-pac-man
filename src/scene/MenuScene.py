@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from ursina import Entity, Vec3, color
+from sys import exit
 
 from src.ursina_assets.ButtonUtils import ButtonUtils
 from src.ursina_assets.TextUtils import TextUtils
@@ -124,7 +125,7 @@ class MenuScene(Scene):
         Returns:
             None.
         """
-        quit()
+        exit()
 
     def onClickInstruction(self) -> None:
         """Switch to the instructions scene.
