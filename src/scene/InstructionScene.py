@@ -115,7 +115,7 @@ class InstructionScene(Scene):
         """
         self.button_return = ButtonUtils(
             text="RETURN",
-            position=Vec3(0, 1, -6),
+            position=Vec3(0, 1, -6.5),
             action=lambda: self.onClickReturn(),
             button_color=color.dark_gray,
             parent=self.container,
