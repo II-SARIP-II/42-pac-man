@@ -1,5 +1,5 @@
 # downloads files
-*.zip
+# *.zip
 
 # python cache files
 __pycache__
@@ -11,7 +11,7 @@ test.py
 .mypy_cache
 
 #python version file
-.python-version 
+.python-version
 
 # vscode file
 .vscode
