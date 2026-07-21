@@ -70,7 +70,8 @@ class InstructionScene(Scene):
                 "Invincibility  -  B",
                 "Increase Speed  -  V",
                 "Freeze Ghosts  -  Z",
-                "Infinite Lives - X"
+                "Infinite Lives - X",
+                "Next Level  -  N"
             ],
         )
 
