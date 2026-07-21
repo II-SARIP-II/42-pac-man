@@ -39,7 +39,7 @@ to check the type-hint with strict flag
 
 It was mandatory to delivered on Itch.io the packaged game. So here is the link and the password to access to the game online:
 link: https://pgougnejvacossi.itch.io/pac-man
-password: pac-man42jp
+
 
 
 # ICI EXPLIQUE ITCH.IO
