@@ -57,7 +57,6 @@ class GameScene(Scene):
             self.level.width, self.level.height, self.player, self.level
         )
 
-        # Pacgums
         self.nb_pacgum = 0
         self.pacgums = self.createPacGums()
         self.current_nb_pacgum = self.nb_pacgum

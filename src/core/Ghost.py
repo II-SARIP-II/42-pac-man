@@ -147,7 +147,7 @@ class Ghost(Character):
             if self.player.is_hunter:
                 if self.mode != EnumMode.DEAD:
                     self.mode = EnumMode.SCARED
-                    self.alpha = 1
+                    self.alpha = 1.0
                     self.texture = "/assets/images/scared_ghost.png"
             else:
                 self.has_been_killed = False
@@ -214,7 +214,7 @@ class Ghost(Character):
         Returns:
             Tuple[int, int]: A random (x, y) grid position.
         """
-        self.alpha: float = 1
+        self.alpha = 1.0
         self.chase_count += 1
         if self.chase_count > 15:
             self.mode = EnumMode.CHASE
