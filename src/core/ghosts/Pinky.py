@@ -64,9 +64,10 @@ class Pinky(Ghost):
         self.alpha = 1
         self.chase_count += 1
         if self.chase_count > 30:
-            self.mode = EnumMode.SCARED
+            self.mode = EnumMode.RANDOM
             self.speed = 2.5
             self.chase_count = 0
+
         player_dir = self.player.current_direction
         add_pos = (0, 0)
         match player_dir:
@@ -121,6 +122,10 @@ class Pinky(Ghost):
     ) -> None:
         """Find the shortest path from `start` to `goal`.
 
+        If the ghost has already reached its target tile, alternates
+        between CHASE and RANDOM for variety, or revives a DEAD ghost
+        that reached its spawn tile. Leaves SCARED/STOP mode untouched.
+
         Args:
             start (Node): Ghost's current node.
             goal (Node): Target node.
@@ -131,9 +136,14 @@ class Pinky(Ghost):
         """
         if start == goal:
             self.target_path = [start]
-            if self.mode == EnumMode.RANDOM:
+            if self.mode == EnumMode.DEAD:
+                self.mode = EnumMode.RANDOM
+                self.speed = 2
+                self.alpha = 1.0
+            elif self.mode == EnumMode.RANDOM:
                 self.mode = EnumMode.CHASE
-            else:
+                self.speed = 2
+            elif self.mode == EnumMode.CHASE:
                 self.mode = EnumMode.RANDOM
             return
 
@@ -141,7 +151,7 @@ class Pinky(Ghost):
         visited = {start}
 
         if disallowed_node and disallowed_node != goal:
-            if len(start.neighbours) > 1:
+            if start.nb_neighbours > 1:
                 visited.add(disallowed_node)
 
         while queue:

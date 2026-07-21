@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 
 class Inky(Ghost):
-    """Cyan ghost that targets a tile ahead of the player's movement."""
+    """Cyan ghost that flanks the player from the side."""
 
     def __init__(
         self,
@@ -53,7 +53,7 @@ class Inky(Ghost):
             self,
             player_grid_pos: Tuple[int, Any]
             ) -> Tuple[int, int]:
-        """Compute the chase target: a tile ahead of the player.
+        """Compute the chase target: a tile flanking the player's side.
 
         Args:
             player_grid_pos (Tuple[int, Any]): Player's grid position.
@@ -67,15 +67,18 @@ class Inky(Ghost):
             self.mode = EnumMode.RANDOM
             self.speed = 2.5
             self.chase_count = 0
+
+        # Offset perpendicular to the player's facing direction (a
+        # 90-degree flank), distinct from Pinky's "ahead" ambush.
         player_dir = self.player.current_direction
         add_pos = (0, 0)
         match player_dir:
             case 0:
-                add_pos = (-2, 0)
+                add_pos = (2, 0)
             case 1:
                 add_pos = (0, 2)
             case 2:
-                add_pos = (2, 0)
+                add_pos = (-2, 0)
             case 3:
                 add_pos = (0, -2)
         return tuple(map(lambda x, y: x + y, player_grid_pos, add_pos))
@@ -118,6 +121,10 @@ class Inky(Ghost):
     ) -> None:
         """Find the shortest path from `start` to `goal`.
 
+        If the ghost has already reached its target tile, alternates
+        between CHASE and RANDOM for variety, or revives a DEAD ghost
+        that reached its spawn tile. Leaves SCARED/STOP mode untouched.
+
         Args:
             start (Node): Ghost's current node.
             goal (Node): Target node.
@@ -128,9 +135,14 @@ class Inky(Ghost):
         """
         if start == goal:
             self.target_path = [start]
-            if self.mode == EnumMode.RANDOM:
+            if self.mode == EnumMode.DEAD:
+                self.mode = EnumMode.RANDOM
+                self.speed = 2
+                self.alpha = 1.0
+            elif self.mode == EnumMode.RANDOM:
                 self.mode = EnumMode.CHASE
-            else:
+                self.speed = 2
+            elif self.mode == EnumMode.CHASE:
                 self.mode = EnumMode.RANDOM
             return
 
@@ -138,7 +150,7 @@ class Inky(Ghost):
         visited = {start}
 
         if disallowed_node and disallowed_node != goal:
-            if len(start.neighbours) > 1:
+            if start.nb_neighbours > 1:
                 visited.add(disallowed_node)
 
         while queue:

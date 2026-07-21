@@ -16,6 +16,8 @@ if TYPE_CHECKING:
 class Player(Character):
     """The player-controlled Pac-Man character."""
 
+    ITEM_COLLECTION_DISTANCE = 0.3
+
     def __init__(
             self,
             parent: "GameScene",
@@ -140,6 +142,8 @@ class Player(Character):
                 if curr_dir_neighbour is not None:
                     neighbour = self.getNode(curr_dir_neighbour)
                     self.target_node = neighbour
+                else:
+                    self.wish_direction = -1
 
     def _handleMovement(self) -> None:
         """Move the player one step towards its current target node.
@@ -181,13 +185,29 @@ class Player(Character):
                 self.is_hunter = False
                 self.time_hunter = None
 
-        if self.current_node.item:
-            self.eatItem(self.current_node)
+        self.eatNearbyItems()
 
         if self.current_node == self.target_node:
             self._handleDirectionChange()
         else:
             self._handleMovement()
+
+    def eatNearbyItems(self) -> None:
+        """Eat any item within pickup range on the current/target node.
+
+        Checks distance rather than requiring an exact node arrival, so
+        an item can be eaten slightly before the player is centered on
+        its tile.
+
+        Returns:
+            None.
+        """
+        for node in (self.current_node, self.target_node):
+            if node.item:
+                item_vec = convertPosToVec(node.pos, self.size)
+                distance = (item_vec - self.position).length()
+                if distance <= self.ITEM_COLLECTION_DISTANCE:
+                    self.eatItem(node)
 
     def eatItem(self, node: Node) -> None:
         """Consume the item on the given node, if any.

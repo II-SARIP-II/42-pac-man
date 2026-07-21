@@ -41,6 +41,7 @@ class Ghost(Character):
     pathing. Subclasses implement `chaseMovement`, `deadMovement`,
     `moving`, and `bfs`.
     """
+    COLLISION_DISTANCE = 0.3
 
     def __init__(
         self,
@@ -220,6 +221,7 @@ class Ghost(Character):
         self.chase_count += 1
         if self.chase_count > 15:
             self.mode = EnumMode.CHASE
+            self.speed = 2
             self.chase_count = 0
         return (
             random.randint(0, self.width - 1),
@@ -265,14 +267,16 @@ class Ghost(Character):
     def playerCollision(self) -> None:
         """Check for and resolve a collision with the player.
 
+        Uses actual world-space distance rather than shared-tile
+        equality, so a collision only fires on visual overlap.
+
         Returns:
             None.
         """
         player_vec = self.getTargetPos()
-        player_pos = convertVecToPos(player_vec, (self.width, self.height))
-        ghost_pos = convertVecToPos(self.position, (self.width, self.height))
+        distance = (player_vec - self.position).length()
 
-        if player_pos != ghost_pos:
+        if distance > self.COLLISION_DISTANCE:
             return
 
         if self.player.is_hunter:
