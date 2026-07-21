@@ -10,6 +10,7 @@ from src.core.Character import Character
 from src.core.Node import Node
 from src.core.Player import Player
 from src.utils import convertVecToPos, convertPosToVec
+from src.utils_io import resource_path
 
 if TYPE_CHECKING:
     from src.scene.GameScene import GameScene
@@ -148,7 +149,8 @@ class Ghost(Character):
                 if self.mode != EnumMode.DEAD:
                     self.mode = EnumMode.SCARED
                     self.alpha = 1.0
-                    self.texture = "/assets/images/scared_ghost.png"
+                    self.texture = resource_path(
+                        "/assets/images/scared_ghost.png")
             else:
                 self.has_been_killed = False
                 if self.mode == EnumMode.SCARED:
@@ -231,7 +233,8 @@ class Ghost(Character):
             Any: The neighbour grid position furthest from the player.
         """
         self.alpha = 1
-        self.texture = "/assets/images/scared_ghost.png"
+        self.texture = resource_path(
+            "/assets/images/scared_ghost.png")
 
         player_vec = self.getTargetPos()
         player_x, player_y = convertVecToPos(

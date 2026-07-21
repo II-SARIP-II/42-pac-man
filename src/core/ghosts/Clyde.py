@@ -7,6 +7,7 @@ from src.core.Level import Level
 from src.core.Node import Node
 from src.core.Player import Player
 from src.utils import convertPosToVec
+from src.utils_io import resource_path
 
 if TYPE_CHECKING:
     from src.scene.GameScene import GameScene
@@ -41,7 +42,7 @@ class Clyde(Ghost):
             width=width,
             height=height,
             parent=parent,
-            image_path="/assets/images/clyde.png",
+            image_path=resource_path("/assets/images/clyde.png"),
             player=player,
             position=convertPosToVec(self.pos, (width, height)),
             level=level,

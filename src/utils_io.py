@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import sys
 from pathlib import Path
 from typing import Any, Iterable, List
 
@@ -175,3 +176,19 @@ def write_text_file(text: str, path: str) -> None:
             f.write(text)
     except OSError as e:
         raise OSError(f"Could not write to {path}: {e}") from e
+
+
+def resource_path(relative_path: str) -> str:
+    """Resolve a path relative to the app's base directory.
+
+    Args:
+        relative_path (str): Path relative to the base directory.
+
+    Returns:
+        str: The resolved absolute path.
+    """
+    if '__compiled__' in globals():
+        base_path = os.path.dirname(sys.executable)
+    else:
+        base_path = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base_path, relative_path)

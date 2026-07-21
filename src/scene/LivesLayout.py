@@ -3,6 +3,7 @@ from typing import Any
 from ursina import Entity, Text, Vec2, camera, color, destroy
 
 from src.GameData import GameData
+from src.utils_io import resource_path
 
 
 class LivesLayout(Entity):
@@ -65,7 +66,7 @@ class LivesLayout(Entity):
                 model="quad",
                 scale=(0.1, 0.1),
                 position=Vec2(0.06, 0),
-                texture="/assets/images/infinity_yellow.png",
+                texture=resource_path("/assets/images/infinity_yellow.png"),
                 parent=self,
             )
             self.life_entities.append(life_icon)
@@ -76,7 +77,7 @@ class LivesLayout(Entity):
                 model="quad",
                 scale=(0.05, 0.05),
                 position=Vec2(0.06, 0),
-                texture="/assets/images/pacman.png",
+                texture=resource_path("/assets/images/pacman.png"),
                 parent=self,
             )
             self.life_entities.append(life_icon)
@@ -89,7 +90,7 @@ class LivesLayout(Entity):
                     model="quad",
                     scale=(0.05, 0.05),
                     position=Vec2(i * 0.06, 0),
-                    texture="/assets/images/pacman.png",
+                    texture=resource_path("/assets/images/pacman.png"),
                     parent=self,
                 )
                 self.life_entities.append(life_icon)

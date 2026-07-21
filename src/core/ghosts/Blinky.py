@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Any, Optional, Tuple
 
 from ursina import time
 
+from src.utils_io import resource_path
 from src.core.Ghost import EnumMode, Ghost
 from src.core.Level import Level
 from src.core.Node import Node
@@ -40,7 +41,8 @@ class Blinky(Ghost):
             width=width,
             height=height,
             parent=parent,
-            image_path="/assets/images/blinky.png",
+            image_path=resource_path(
+                "/assets/images/blinky.png"),
             player=player,
             position=convertPosToVec(self.pos, (width, height)),
             level=level,
