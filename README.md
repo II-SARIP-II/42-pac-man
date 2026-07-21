@@ -156,6 +156,15 @@ Cheats:
 ![General Software Architecture](assets/images/software_architecture.png)
 
 # Project Management
+
+| Pgougne | Jvacossi |
+|---|---|
+| Parsing | Architecture |
+| Ghosts | Player|
+| Graphics | Scenes |
+| Algorithms for the Ghosts | Items |
+| README | README |
+
 For the project management we used GitHub for version control and collaboration and a Kanban board for task management.
 
 At the beginning of the project we worked together because it was difficult to define precise tasks, but as the project took shape we were able to become more autonomous.
