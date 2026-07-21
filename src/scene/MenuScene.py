@@ -105,6 +105,7 @@ class MenuScene(Scene):
             None.
         """
         self.game_engine.resetGameData()
+        self.game_engine.level_generator.seeded = False
         self.game_engine.initLevel()
         self.game_engine.newGameScene()
 
