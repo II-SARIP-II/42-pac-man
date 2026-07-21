@@ -6,31 +6,18 @@ together — including how decisions got made and how disagreements or issues
 were handled. It's meant to make our collaboration process visible, not just
 the end result.
 
-## How to fill this out
-Keep the roles table up to date as work gets reassigned. Add a short note any
-time there's a notable issue, disagreement, or change in how you're working.
-
 ### Roles & responsibilities
-| Person | Main area(s) | Notes |
-|---|---|---|
-| [Name] | e.g. retrieval pipeline, evaluation | |
-| [Name] | e.g. README, testing, tooling | |
+| Pgougne | Jvacossi |
+|---|---|
+| Parsing | Architecture |
+| Ghosts | Player|
+| Graphics | Scenes |
+| Algorithms for the Ghosts | Items |
+| README | README |
 
-### How decisions are made
-Briefly describe your general process (e.g. "small decisions made independently
-by whoever owns that part; bigger decisions discussed together and logged in
-decisions.md").
+### Project organization
+At the beginning of the project we worked together because it was difficult to define precise tasks, but as the project took shape we were able to become more autonomous.
 
-### Issues & conflict handling
-Log any real friction here — disagreements on approach, missed deadlines,
-miscommunication — and how it got resolved. Doesn't need to be dramatic, just
-honest. A couple of lines per incident is enough.
+Pgougne quickly focused on the visualization, which was very important early on to start implementing the Player, Ghosts, and Items. Jvacossi mainly focused on the different scenes that make up the game.
 
-## Example
-> **Issue:** Disagreement on chunking strategy for the RAG pipeline (fixed-size
-> vs. semantic chunking). Resolved by implementing both quickly and comparing
-> Recall@k scores — semantic chunking won, decision logged in decisions.md.
-
-## Notes
-- This file is as much about *process* as it is about a static org chart.
-- It's fine (expected, even) to show that roles shifted over time.
+We were challenged several times by the architecture, where we had to refactor classes and functions many times.

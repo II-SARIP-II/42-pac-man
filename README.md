@@ -27,45 +27,39 @@ This project use UV
 To run the project, you must install all the dependencies
 > make install
 
-and then:
+And then:
 > make run
 
-to check the type-hint
+To check the type-hint
 > make lint
 
-to check the type-hint with strict flag
+To check the type-hint with strict flag
 > make lint-strict
 
-
-It was mandatory to delivered on Itch.io the packaged game. So here is the link and the password to access to the game online:
-link: https://pgougnejvacossi.itch.io/pac-man
-
-
-
-# ICI EXPLIQUE ITCH.IO
+It was mandatory to delivered on Itch.io the packaged game. So here is the link to access to the game online:
+> https://pgougnejvacossi.itch.io/pac-man
 
 # Resources
+**Ursina's Documentation**\
 https://www.ursinaengine.org/\
 https://www.ursinaengine.org/documentation.html\
 https://www.ursinaengine.org/api_reference.html
 
-How AI was used ?
+**How AI was used ?**\
 Ai was used throughout this project as a support and learning assistant.
 
 - Debugging:
-
   -  Explain unexpected behaviors
   - Suggest potential causes of bugs
 
 - Understanding Ursina:
-
   - Get some example
   - Complet the thin documentation of Ursina
 
 - Global Assistance:
-
   - Clarify architectural decisions
   - Discuss best practices in project structure
+  - Writing Docstrings
 
 # Configuration
 
@@ -83,7 +77,7 @@ By default, the configuration data are stored in config/config.json and the file
 |  level_max_time  |  int  |  The time to complet a level |  No, default 90  |
 
 It looks like this: 
-```
+```json
 {
   "highscore_filename": "config/highscores.json",
   "levels": [
@@ -95,38 +89,7 @@ It looks like this:
       "width": 6,
       "height": 6
     },
-    {
-      "width": 6,
-      "height": 6
-    },
-    {
-      "width": 6,
-      "height": 6
-    },
-    {
-      "width": 6,
-      "height": 6
-    },
-    {
-      "width": 6,
-      "height": 6
-    },
-    {
-      "width": 6,
-      "height": 6
-    },
-    {
-      "width": 6,
-      "height": 6
-    },
-    {
-      "width": 6,
-      "height": 6
-    },
-    {
-      "width": 6,
-      "height": 6
-    }
+    ...
   ],
   "lives": 3,
   "points_per_pacgum": 10,
@@ -161,46 +124,6 @@ with 3 differents data in each score:
       "name": "paris",
       "score": 266,
       "date": "2026-07-06T16:16:15.249185"
-    },
-    {
-      "name": "g fini",
-      "score": 144,
-      "date": "2026-07-09T10:00:40.293904"
-    },
-    {
-      "name": "johhny",
-      "score": 144,
-      "date": "2026-07-09T13:50:08.173526"
-    },
-    {
-      "name": "jean",
-      "score": 144,
-      "date": "2026-07-09T14:05:29.052111"
-    },
-    {
-      "name": "johnny",
-      "score": 72,
-      "date": "2026-07-08T17:25:33.465249"
-    },
-    {
-      "name": "jean",
-      "score": 20,
-      "date": "2026-07-20T09:37:00.372607"
-    },
-    {
-      "name": "pacman",
-      "score": 2,
-      "date": "2026-07-20T09:29:22.376250"
-    },
-    {
-      "name": "0123456789",
-      "score": 2,
-      "date": "2026-07-20T09:37:43.024707"
-    },
-    {
-      "name": "lala lala",
-      "score": 2,
-      "date": "2026-07-20T09:44:16.662490"
     }
   ]
 }
@@ -224,11 +147,22 @@ Cheats:
 |      Name      |      Behaviour      |     Key      |
 |:--------------:|:--------------:|:--------------:|
 |  Freeze Ghost  |  ghost stop mooving  |  z  |
-|  Infinite Lives  |  you get 9999999999999999 lives  |  x  |
+|  Infinite Lives  |  you get infinite lives  |  x  |
 |  Double Speed  |  Your speed double  |  v  |
 |  Invincibility  |  You cannot be touch by ghost but you can eat them with a super pac-gum  |  b  |
 |  All cheats  |  You get all the previous cheats  |  c  |
 
 # General Software Architecture
+![General Software Architecture](assets/images/software_architecture.png)
 
 # Project Management
+For the project management we used GitHub for version control and collaboration and a Kanban board for task management.
+
+At the beginning of the project we worked together because it was difficult to define precise tasks, but as the project took shape we were able to become more autonomous.
+
+Pgougne quickly focused on the visualization, which was very important early on to start implementing the Player, Ghosts, and Items. Jvacossi mainly focused on the different scenes that make up the game.
+
+We were challenged several times by the architecture, where we had to refactor classes and functions many times.
+
+![Kanban](assets/images/kanban.png)
+![Timeline](assets/images/timeline.png)
