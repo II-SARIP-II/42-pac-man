@@ -1,10 +1,9 @@
 FLK 	:= flake8
 MYPY 	:= mypy
 FLAGS	:= --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
-DEP 	:= pydantic mypy flake8
 
 install:
-	uv add $(DEP)
+	uv sync
 
 run:
 	@uv run python pac-man.py config/config.json
