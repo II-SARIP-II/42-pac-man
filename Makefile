@@ -9,7 +9,7 @@ run:
 	@uv run python pac-man.py config/config.json
 
 debug:
-	@uv run python pdb pac-man.py config/config.json
+	@uv run python -m pdb pac-man.py config/config.json
 
 clean:
 	rm -rf __pycache__ .mypy_cache .python-version .vscode
