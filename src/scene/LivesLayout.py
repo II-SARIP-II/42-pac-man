@@ -44,7 +44,7 @@ class LivesLayout(Entity):
                 model="quad",
                 scale=(0.1, 0.1),
                 position=Vec2(0.06, 0),
-                texture="assets/images/infinity_yellow.png",
+                texture="/assets/images/infinity_yellow.png",
                 parent=self,
             )
             self.life_entities.append(life_icon)
@@ -55,7 +55,7 @@ class LivesLayout(Entity):
                 model="quad",
                 scale=(0.05, 0.05),
                 position=Vec2(0.06, 0),
-                texture="assets/images/pacman.png",
+                texture="/assets/images/pacman.png",
                 parent=self,
             )
             self.life_entities.append(life_icon)
@@ -68,7 +68,7 @@ class LivesLayout(Entity):
                     model="quad",
                     scale=(0.05, 0.05),
                     position=Vec2(i * 0.06, 0),
-                    texture="assets/images/pacman.png",
+                    texture="/assets/images/pacman.png",
                     parent=self,
                 )
                 self.life_entities.append(life_icon)

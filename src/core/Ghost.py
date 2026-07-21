@@ -107,7 +107,7 @@ class Ghost(Character):
                 if self.mode != EnumMode.DEAD:
                     self.mode = EnumMode.SCARED
                     self.alpha = 1
-                    self.texture = "assets/images/scared_ghost.png"
+                    self.texture = "/assets/images/scared_ghost.png"
             else:
                 self.has_been_killed = False
                 if self.mode == EnumMode.SCARED:
@@ -165,7 +165,7 @@ class Ghost(Character):
 
     def scaredMovement(self) -> Any:
         self.alpha = 1
-        self.texture = "assets/images/scared_ghost.png"
+        self.texture = "/assets/images/scared_ghost.png"
 
         player_vec = self.getTargetPos()
         player_x, player_y = convertVecToPos(
