@@ -9,13 +9,24 @@ if TYPE_CHECKING:
 
 
 class PacGum(Item):
+    """A basic collectible pellet worth a small amount of points."""
+
     def __init__(
         self,
         score: int,
         position: Vec3,
         parent: "GameScene"
     ) -> None:
+        """Initialize a standard pac-gum pellet.
 
+        Args:
+            score (int): Points awarded when eaten.
+            position (Vec3): World position.
+            parent (GameScene): Scene to parent this pellet to.
+
+        Returns:
+            None.
+        """
         super().__init__(
             score=score,
             position=position,
@@ -25,13 +36,24 @@ class PacGum(Item):
 
 
 class SuperPacGum(Item):
+    """A power pellet that grants the player temporary hunter status."""
+
     def __init__(
         self,
         score: int,
         position: Vec3,
         parent: "GameScene"
     ) -> None:
+        """Initialize a super pac-gum power pellet.
 
+        Args:
+            score (int): Points awarded when eaten.
+            position (Vec3): World position.
+            parent (GameScene): Scene to parent this pellet to.
+
+        Returns:
+            None.
+        """
         super().__init__(
             score=score,
             position=position,
@@ -44,9 +66,19 @@ class SuperPacGum(Item):
         self.chrono = 0
 
     def update(self) -> None:
+        """Update the pellet's flashing animation.
+
+        Returns:
+            None.
+        """
         self.flashingEffect()
 
     def flashingEffect(self) -> None:
+        """Toggle the pellet's color at a fixed interval.
+
+        Returns:
+            None.
+        """
         self.chrono += time.dt
 
         if self.chrono >= self.speed:

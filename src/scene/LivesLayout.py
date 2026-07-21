@@ -6,10 +6,21 @@ from src.GameData import GameData
 
 
 class LivesLayout(Entity):
+    """HUD widget displaying the player's remaining lives."""
+
     def __init__(self,
                  game_data: GameData,
                  **kwargs: Any
                  ):
+        """Initialize the lives HUD and display the initial life count.
+
+        Args:
+            game_data (GameData): Lives tracker to display.
+            **kwargs (Any): Extra keyword arguments for the `Entity`.
+
+        Returns:
+            None.
+        """
         super().__init__(
             parent=camera.ui,
             position=Vec2(-0.85, -0.45),
@@ -31,11 +42,21 @@ class LivesLayout(Entity):
         self.displayLives()
 
     def clear_icons(self) -> None:
+        """Destroy all currently displayed life icons.
+
+        Returns:
+            None.
+        """
         for icon in self.life_entities:
             destroy(icon)
         self.life_entities.clear()
 
     def displayLives(self) -> None:
+        """Redraw the life icons to match the current life count/state.
+
+        Returns:
+            None.
+        """
         self.clear_icons()
 
         if self.infinite:
@@ -74,5 +95,10 @@ class LivesLayout(Entity):
                 self.life_entities.append(life_icon)
 
     def infiniteLive(self) -> None:
+        """Toggle infinite-lives display mode and refresh the HUD.
+
+        Returns:
+            None.
+        """
         self.infinite = not self.infinite
         self.displayLives()

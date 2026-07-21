@@ -14,7 +14,18 @@ if TYPE_CHECKING:
 
 
 class LoseScene(Scene):
+    """Scene shown when the player runs out of lives."""
+
     def __init__(self, game_engine: "GameEngine"):
+        """Initialize the lose scene and build its contents.
+
+        Args:
+            game_engine (GameEngine): The engine managing scene
+                transitions and shared game state.
+
+        Returns:
+            None.
+        """
         super().__init__(game_engine)
 
         self.container = Entity(
@@ -31,12 +42,22 @@ class LoseScene(Scene):
         gridLayout(self.container, 5)
 
     def createScene(self) -> None:
+        """Build the scene's background, title, input field, and buttons.
+
+        Returns:
+            None.
+        """
         self.createBackground()
         self.createTitle()
         self.createInputField()
         self.createButtons()
 
     def createTitle(self) -> None:
+        """Create the "Game Over" title text and score display.
+
+        Returns:
+            None.
+        """
         self.title = TextUtils(
             parent=self.container_texts,
             text="Game Over",
@@ -49,6 +70,11 @@ class LoseScene(Scene):
         )
 
     def createButtons(self) -> None:
+        """Create the Menu and Quit buttons.
+
+        Returns:
+            None.
+        """
         self.button_menu = ButtonUtils(
             text="MENU",
             action=lambda: self.onClickMenu(),
@@ -64,6 +90,11 @@ class LoseScene(Scene):
         )
 
     def createInputField(self) -> None:
+        """Create the name-entry input field and validate button.
+
+        Returns:
+            None.
+        """
         self.player_name = InputField(
             enabled=False
         )
@@ -80,6 +111,11 @@ class LoseScene(Scene):
         )
 
     def update(self) -> None:
+        """Refresh the displayed score and the name-entry placeholder text.
+
+        Returns:
+            None.
+        """
         self.score.text = f"Score: {self.game_engine.game_data.score}"
 
         if self.player_name.text == "":
@@ -88,6 +124,14 @@ class LoseScene(Scene):
             self.visual_name_text.text = self.player_name.text
 
     def input(self, key: str) -> None:
+        """Handle keyboard input for typing the player's name.
+
+        Args:
+            key (str): Key that was pressed.
+
+        Returns:
+            None.
+        """
         if key == 'enter':
             self.submitScore()
             return
@@ -106,14 +150,34 @@ class LoseScene(Scene):
                 self.player_name.text += key
 
     def onClickMenu(self) -> None:
+        """Return to the main menu scene.
+
+        Returns:
+            None.
+        """
         self.game_engine.changeScene(self.game_engine.menu_scene)
 
     def onClickQuit(self) -> None:
+        """Quit the application.
+
+        Returns:
+            None.
+        """
         quit()
 
     def onExit(self) -> None:
+        """Clear the entered name and disable the scene on exit.
+
+        Returns:
+            None.
+        """
         self.player_name.text=""
         self.disable()
 
     def submitScore(self) -> None:
+        """Submit the entered name and current score to the leaderboard.
+
+        Returns:
+            None.
+        """
         self.game_engine.submitScore(self.player_name.text)

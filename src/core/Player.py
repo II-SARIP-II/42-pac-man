@@ -14,6 +14,8 @@ if TYPE_CHECKING:
 
 
 class Player(Character):
+    """The player-controlled Pac-Man character."""
+
     def __init__(
             self,
             parent: "GameScene",
@@ -21,7 +23,17 @@ class Player(Character):
             width: int,
             height: int
             ) -> None:
+        """Initialize the player at the center of the maze.
 
+        Args:
+            parent (GameScene): Scene to parent the player to.
+            game_data (GameData): Score/lives/time tracker.
+            width (int): Level grid width.
+            height (int): Level grid height.
+
+        Returns:
+            None.
+        """
         if width % 2 != 0:
             self.start_pos = (width // 2, height // 2)
         else:
@@ -52,6 +64,11 @@ class Player(Character):
         self.time_hunter: datetime | None = None
 
     def loseLife(self) -> None:
+        """Reset the player's position after losing a life.
+
+        Returns:
+            None.
+        """
         self.position = convertPosToVec(
             self.start_pos,
             (self.width, self.height)
@@ -63,6 +80,11 @@ class Player(Character):
             self.flashingPlayer()
 
     def getPlayerPos(self) -> Vec3:
+        """Get the player's position relative to the game scene.
+
+        Returns:
+            Vec3: Position relative to the parent `GameScene`.
+        """
         return self.get_position(relative_to=self.game_scene)
 
     def flashingPlayer(
@@ -70,7 +92,15 @@ class Player(Character):
             duration: float = 2.0,
             interval: float = 0.15
             ) -> None:
+        """Play a blinking animation indicating the player has died.
 
+        Args:
+            duration (float): Total animation length, in seconds.
+            interval (float): Delay between color toggles, in seconds.
+
+        Returns:
+            None.
+        """
         self.get_eaten = True
 
         max_steps = int(duration/interval)
@@ -88,6 +118,11 @@ class Player(Character):
         toggle_color(0)
 
     def _handleDirectionChange(self) -> None:
+        """Pick the next target node once the player reaches a node.
+
+        Returns:
+            None.
+        """
         if self.wish_direction >= 0:
             wish_dir_neighbour = self.current_node.neighbours[
                 self.wish_direction
@@ -107,6 +142,11 @@ class Player(Character):
                     self.target_node = neighbour
 
     def _handleMovement(self) -> None:
+        """Move the player one step towards its current target node.
+
+        Returns:
+            None.
+        """
         opposite_direction = (self.current_direction + 2) % 4
 
         if self.wish_direction == opposite_direction:
@@ -129,6 +169,11 @@ class Player(Character):
                 self.position += direction * step
 
     def update(self) -> None:
+        """Advance the player's state for the current frame.
+
+        Returns:
+            None.
+        """
         if self.game_data.game_time <= 1:
             self.parent.gameLoose()
         if self.is_hunter and self.time_hunter:
@@ -145,6 +190,14 @@ class Player(Character):
             self._handleMovement()
 
     def eatItem(self, node: Node) -> None:
+        """Consume the item on the given node, if any.
+
+        Args:
+            node (Node): Maze node whose item should be eaten.
+
+        Returns:
+            None.
+        """
         if node.item:
             self.game_data.addScore(node.item.score)
             if isinstance(node.item, SuperPacGum):
@@ -156,4 +209,9 @@ class Player(Character):
             self.game_scene.isTheLevelFinished()
 
     def eatGhost(self) -> None:
+        """Award the player for eating a ghost while in hunter mode.
+
+        Returns:
+            None.
+        """
         self.game_data.eatGhost()

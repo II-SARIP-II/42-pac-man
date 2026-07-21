@@ -8,7 +8,17 @@ from typing import Any, Iterable, List
 
 
 def ensure_directory(path: str) -> None:
-    """Create directory if missing, raise OSError on failure."""
+    """Create a directory (and any missing parents) if it doesn't exist.
+
+    Args:
+        path (str): Path of the directory to ensure exists.
+
+    Returns:
+        None.
+
+    Raises:
+        OSError: If the directory could not be created.
+    """
     try:
         os.makedirs(path, exist_ok=True)
     except OSError as e:
@@ -16,9 +26,18 @@ def ensure_directory(path: str) -> None:
 
 
 def load_json_file(path: str) -> Any:
-    """Load and return JSON from a file.
+    """Load and parse a JSON file, stripping `#`-style comment lines.
 
-    Raises FileNotFoundError, ValueError (for invalid JSON) or PermissionError.
+    Args:
+        path (str): Path of the JSON file.
+
+    Returns:
+        Any: The parsed JSON content.
+
+    Raises:
+        FileNotFoundError: If the file does not exist.
+        ValueError: If the content is not valid JSON.
+        PermissionError: If the file cannot be read.
     """
     p = Path(path)
     if not p.is_file():
@@ -34,10 +53,17 @@ def load_json_file(path: str) -> Any:
 
 
 def read_jsonl(path: str) -> List[dict[Any, Any]]:
-    """Read a JSONL file and return a list of parsed objects.
+    """Read a JSONL file into a list of objects, skipping bad lines.
 
-    Malformed lines are skipped with a printed warning.
-    Raises FileNotFoundError or PermissionError when appropriate.
+    Args:
+        path (str): Path of the JSONL file.
+
+    Returns:
+        List[dict[Any, Any]]: The successfully parsed objects.
+
+    Raises:
+        FileNotFoundError: If the file does not exist.
+        PermissionError: If the file cannot be read.
     """
     p = Path(path)
     if not p.is_file():
@@ -62,9 +88,17 @@ def read_jsonl(path: str) -> List[dict[Any, Any]]:
 
 
 def read_text_file(path: str) -> str:
-    """Read entire text file and return its contents.
+    """Read the entire contents of a text file.
 
-    Raises FileNotFoundError or PermissionError.
+    Args:
+        path (str): Path of the file.
+
+    Returns:
+        str: The file's text content.
+
+    Raises:
+        FileNotFoundError: If the file does not exist.
+        PermissionError: If the file cannot be read.
     """
     p = Path(path)
     if not p.is_file():
@@ -77,8 +111,18 @@ def read_text_file(path: str) -> str:
 
 
 def append_jsonl(records: Iterable[dict[Any, Any]], path: str) -> None:
-    """Append records (dicts) to a JSONL file,
-    creating parent dir if needed."""
+    """Append a sequence of records to a JSONL file.
+
+    Args:
+        records (Iterable[dict[Any, Any]]): Records to append.
+        path (str): Path of the JSONL file.
+
+    Returns:
+        None.
+
+    Raises:
+        OSError: If the file could not be written to.
+    """
     p = Path(path)
     ensure_directory(str(p.parent))
     try:
@@ -90,8 +134,18 @@ def append_jsonl(records: Iterable[dict[Any, Any]], path: str) -> None:
 
 
 def write_json_file(obj: Any, path: str) -> None:
-    """Write an object as pretty JSON to a file,
-    creating parent dir if needed."""
+    """Write an object to a file as pretty-printed JSON.
+
+    Args:
+        obj (Any): JSON-serializable object to write.
+        path (str): Path of the file.
+
+    Returns:
+        None.
+
+    Raises:
+        OSError: If the file could not be written to.
+    """
     p = Path(path)
     ensure_directory(str(p.parent))
     try:
@@ -102,7 +156,18 @@ def write_json_file(obj: Any, path: str) -> None:
 
 
 def write_text_file(text: str, path: str) -> None:
-    """Write text to a file, creating parent dir if needed."""
+    """Write text content to a file.
+
+    Args:
+        text (str): Text to write.
+        path (str): Path of the file.
+
+    Returns:
+        None.
+
+    Raises:
+        OSError: If the file could not be written to.
+    """
     p = Path(path)
     ensure_directory(str(p.parent))
     try:

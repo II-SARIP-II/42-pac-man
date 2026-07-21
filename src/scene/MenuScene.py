@@ -13,7 +13,18 @@ if TYPE_CHECKING:
 
 
 class MenuScene(Scene):
+    """The main menu scene, the entry point of the game."""
+
     def __init__(self, game_engine: "GameEngine"):
+        """Initialize the menu scene and build its contents.
+
+        Args:
+            game_engine (GameEngine): The engine managing scene
+                transitions and shared game state.
+
+        Returns:
+            None.
+        """
         super().__init__(game_engine)
 
         self.container = Entity(
@@ -25,11 +36,21 @@ class MenuScene(Scene):
         gridLayout(self.container, 1.8)
 
     def createScene(self) -> None:
+        """Build the scene's background, title, and menu buttons.
+
+        Returns:
+            None.
+        """
         self.createBackground()
         self.createTitle("PACMAN")
         self.createButtons()
 
     def createButtons(self) -> None:
+        """Create the Play, Leaderboard, Instructions, and Quit buttons.
+
+        Returns:
+            None.
+        """
         self.button_play = ButtonUtils(
             text="PLAY",
             position=Vec3(0, 1, 1),
@@ -63,12 +84,25 @@ class MenuScene(Scene):
         )
 
     def createTitle(self, title: str) -> None:
+        """Create the menu's title text.
+
+        Args:
+            title (str): The text to display as the menu title.
+
+        Returns:
+            None.
+        """
         self.title = TextUtils(
             parent=self.container,
             text=title
         )
 
     def onClickPlay(self) -> None:
+        """Start a new game and switch to the game scene.
+
+        Returns:
+            None.
+        """
         self.game_engine.resetGameData()
         self.game_engine.initLevel()
         self.game_engine.newGameScene()
@@ -77,10 +111,25 @@ class MenuScene(Scene):
             self.game_engine.changeScene(self.game_engine.game_scene)
 
     def onClickLeaderboard(self) -> None:
+        """Switch to the leaderboard scene.
+
+        Returns:
+            None.
+        """
         self.game_engine.changeScene(self.game_engine.leaderboard_scene)
 
     def onClickQuit(self) -> None:
+        """Quit the application.
+
+        Returns:
+            None.
+        """
         quit()
 
     def onClickInstruction(self) -> None:
+        """Switch to the instructions scene.
+
+        Returns:
+            None.
+        """
         self.game_engine.changeScene(self.game_engine.instruction_scene)

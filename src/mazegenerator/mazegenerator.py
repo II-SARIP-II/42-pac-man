@@ -4,11 +4,28 @@ from typing import Iterator
 
 
 class MazeGenerator:
+    """Generates a random maze using a recursive-backtracker algorithm.
+
+    Each cell is stored as a 4-bit wall bitmask (bit 0=north, 1=east,
+    2=south, 3=west blocked).
+    """
 
     def __init__(self, size: tuple[int, int] = (15, 15), perfect: bool = False,
                  entry_cell: tuple[int, int] = (0, 0),
                  exit_cell: tuple[int, int] = (-1, -1),
                  seed: int = 0) -> None:
+        """Initialize and immediately generate a maze.
+
+        Args:
+            size (tuple[int, int]): Maze (width, height), in cells.
+            perfect (bool): If True, no loops are added.
+            entry_cell (tuple[int, int]): Maze entry cell.
+            exit_cell (tuple[int, int]): Maze exit cell.
+            seed (int): Random seed; 0 for non-deterministic.
+
+        Returns:
+            None.
+        """
         self._width = size[0]
         self._height = size[1]
         self._perfect = perfect
@@ -29,21 +46,33 @@ class MazeGenerator:
 
     @property
     def maze(self) -> list[list[int]]:
+        """list[list[int]]: The generated maze as rows of wall bitmasks."""
         return self._maze
 
     @property
     def shortest_path(self) -> str | bool:
+        """str | bool: Direction-letter path from entry to exit, or False."""
         return self._shortest_path
 
     @property
     def maze_entry(self) -> tuple[int, int]:
+        """tuple[int, int]: The maze's entry cell."""
         return self._entryx, self._entryy
 
     @property
     def maze_exit(self) -> tuple[int, int]:
+        """tuple[int, int]: The maze's exit cell."""
         return self._exitx, self._exity
 
     def generate(self, seed: int = 0) -> None:
+        """Generate a new maze, replacing any previously generated one.
+
+        Args:
+            seed (int): Random seed; 0 for non-deterministic.
+
+        Returns:
+            None.
+        """
         random.seed(seed) if seed > 0 else random.seed()
         self._seed = seed
         self._create_empty_maze()
@@ -54,6 +83,11 @@ class MazeGenerator:
 #    Private functions
 
     def _create_empty_maze(self) -> None:
+        """Build the initial grid with all cells open and a solid border.
+
+        Returns:
+            None.
+        """
         self._maze = [[8] + [0] * (self._width-2) +
                       [2] for _ in range(self._height-2)]
         self._maze.insert(0, [9] + [1] * (self._width-2) + [3])
@@ -61,6 +95,11 @@ class MazeGenerator:
         self._path = [[0] * self._width for _ in range(self._height)]
 
     def _add_42_to_maze(self) -> None:
+        """Stamp a small "42" glyph pattern into the center of the maze.
+
+        Returns:
+            None.
+        """
         ft_small = [[1, 0, 0, 0, 1, 1, 1],
                     [1, 0, 0, 0, 0, 0, 1],
                     [1, 1, 1, 0, 1, 1, 1],
@@ -83,6 +122,15 @@ class MazeGenerator:
                     self._path[posy+y][posx+x] = 1
 
     def _is_available(self, x: int, y: int) -> bool:
+        """Check whether a cell is within bounds and not yet visited.
+
+        Args:
+            x (int): Column index.
+            y (int): Row index.
+
+        Returns:
+            bool: True if the cell is in bounds and unvisited.
+        """
         if (
                 0 <= y < self._height and
                 0 <= x < self._width and self._path[y][x] == 0
@@ -92,6 +140,19 @@ class MazeGenerator:
 
     def _get_neighbors(self, x: int,
                        y: int) -> Iterator[tuple[int, int, int, int]]:
+        """Yield unvisited neighbours of a cell, in random order.
+
+        Also has a 1-in-6 chance of knocking down a wall to an already
+        visited neighbour, adding loops when `self._perfect` is False.
+
+        Args:
+            x (int): Column index.
+            y (int): Row index.
+
+        Yields:
+            tuple[int, int, int, int]: Neighbour (x, y), the wall bit to
+            it, and the opposite wall bit back.
+        """
         directions = [(1, 0, 2, 8), (-1, 0, 8, 2), (0, 1, 4, 1), (0, -1, 1, 4)]
         random.shuffle(directions)
         for dw, dh, code, opp_code in directions:
@@ -112,6 +173,16 @@ class MazeGenerator:
                         self._maze[ny][nx] = self._maze[ny][nx] & (~opp_code)
 
     def _generate_maze(self, x: int, y: int, from_code: int) -> None:
+        """Recursively carve the maze via depth-first backtracking.
+
+        Args:
+            x (int): Column index.
+            y (int): Row index.
+            from_code (int): Wall bit this cell was entered from.
+
+        Returns:
+            None.
+        """
         self._path[y][x] = 1
         non_mutable = self._maze[y][x]
         self._maze[y][x] = 15 & ~from_code
@@ -122,6 +193,11 @@ class MazeGenerator:
             self._generate_maze(nx, ny, opp_code)
 
     def _find_short_path(self) -> None:
+        """Compute the shortest path from the entry cell to the exit cell.
+
+        Returns:
+            None.
+        """
         directions = [(0, 1, 4, 'S'), (1, 0, 2, 'E'),
                       (-1, 0, 8, 'W'), (0, -1, 1, 'N')]
         if (self._entryx, self._entryy) == (self._exitx, self._exity):

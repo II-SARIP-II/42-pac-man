@@ -12,7 +12,18 @@ if TYPE_CHECKING:
 
 
 class InstructionScene(Scene):
+    """Scene displaying controls and cheat-key instructions to the player."""
+
     def __init__(self, game_engine: "GameEngine"):
+        """Initialize the instruction scene and build its contents.
+
+        Args:
+            game_engine (GameEngine): The engine managing scene
+                transitions and shared game state.
+
+        Returns:
+            None.
+        """
         super().__init__(game_engine)
 
         self.container = Entity(
@@ -24,11 +35,21 @@ class InstructionScene(Scene):
         # gridLayout(self.container, 1.8)
 
     def createScene(self) -> None:
+        """Build the scene's background, instruction text, and return button.
+
+        Returns:
+            None.
+        """
         self.createBackground()
         self.createText()
         self.createButtons()
 
     def createText(self) -> None:
+        """Create the title and instruction sections.
+
+        Returns:
+            None.
+        """
         # Titre fixe, en haut de l'écran => z positif (avant du plan vu du dessus)
         self.title = TextUtils(
             parent=self.container,
@@ -57,6 +78,15 @@ class InstructionScene(Scene):
         gridLayout(self.sections, 1.8)
 
     def createSection(self, title: str, lines: list[str]) -> Entity:
+        """Create a titled block of instruction lines.
+
+        Args:
+            title (str): Section heading.
+            lines (list[str]): Instruction lines below the title.
+
+        Returns:
+            Entity: The section's container entity.
+        """
         section = Entity(parent=self.sections)
 
         TextUtils(
@@ -80,6 +110,11 @@ class InstructionScene(Scene):
         return section
 
     def createButtons(self) -> None:
+        """Create the button that returns to the previous scene.
+
+        Returns:
+            None.
+        """
         self.button_return = ButtonUtils(
             text="RETURN",
             position=Vec3(0, 1, -6),
@@ -89,4 +124,9 @@ class InstructionScene(Scene):
         )
 
     def onClickReturn(self) -> None:
+        """Return to whichever scene was active before this one.
+
+        Returns:
+            None.
+        """
         self.game_engine.changeScene(self.game_engine.prev_scene)

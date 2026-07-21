@@ -7,6 +7,8 @@ if TYPE_CHECKING:
 
 
 class Item(Entity):
+    """Base class for collectible entities placed on the maze grid."""
+
     def __init__(
         self,
         score: int,
@@ -17,7 +19,20 @@ class Item(Entity):
         collider: str = 'box',
         color: color = color.salmon
     ) -> None:
+        """Initialize the item entity and its score value.
 
+        Args:
+            score (int): Points awarded when eaten.
+            position (Vec3): World position.
+            parent (GameScene): Scene to parent this item to.
+            model (str): 3D model name.
+            scale (Vec3): Item size.
+            collider (str): Collider shape.
+            color (color): Tint color.
+
+        Returns:
+            None.
+        """
         super().__init__(
             model=model,
             scale=scale,

@@ -7,6 +7,8 @@ if TYPE_CHECKING:
 
 
 class TextUtils(Text):
+    """A pre-styled text label oriented for the game's top-down camera."""
+
     def __init__(
         self,
         parent: "GameScene",
@@ -17,7 +19,20 @@ class TextUtils(Text):
         scale: float = 30,
         **kwargs: Any,
     ) -> None:
+        """Initialize the text label and orient it for the top-down camera.
 
+        Args:
+            parent (GameScene): Scene to parent this text to.
+            text (str): Text content.
+            position (Vec3): World position.
+            color (color): Text color.
+            origin (tuple[float, float]): Anchor point for positioning.
+            scale (float): Text size.
+            **kwargs (Any): Extra keyword arguments for the `Text` entity.
+
+        Returns:
+            None.
+        """
         super().__init__(
             text=text,
             position=position,

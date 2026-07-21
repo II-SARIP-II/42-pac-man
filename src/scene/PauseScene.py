@@ -12,7 +12,18 @@ if TYPE_CHECKING:
 
 
 class PauseScene(Scene):
+    """Scene shown when the player pauses an active game."""
+
     def __init__(self, game_state: "GameEngine"):
+        """Initialize the pause scene and build its contents.
+
+        Args:
+            game_state (GameEngine): The engine managing scene
+                transitions and shared game state.
+
+        Returns:
+            None.
+        """
         super().__init__(game_state)
 
         self.game_state = game_state
@@ -26,11 +37,24 @@ class PauseScene(Scene):
         gridLayout(self.container, spacing=1.8)
 
     def createScene(self) -> None:
+        """Build the scene's background, title, and menu buttons.
+
+        Returns:
+            None.
+        """
         self.createBackground()
         self.createTitle("PAUSE")
         self.createButtons()
 
     def createTitle(self, title: str) -> None:
+        """Create the pause scene's title text.
+
+        Args:
+            title (str): The text to display as the title.
+
+        Returns:
+            None.
+        """
         self.title = TextUtils(
             text=title,
             position=Vec3(0, 1, 0),
@@ -39,6 +63,11 @@ class PauseScene(Scene):
         )
 
     def createButtons(self) -> None:
+        """Create the Resume, Instructions, Menu, and Quit buttons.
+
+        Returns:
+            None.
+        """
         self.button_resume = ButtonUtils(
             text="RESUME",
             position=Vec3(0, 1, 1),
@@ -72,14 +101,34 @@ class PauseScene(Scene):
         )
 
     def onClickMenu(self) -> None:
+        """Return to the main menu scene.
+
+        Returns:
+            None.
+        """
         self.game_engine.changeScene(self.game_engine.menu_scene)
 
     def onClickInstructions(self) -> None:
+        """Switch to the instructions scene.
+
+        Returns:
+            None.
+        """
         self.game_engine.changeScene(self.game_engine.instruction_scene)
 
     def onClickResume(self) -> None:
+        """Resume gameplay by switching back to the active game scene.
+
+        Returns:
+            None.
+        """
         if self.game_engine.game_scene:
             self.game_engine.changeScene(self.game_engine.game_scene)
 
     def onClickQuit(self) -> None:
+        """Quit the application.
+
+        Returns:
+            None.
+        """
         quit()

@@ -5,11 +5,29 @@ from .Node import Node
 
 
 class LevelGenerator:
+    """Builds `Level` instances from configuration using `MazeGenerator`."""
+
     def __init__(self, seed: int) -> None:
+        """Initialize the generator with a seed for the first level.
+
+        Args:
+            seed (int): Seed for the first generated maze.
+
+        Returns:
+            None.
+        """
         self.seed = seed
         self.seeded = False
 
     def generateLevel(self, level: LevelValidation) -> Level:
+        """Generate a `Level` from the given level configuration.
+
+        Args:
+            level (LevelValidation): Width/height configuration.
+
+        Returns:
+            Level: The newly generated level.
+        """
         width = level.width
         height = level.height
 
@@ -34,7 +52,17 @@ class LevelGenerator:
     def getNeighbours(
         self, pos: tuple[int, int], height: int, width: int
     ) -> list[tuple[int, int] | None]:
+        """Compute a cell's cardinal neighbour coordinates.
 
+        Args:
+            pos (tuple[int, int]): Grid coordinate to compute for.
+            height (int): Level grid height.
+            width (int): Level grid width.
+
+        Returns:
+            list[tuple[int, int] | None]: [north, east, south, west]
+            coordinates, None where out of bounds.
+        """
         x, y = pos
 
         if y - 1 >= 0:

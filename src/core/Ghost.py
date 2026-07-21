@@ -16,6 +16,16 @@ if TYPE_CHECKING:
 
 
 class EnumMode(Enum):
+    """AI states a `Ghost` can be in.
+
+    Attributes:
+        CHASE: Pursuing a per-subclass target position.
+        RANDOM: Wandering towards a random tile.
+        SCARED: Fleeing from the player.
+        DEAD: Eaten, heading back to spawn.
+        STOP: Frozen in place.
+    """
+
     CHASE = 1
     RANDOM = 2
     SCARED = 3
@@ -24,6 +34,13 @@ class EnumMode(Enum):
 
 
 class Ghost(Character):
+    """Base class for the AI-controlled enemies chasing the player.
+
+    Handles the shared mode state machine, player collision, and BFS
+    pathing. Subclasses implement `chaseMovement`, `deadMovement`,
+    `moving`, and `bfs`.
+    """
+
     def __init__(
         self,
         width: int,
@@ -35,7 +52,21 @@ class Ghost(Character):
         spawn_pos: tuple[int, int],
         level: Level
     ) -> None:
+        """Initialize the ghost's shared movement/AI state.
 
+        Args:
+            width (int): Level grid width.
+            height (int): Level grid height.
+            image_path (str): Texture for the ghost's normal appearance.
+            parent (GameScene): Scene to parent this ghost to.
+            player (Player): Player the ghost reacts to.
+            position (Vec3): Initial world position.
+            spawn_pos (tuple[int, int]): Grid coordinate to respawn at.
+            level (Level): Level to navigate.
+
+        Returns:
+            None.
+        """
         self.spawn_position = spawn_pos
 
         spawn_position = Vec3(position.x, 0.1, position.z)
@@ -67,6 +98,11 @@ class Ghost(Character):
         self.stop = False
 
     def respawn(self) -> None:
+        """Reset the ghost to its spawn position and default state.
+
+        Returns:
+            None.
+        """
         self.position = convertPosToVec(
             self.spawn_position, (self.width, self.height))
 
@@ -79,6 +115,11 @@ class Ghost(Character):
         self.last_player_death = datetime.now()
 
     def update(self) -> None:
+        """Advance the ghost's AI and movement for the current frame.
+
+        Returns:
+            None.
+        """
         if self.mode == EnumMode.STOP:
             self.stop = True
         if not self.stop:
@@ -116,6 +157,11 @@ class Ghost(Character):
             self.playerCollision()
 
     def recalculatePath(self) -> None:
+        """Recompute the target position and BFS path towards it.
+
+        Returns:
+            None.
+        """
         if self.mode == EnumMode.CHASE:
             player_pos = self.player.getPlayerPos()
             player_grid_pos = convertVecToPos(
@@ -147,12 +193,27 @@ class Ghost(Character):
             )
 
     def getEaten(self) -> None:
+        """Handle being eaten by the player. Overridden by subclasses.
+
+        Returns:
+            None.
+        """
         pass
 
     def getTargetPos(self) -> Vec3:
+        """Get the world position used as the chase reference.
+
+        Returns:
+            Vec3: The player's current world position.
+        """
         return self.player.getPlayerPos()
 
     def randomMovement(self) -> Tuple[int, int]:
+        """Compute a random target grid position for RANDOM mode.
+
+        Returns:
+            Tuple[int, int]: A random (x, y) grid position.
+        """
         self.alpha: float = 1
         self.chase_count += 1
         if self.chase_count > 15:
@@ -164,6 +225,11 @@ class Ghost(Character):
         )
 
     def scaredMovement(self) -> Any:
+        """Compute a flee target that maximizes distance from the player.
+
+        Returns:
+            Any: The neighbour grid position furthest from the player.
+        """
         self.alpha = 1
         self.texture = "assets/images/scared_ghost.png"
 
@@ -194,6 +260,11 @@ class Ghost(Character):
         return best_pos
 
     def playerCollision(self) -> None:
+        """Check for and resolve a collision with the player.
+
+        Returns:
+            None.
+        """
         player_vec = self.getTargetPos()
         player_pos = convertVecToPos(player_vec, (self.width, self.height))
         ghost_pos = convertVecToPos(self.position, (self.width, self.height))
@@ -216,6 +287,11 @@ class Ghost(Character):
             self.parent.killPlayer()
 
     def getKilled(self) -> None:
+        """Mark the ghost as killed and award the player.
+
+        Returns:
+            None.
+        """
         self.mode = EnumMode.DEAD
         self.player.eatGhost()
         self.has_been_killed = True

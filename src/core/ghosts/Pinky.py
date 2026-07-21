@@ -13,6 +13,8 @@ if TYPE_CHECKING:
 
 
 class Pinky(Ghost):
+    """Pink ghost that targets a tile to the side of the player."""
+
     def __init__(
         self,
         width: int,
@@ -21,6 +23,18 @@ class Pinky(Ghost):
         player: Player,
         level: Level
     ):
+        """Create Pinky at the top-left spawn corner.
+
+        Args:
+            width (int): Level grid width.
+            height (int): Level grid height.
+            parent (GameScene): Scene to parent this ghost to.
+            player (Player): Player to chase.
+            level (Level): Level to navigate.
+
+        Returns:
+            None.
+        """
         self.pos = (0, height - 1)
         super().__init__(
             width=width,
@@ -37,6 +51,14 @@ class Pinky(Ghost):
             self,
             player_grid_pos: Tuple[int, Any]
             ) -> Tuple[int, int]:
+        """Compute the chase target: a tile beside the player.
+
+        Args:
+            player_grid_pos (Tuple[int, Any]): Player's grid position.
+
+        Returns:
+            Tuple[int, int]: Target grid position.
+        """
         self.alpha = 1
         self.chase_count += 1
         if self.chase_count > 30:
@@ -57,9 +79,19 @@ class Pinky(Ghost):
         return tuple(map(lambda x, y: x + y, player_grid_pos, add_pos))
 
     def deadMovement(self) -> Any:
+        """Get the target position while dead.
+
+        Returns:
+            Any: Spawn grid position.
+        """
         return self.pos
 
     def moving(self) -> bool:
+        """Advance one step along the current target path.
+
+        Returns:
+            bool: True if the next path node was reached this frame.
+        """
         if len(self.target_path) < 2:
             return False
         target_vec = convertPosToVec(
@@ -85,6 +117,16 @@ class Pinky(Ghost):
         goal: Node,
         disallowed_node: Optional[Node] = None
     ) -> None:
+        """Find the shortest path from `start` to `goal`.
+
+        Args:
+            start (Node): Ghost's current node.
+            goal (Node): Target node.
+            disallowed_node (Optional[Node]): Node to avoid revisiting.
+
+        Returns:
+            None.
+        """
         if start == goal:
             self.target_path = [start]
             if self.mode == EnumMode.RANDOM:

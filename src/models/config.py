@@ -5,11 +5,31 @@ from pydantic import BaseModel, Field
 
 
 class LevelValidation(BaseModel):
+    """Validated dimensions for a single maze level.
+
+    Attributes:
+        width: Level grid width, in tiles (5-100).
+        height: Level grid height, in tiles (5-100).
+    """
+
     width: int = Field(gt=5, lt=100)
     height: int = Field(gt=5, lt=100)
 
 
 class ConfigFileValidation(BaseModel):
+    """Validated schema for the game's top-level configuration file.
+
+    Attributes:
+        highscore_filename: Path to the high-score JSON file.
+        levels: Level configurations, at least 10 entries.
+        lives: Starting lives per game.
+        points_per_pacgum: Points per regular pac-gum.
+        points_per_super_pacgum: Points per super pac-gum.
+        points_per_ghost: Points per ghost eaten.
+        seed: Maze generation seed.
+        level_max_time: Time per level, in seconds.
+    """
+
     highscore_filename: Path
     levels: List[LevelValidation] = Field(min_length=10)
     lives: int = Field(default=3, ge=1)

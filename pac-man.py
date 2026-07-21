@@ -8,6 +8,11 @@ from src.utils_io import load_json_file
 
 
 def main() -> None:
+    """Load config from argv, launch the app, and run the game loop.
+
+    Returns:
+        None.
+    """
     app = Ursina()
 
     if len(argv) != 2:

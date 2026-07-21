@@ -22,12 +22,24 @@ if TYPE_CHECKING:
 
 
 class GameScene(Scene):
+    """The main gameplay scene: maze, player, ghosts, pac-gums, and HUD."""
+
     def __init__(
             self,
             game_engine: "GameEngine",
             game_data: GameData,
             level: Level
             ) -> None:
+        """Initialize the game scene and build the maze and its actors.
+
+        Args:
+            game_engine (GameEngine): Engine managing scenes.
+            game_data (GameData): Score/lives/time tracker.
+            level (Level): Level to build the scene from.
+
+        Returns:
+            None.
+        """
         super().__init__(game_engine)
 
         self.game_engine = game_engine
@@ -62,6 +74,11 @@ class GameScene(Scene):
         self.is_ghosts_moving = True
 
     def cleanUp(self) -> None:
+        """Disable input and destroy all entities owned by this scene.
+
+        Returns:
+            None.
+        """
         self.ignore = True
         self.disable()
 
@@ -86,6 +103,14 @@ class GameScene(Scene):
                 destroy(entity)
 
     def input(self, key: str) -> None:
+        """Handle keyboard input for gameplay controls and cheats.
+
+        Args:
+            key (str): Key that was pressed.
+
+        Returns:
+            None.
+        """
         match key:
             case "escape":
                 self.game_engine.changeScene(self.game_engine.pause_scene)
@@ -115,6 +140,11 @@ class GameScene(Scene):
                 self.toggleAllCheat()
 
     def createMap(self) -> list[Entity]:
+        """Build the floor plane and wall entities for the maze.
+
+        Returns:
+            list[Entity]: The floor and wall entities created.
+        """
         map: list[Entity] = []
         map.append(Entity(
             model="plane",
@@ -180,6 +210,16 @@ class GameScene(Scene):
             height: int,
             game_data: GameData
             ) -> Player:
+        """Create the player character at the center of the maze.
+
+        Args:
+            width (int): Level grid width.
+            height (int): Level grid height.
+            game_data (GameData): Score/lives/time tracker.
+
+        Returns:
+            Player: The newly created player entity.
+        """
         return Player(
             parent=self,
             width=width,
@@ -187,6 +227,11 @@ class GameScene(Scene):
             game_data=game_data)
 
     def createPacGums(self) -> list[Entity]:
+        """Place a `SuperPacGum` on each corner and `PacGum` elsewhere.
+
+        Returns:
+            list[Entity]: The pac-gum entities created.
+        """
         items: list[Entity] = []
         width = self.size[0]
         height = self.size[1]
@@ -215,6 +260,17 @@ class GameScene(Scene):
     def createGhosts(
         self, width: int, height: int, player: Player, level: Level
     ) -> List[Ghost]:
+        """Create the four ghosts (Blinky, Pinky, Inky, Clyde).
+
+        Args:
+            width (int): Level grid width.
+            height (int): Level grid height.
+            player (Player): Player for the ghosts to chase.
+            level (Level): Level to navigate.
+
+        Returns:
+            List[Ghost]: The four ghost entities.
+        """
         return [
             Blinky(
                 parent=self,
@@ -247,6 +303,11 @@ class GameScene(Scene):
         ]
 
     def isTheLevelFinished(self) -> None:
+        """End the level once all pac-gums have been eaten.
+
+        Returns:
+            None.
+        """
         if self.current_nb_pacgum <= 0:
             if self.game_engine.no_level == self.game_engine.nb_level:
                 self.game_engine.changeScene(self.game_engine.finish_scene)
@@ -254,12 +315,22 @@ class GameScene(Scene):
                 self.game_engine.changeScene(self.game_engine.win_scene)
 
     def toggleAllCheat(self) -> None:
+        """Toggle every cheat at once.
+
+        Returns:
+            None.
+        """
         self.toggleMovingGhosts()
         self.toggleInfiniteLives()
         self.toggleIncreaseSpeed()
         self.toggleInvincibility()
 
     def toggleMovingGhosts(self) -> None:
+        """Toggle whether ghosts actively chase the player or stay frozen.
+
+        Returns:
+            None.
+        """
         self.is_ghosts_moving = not self.is_ghosts_moving
         if not self.is_ghosts_moving:
             for ghost in self.ghosts:
@@ -270,22 +341,42 @@ class GameScene(Scene):
                 ghost.stop = False
 
     def toggleInfiniteLives(self) -> None:
+        """Toggle infinite lives for the player, updating the HUD.
+
+        Returns:
+            None.
+        """
         self.game_data.infiniteLives()
         self.lives_layout.infiniteLive()
 
     def toggleInvincibility(self) -> None:
+        """Toggle whether the player is immune to ghost collisions.
+
+        Returns:
+            None.
+        """
         if self.player.invincibility:
             self.player.invincibility = False
         else:
             self.player.invincibility = True
 
     def toggleIncreaseSpeed(self) -> None:
+        """Toggle the player's movement speed between normal and doubled.
+
+        Returns:
+            None.
+        """
         if self.player.speed == 5.0:
             self.player.speed = 10.0
         else:
             self.player.speed = 5.0
 
     def killPlayer(self) -> None:
+        """Handle the player being killed by a ghost.
+
+        Returns:
+            None.
+        """
         self.player.loseLife()
         self.game_data.playerDead()
 
@@ -297,14 +388,29 @@ class GameScene(Scene):
         self.lives_layout.displayLives()
 
     def onEntry(self) -> None:
+        """Enable the scene and its HUD elements when it becomes active.
+
+        Returns:
+            None.
+        """
         self.enable()
         self.lives_layout.enable()
         self.text_layout.enable()
 
     def gameLoose(self) -> None:
+        """Transition to the lose scene when the player runs out of lives.
+
+        Returns:
+            None.
+        """
         self.game_engine.changeScene(self.game_engine.lose_scene)
 
     def onExit(self) -> None:
+        """Disable the scene and its HUD elements when it stops being active.
+
+        Returns:
+            None.
+        """
         self.lives_layout.disable()
         self.text_layout.disable()
         self.disable()

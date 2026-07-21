@@ -10,13 +10,28 @@ if TYPE_CHECKING:
 
 
 class TextLayout(Entity):
+    """HUD widget displaying score, deaths, remaining time, and level."""
+
     def __init__(self,
                  game_engine: "GameEngine",
                  game_data: GameData,
                  multiplier: float = 1,
                  **kwargs: Any
                  ) -> None:
+        """Initialize the HUD text and display the initial stats.
 
+        Args:
+            game_engine (GameEngine): Engine managing scenes.
+            game_data (GameData): Score/death/time/level tracker.
+            multiplier (float): Reserved scaling factor; must be >= 0.
+            **kwargs (Any): Extra keyword arguments for the `Entity`.
+
+        Returns:
+            None.
+
+        Raises:
+            ValueError: If `multiplier` is negative.
+        """
         if multiplier < 0:
             raise ValueError("Multiplier must be positive")
 
@@ -39,6 +54,11 @@ class TextLayout(Entity):
         self.refresh_text()
 
     def refresh_text(self) -> None:
+        """Rebuild and apply the HUD text from the current game data.
+
+        Returns:
+            None.
+        """
         txt = (f"Score: {self.game_data.score}\n"
                f"Death: {self.game_data.nb_death}\n"
                f"Time: {max(0, int(self.game_data.game_time))}\n"
@@ -48,6 +68,11 @@ class TextLayout(Entity):
             self.text_entity.text = txt
 
     def update(self) -> None:
+        """Tick down the game timer and refresh the HUD while playing.
+
+        Returns:
+            None.
+        """
         if self.game_engine.current_scene == self.game_engine.game_scene:
             self.game_data.removeTime(ursina.time.dt)
             self.refresh_text()
