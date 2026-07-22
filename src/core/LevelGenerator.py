@@ -1,4 +1,4 @@
-from ..mazegenerator import MazeGenerator
+from src.mazegenerator.mazegenerator import MazeGenerator
 from ..models.config import LevelValidation
 from .Level import Level
 from .Node import Node

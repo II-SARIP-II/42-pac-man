@@ -22,7 +22,21 @@ def main() -> None:
             print("\nUsage: pac-man.py <config_file>")
             exit(1)
 
-        config = ConfigFileValidation(**load_json_file(argv[1]))
+        raw_config = load_json_file(argv[1])
+
+        if not isinstance(raw_config, dict):
+            print("\nError : JSON file must contain an object/dictionary.")
+            exit(1)
+
+        for f_name, f_info in ConfigFileValidation.model_fields.items():
+            if f_name not in raw_config and not f_info.is_required():
+                print(
+                    f"\nInformation: the field '{f_name}' "
+                    "is missing from the JSON."
+                    f"\nDefault value applied: {f_info.default}\n"
+                )
+
+        config = ConfigFileValidation(**raw_config)
 
         GameEngine(
             str(config.highscore_filename),
@@ -39,7 +53,8 @@ def main() -> None:
 
     except ValidationError as e:
         print(
-            f"Validation error: {e.errors()[0]['loc']} {e.errors()[0]['msg']}")
+            f"\nValidation error: {e.errors()[0]['loc']} "
+            f"{e.errors()[0]['msg']}")
         exit(1)
 
     except Exception as e:
