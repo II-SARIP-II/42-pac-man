@@ -1,9 +1,9 @@
 {
-  "highscore_filename": "config/highscores.json",
+  #"highscore_filename": "config/highscores.json",
   "levels": [
     {
-      "width": 10,
-      "height": 10
+      "width": 25,
+      "height": 20
     },
     {
       "width": 6,

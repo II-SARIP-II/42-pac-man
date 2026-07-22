@@ -2,9 +2,11 @@ _This project has been created as part of the 42 curriculum by pgougne, jvacossi
 
 ![42 banner](assets/images/42banner.png)
 
-# Description
+# Pac-Man
 
-## Introduction
+## Description
+
+### Introduction
 
 First released in 1980 by Namco, Pac-Man quickly became a cultural icon and one of
 the most influential video games of all time. Designed by Toru Iwatani, its goal was to
@@ -16,30 +18,43 @@ Pac-Man was also the first game to popularize the concept of a power-up — the 
 levels, but due to an integer overflow bug, level 256 was impossible to finish, known as
 the infamous “kill screen”.
 
-## Project
+### Project
 
 This project is about making our version of Pac-Man. We decided to make a Pac-Man in 3D with a top-down view, featuring realistic ghost visuals against a custom-rendered yellow sphere for Pac-Man. Navigating through intricate 3D mazes with Ursina, the player moves across multiple levels, dodging four unique ghosts while collecting pacgums and high-value super-pacgums. Eating a super-pacgum briefly turns the tables, allowing Pac-Man to hunt down vulnerable ghosts for extra points before they respawn in their corners. The gameplay experience includes a live HUD tracking score, remaining lives, and level timers, many menus like pause, menu, leaderboard... To complete the experience, the game features a persistent top-10 highscore system where players can record their names, as well as a dedicated cheat mode offering invincibility, speed boosts, and level skips and many others to explore every aspect of the game.
 
-# Instructions
+## Instructions
 
 This project use UV
 
 To run the project, you must install all the dependencies
-> make install
+```sh
+make install
+```
 
 And then:
-> make run
+```sh
+make run
+```
 
 To check the type-hint
-> make lint
+```sh
+make lint
+```
 
 To check the type-hint with strict flag
-> make lint-strict
+```sh
+make lint-strict
+```
 
 It was mandatory to delivered on Itch.io the packaged game. So here is the link to access to the game online:
-> https://pgougnejvacossi.itch.io/pac-man
+> https://pgougnejvacossi.itch.io/pac-man\
 
-# Resources
+To use the package, you must unzip it:
+```sh
+unzip pacman_package.zip
+```
+
+## Resources
 **Ursina's Documentation**\
 https://www.ursinaengine.org/\
 https://www.ursinaengine.org/documentation.html\
@@ -61,9 +76,9 @@ Ai was used throughout this project as a support and learning assistant.
   - Discuss best practices in project structure
   - Writing Docstrings
 
-# Configuration
+## Configuration
 
-By default, the configuration data are stored in config/config.json and the file must contain some of requiered data:
+By default, the configuration data are stored in **config/config.json** and the file must contain some of requiered data:
 
 |      Data      |      Type      |     Usage      |    Requiered   |
 |:--------------:|:--------------:|:--------------:|:--------------:|
@@ -100,7 +115,7 @@ It looks like this:
 }
 ```
 
-# Highscore
+## Highscore
 
 The highscore file in by default in config/highscores.json
 
@@ -129,20 +144,29 @@ with 3 differents data in each score:
 }
 ```
 
-# Maze Generation
+## Maze Generation
 The maze generation was pretty simple, we only had to create a MazeGenerator() class, than the generated hexadecimal maze is translated into a map of nodes with the wall data in it. And then it is displayed in the scene.
 
 > Hexadecimal Maze: [[9, 3, 9, 5, 1, 3], [8, 6, 8, 1, 2, 14], [8, 1, 0, 4, 4, 3], [10, 14, 8, 5, 3, 10], [8, 3, 10, 11, 12, 2], [12, 4, 4, 4, 5, 6]]
 
 > Nodes map: {(0, 0): Node (0, 0), (1, 0): Node (1, 0), (2, 0): Node (2, 0), (3, 0): Node (3, 0), (4, 0): Node (4, 0), (5, 0): Node (5, 0), (0, 1): Node (0, 1), (1, 1): Node (1, 1), (2, 1): Node (2, 1), (3, 1): Node (3, 1), (4, 1): Node (4, 1), (5, 1): Node (5, 1), (0, 2): Node (0, 2), (1, 2): Node (1, 2), (2, 2): Node (2, 2), (3, 2): Node (3, 2), (4, 2): Node (4, 2), (5, 2): Node (5, 2), (0, 3): Node (0, 3), (1, 3): Node (1, 3), (2, 3): Node (2, 3), (3, 3): Node (3, 3), (4, 3): Node (4, 3), (5, 3): Node (5, 3), (0, 4): Node (0, 4), (1, 4): Node (1, 4), (2, 4): Node (2, 4), (3, 4): Node (3, 4), (4, 4): Node (4, 4), (5, 4): Node (5, 4), (0, 5): Node (0, 5), (1, 5): Node (1, 5), (2, 5): Node (2, 5), (3, 5): Node (3, 5), (4, 5): Node (4, 5), (5, 5): Node (5, 5)}
 
-# Implementation
+## Implementation
 
-Before the changes in the subject, it wasn't clear about the visualisation library to use, so we decided to use Ursina to make a 3d top down view of the pac-man game.
+We decided to use **Ursina** to make a 3d top down view of the pac-man game.
 
-Each ghosts have a different behaviour, blinky (red) want to reach your position, another two nodes in front of you, and the two others are going 2 nodes on your left or your right. They change the chase mode to Random mode in a fix time. If you eat a super pacgum, they try to escape from you and when you eat then they go back to their spawn.
+Each ghosts have a different behaviour, Blinky (red) want to reach your position, Pinky two nodes in front of you, Inky and Clyde are going 2 nodes on your left or your right. They change the chase mode to Random mode in a fix time.
+If you eat a super pacgum, they try to escape from you and when you eat them, they go back to their spawn.
+The algorithm used to move the ghosts is a simple custom **BFS**.
 
-Cheats:
+The pacgums are Entities linked to their nodes, if the Player get on a node that has a pacgum, the pacgum is consumed.
+
+The Player's movement is based on vector and euclidian distance. It has a buffer input to keep track of the player's movement.
+
+Every screens (menu, game over, pause, etc) has its own Scene, with buttons, text, and other UI elements.
+
+
+### Cheats:
 
 |      Name      |      Behaviour      |     Key      |
 |:--------------:|:--------------:|:--------------:|
@@ -150,12 +174,17 @@ Cheats:
 |  Infinite Lives  |  you get infinite lives  |  x  |
 |  Double Speed  |  Your speed double  |  v  |
 |  Invincibility  |  You cannot be touch by ghost but you can eat them with a super pac-gum  |  b  |
+|  Next Level  |  Get to the next level  |  n  |
 |  All cheats  |  You get all the previous cheats  |  c  |
 
-# General Software Architecture
+## General Software Architecture
 ![General Software Architecture](assets/images/software_architecture.png)
 
-# Project Management
+The main get the config file, validates it and then passes it to the **GameEngine** that manages the game. Every screen is a different **Scene**. The **GameScene** handle the game logic (**Items**, **Ghosts**, **Player**).\
+
+The **Levels** are generated one by one to avoid overloading the game with too many entities. By choosing to use a 3D engine, we must be careful to avoid performance issues.
+
+## Project Management
 
 | Pgougne | Jvacossi |
 |---|---|
@@ -174,4 +203,7 @@ Pgougne quickly focused on the visualization, which was very important early on 
 We were challenged several times by the architecture, where we had to refactor classes and functions many times.
 
 ![Kanban](assets/images/kanban.png)
+The project's Kanban board.
+
 ![Timeline](assets/images/timeline.png)
+The project's timeline.
